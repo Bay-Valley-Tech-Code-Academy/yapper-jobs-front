@@ -1,0 +1,39 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #A96CDE;
+    padding: 0;
+
+    .title{
+        font-size: 26px;
+        margin-left: 3em
+    }
+
+    .title:hover{
+        cursor: pointer;
+    }
+
+    .nav-links{
+        display: flex;
+        align-items: center;
+        padding: 2em 3em;
+        margin: 0;
+
+        ul{
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+
+            a{
+                text-decoration: none;
+            }
+        }
+
+        .link{
+            padding: 1em;
+        }
+    }
+}
