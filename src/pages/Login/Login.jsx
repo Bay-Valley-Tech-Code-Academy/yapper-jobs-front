@@ -1,6 +1,8 @@
 import React from 'react'
 import "./Login.css"
 
+console.log('forgot to take this out')
+
 function Login() {
   return (
     <div>
