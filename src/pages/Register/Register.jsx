@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"
 import { ChakraProvider, Box, Flex, Heading, Text, Select, Button, Input, useColorMode, ColorModeScript, Link } from "@chakra-ui/react";
 
 const Register = () => {
@@ -15,6 +16,7 @@ const Register = () => {
   const [businessName, setBusinessName] = useState("");
   const [businessWebsite, setBusinessWebsite] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
+  const navigate = useNavigate();
 
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);
@@ -82,13 +84,15 @@ const Register = () => {
       <ColorModeScript initialColorMode="dark" />
       <Box
         p={[2, 4, 6, 8]}
-        maxWidth="800px"
+        maxWidth="100vw"
+        minHeight="100vh"
         margin="auto"
-        bg={colorMode === "light" ? "#663399" : "#0B1215"}
+        // bg={colorMode === "light" ? "#663399" : "#0B1215"}
+        bgGradient={colorMode === "light" ? 'linear(to-l, #663399, #D5B4F2)' : '#0B1215'}
         color={colorMode === "light" ? "#000000" : "#F3F3F3"}
       >
         <Flex direction="column" alignItems="center">
-          <Box bg={colorMode === "light" ? "#FFFFFF" : "#0B1215"} p={4} borderRadius="md" width="100%">
+          <Box bg={colorMode === "light" ? "#FFFFFF" : "#0B1215"} p={4} borderRadius="md" width="50vw">
             <Flex justifyContent="flex-end">
               <Button
                 onClick={toggleColorMode}
@@ -292,7 +296,7 @@ const Register = () => {
                   Register
                 </Button>
                 <Text mt={2} textAlign="center">
-                  Already have an account? <Link color="teal.500">Sign In</Link>
+                  Already have an account? <Link color="teal.500" onClick={() => navigate("/")}>Sign In</Link>
                 </Text>
               </>
             )}

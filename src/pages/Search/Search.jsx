@@ -1,7 +1,7 @@
 import React from 'react'
-import "./Main.css"
+import "./Search.css"
 
-function Main() {
+function Search() {
   return (
     <div>
       Main
@@ -9,4 +9,4 @@ function Main() {
   )
 }
 
-export default Main
+export default Search

@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ChakraProvider } from '@chakra-ui/react';
 import "./App.css";
-import Main from "./pages/Main/Main";
+import Search from "./pages/Search/Search";
 import Apply from "./pages/Apply/Apply";
 import EmployerMain from "./pages/Employer-Main/EmployerMain";
 import ProfileEmployer from "./pages/Profile-Employer/ProfileEmployer";
@@ -23,7 +23,7 @@ function App() {
         <Routes>
           {/* Routes with Navbar */}
           <Route element={<Layout />}>
-            <Route path="/main" element={<Main />} />
+            <Route path="/search" element={<Search />} />
             <Route path="apply/:jobId" element={<Apply />} />
             <Route path="employer-main" element={<EmployerMain />} />
             <Route path="profile-employer" element={<ProfileEmployer />} />
