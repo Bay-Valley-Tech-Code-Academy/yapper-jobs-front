@@ -11,32 +11,32 @@ import {
   Divider,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { MdFavoriteBorder, MdFavorite} from "react-icons/md"; // Assuming you're using Material Icons for the save/unsave icon
-import {FaMapMarkerAlt} from "react-icons/fa"
-function JobCard() {
-
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md"; // Assuming you're using Material Icons for the save/unsave icon
+import { FaMapMarkerAlt } from "react-icons/fa";
+function JobCard(props) {
   return (
     <>
       <Flex direction="column" maxW="400px" mx="auto">
         <Box p="4">
           <Heading as="h2" size="md">
-            Software Engineer
+            {props.title}
           </Heading>
           <Text fontSize="sm" color="gray.600">
-            Google
+            {props.company}
           </Text>
-            <Text fontSize="sm" fontWeight="bold">
-              Full-Time
-            </Text>
-          <Stack direction="row" spacing="2" mt="2" mb="4"> {/* Changed direction to "row" */}
+          <Text fontSize="sm" fontWeight="bold">
+            Full-Time
+          </Text>
+          <Stack direction="row" spacing="2" mt="2" mb="4">
+            {" "}
+            {/* Changed direction to "row" */}
             <Icon as={FaMapMarkerAlt} />
-            <Text fontSize="sm">Mountain View, CA</Text>
+            <Text fontSize="sm">{props.location}</Text>
           </Stack>
-          <Text fontSize="sm" mb="4">
-            As a Software Engineer at Google, you'll work on groundbreaking
-            projects and collaborate with teams across the globe to build
-            innovative solutions.
-          </Text>
+            <Text fontSize="sm" mb="4" maxHeight="110px"
+            overflow="hidden">
+              {props.jobDescription}
+            </Text>
           <Stack
             direction={{ base: "column", md: "row" }}
             spacing={{ base: "2", md: "4" }}

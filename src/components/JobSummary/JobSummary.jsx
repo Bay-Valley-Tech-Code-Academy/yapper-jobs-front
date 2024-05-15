@@ -46,7 +46,7 @@ function JobSummary() {
           </Text>
           {/* )} */}
         </Stack>
-        <Text fontSize="sm" mb="4" overflowY="scroll" maxHeight="200px">
+        <Text fontSize="sm" mb="4" overflowY="auto" maxHeight="500px">
           Another locum tenens opportunity has arrived in California! Our client
           is looking for a nurse practitioner specializing in
           hematology/oncology to begin coverage in early August. Hours include
@@ -88,26 +88,26 @@ function JobSummary() {
         <Heading mb={4}>About the company</Heading>
         <Text ml={4}>
           We're Proud to Offer a Comprehensive Benefits Package Including:
-          <ul>
-            <li>401k retirement plan, with employer match</li>
-            <li>
-              Insurance options including: medical, dental, vision, life and STD
-              insurance
-            </li>
-            <li>
-              Paid Time Off/Vacation: Starting at 80 hours per year, and
-              increases based on tenure with the organization
-            </li>
-            <li>Floating Holiday: 40 hours per year</li>
-            <li>Paid Holidays: 7 days per year</li>
-            <li>
-              Paid Sick Leave: Astound allows a number of paid sick hours per
-              calendar year and varies based on state and/or local laws
-            </li>
-            <li>Tuition reimbursement program</li>
-            <li> Employee discount program</li>
-          </ul>
         </Text>
+        <ul>
+          <li>401k retirement plan, with employer match</li>
+          <li>
+            Insurance options including: medical, dental, vision, life and STD
+            insurance
+          </li>
+          <li>
+            Paid Time Off/Vacation: Starting at 80 hours per year, and increases
+            based on tenure with the organization
+          </li>
+          <li>Floating Holiday: 40 hours per year</li>
+          <li>Paid Holidays: 7 days per year</li>
+          <li>
+            Paid Sick Leave: Astound allows a number of paid sick hours per
+            calendar year and varies based on state and/or local laws
+          </li>
+          <li>Tuition reimbursement program</li>
+          <li> Employee discount program</li>
+        </ul>
       </Box>
     </>
   );

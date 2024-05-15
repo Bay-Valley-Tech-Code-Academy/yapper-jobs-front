@@ -9,32 +9,9 @@ import {
 import Searchbar from "../../components/Searchbar/Searchbar";
 import JobSummary from "../../components/JobSummary/JobSummary";
 import JobCard from "../../components/JobCard/JobCard";
+import { jobs } from "../../jobs";
 
 function Search() {
-  // Sample job data
-  const jobs = [
-    { id: 1, title: "Job 1", company: "Company A" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-    { id: 2, title: "Job 2", company: "Company B" },
-  ];
 
   const [maxJobCards, setMaxJobCards] = useState(10);
 
