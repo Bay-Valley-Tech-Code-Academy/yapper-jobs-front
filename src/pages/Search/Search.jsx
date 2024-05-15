@@ -12,7 +12,7 @@ import JobCard from "../../components/JobCard/JobCard";
 import { jobs } from "../../jobs";
 
 function Search() {
-  const [selectedJob, setSelectedJob] = useState("")
+  const [selectedJob, setSelectedJob] = useState(1)
   const [maxJobCards, setMaxJobCards] = useState(10); //shows up to 10 job cards initially
 
   //add 5 more job cards on click

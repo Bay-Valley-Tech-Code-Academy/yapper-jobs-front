@@ -13,7 +13,7 @@ import {
 import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
 import { jobs } from "../../jobs";
 
-function JobSummary({selectedJob}) {
+function JobSummary({ selectedJob }) {
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
 
   if (!isLargerThanSmall) {
@@ -23,7 +23,11 @@ function JobSummary({selectedJob}) {
   const job = jobs.find((job) => job.id === selectedJob);
 
   if (!job) {
-    return <Text>No job found with ID: {selectedJob}</Text>;
+    return (
+      <Box height="100%" ml="3%">
+        <Heading>No Job Selected</Heading>
+      </Box>
+    );
   }
 
   return (
@@ -55,7 +59,7 @@ function JobSummary({selectedJob}) {
           {/* )} */}
         </Stack>
         <Text fontSize="sm" mb="4" overflowY="auto" maxHeight="500px">
-         {job.jobDescription}
+          {job.jobDescription}
         </Text>
         <Stack direction="row" justify="flex-start" spacing="4">
           <Button
