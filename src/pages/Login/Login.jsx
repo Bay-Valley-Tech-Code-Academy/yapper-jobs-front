@@ -1,21 +1,58 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
-import { ChakraProvider, Box, Flex, Heading, Text, Button, Input, useColorMode, ColorModeScript, Link } from "@chakra-ui/react";
-
+import { 
+  ChakraProvider, 
+  Box, 
+  Flex, 
+  Heading, 
+  Text, 
+  Button, 
+  Input, 
+  useColorMode, 
+  ColorModeScript, 
+  Link, 
+  InputGroup, 
+  InputRightElement,
+  FormControl 
+} from "@chakra-ui/react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    try {
-      e.preventDefault();
-      navigate("/search");
-    } catch(err) {
-      console.log("Failed to sign in")
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    //checks if fields are filled out
+    if(!email || !password) {
+      alert("Please fill out login information");
+      return;
     }
+    //trying react query
+    
+    // const response await fetch("", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({email, password})
+    // })
+    // if(!response.ok)
+    //     throw new ResponseError("Failed sign in request", response);
+
+    //   return await response.json();
+
+
+    //other code to try
+
+    // try {
+    //   navigate("/search");
+    // } catch(err) {
+    //   console.log("Failed to sign in")
+    // }
   }
 
   return (
@@ -28,9 +65,18 @@ function Login() {
         margin="auto"
         bgGradient={colorMode === "light" ? 'linear(to-l, #663399, #D5B4F2)' : '#0B1215'}
         color={colorMode === "light" ? "#000000" : "#F3F3F3"}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
       >
         <Flex direction="column" alignItems="center">
-          <Box bg={colorMode === "light" ? "#FFFFFF" : "#0B1215"} p={4} borderRadius="md" width="50vw" minHeight="75vh">
+          <Box 
+            bg={colorMode === "light" ? "#FFFFFF" : "#0B1215"} 
+            p={10} 
+            borderRadius="md" 
+            width="35vw" 
+            minHeight="65vh"
+          >
             <Flex justifyContent="flex-end">
               <Button
                 onClick={toggleColorMode}
@@ -44,39 +90,68 @@ function Login() {
             <Heading mb={4} ml={4}>Welcome 🗣️</Heading>
             <Heading mb={4} ml={4}>Sign in to Yapper Jobs</Heading>
               <Box flex={1} m={4} mt={10} position="relative">
-                <Input
-                  placeholder="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  isRequired
-                  _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.800" }}
-                  minWidth="30vw"
-                />
+                <FormControl isRequired>
+                  <Input
+                    placeholder="email"
+                    value={email}
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.800" }}
+                    minWidth="30vw"
+                    height="3rem"
+                  />
+                </FormControl>
+                
               </Box>
-              <Box flex={1} m={4} mt={10} position="relative">
-                <Input
-                  placeholder="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  isRequired
-                  _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.800" }}
-                  minWidth="30vw"
-                />
+              <Box flex={1} m={4} mt={5} position="relative">
+                <InputGroup>
+                  <Input
+                    placeholder="password"
+                    value={password}
+                    type={showPassword ? "text" : "password"}
+                    onChange={(e) => setPassword(e.target.value)}
+                    isRequired
+                    _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.800" }}
+                    minWidth="30vw"
+                    height="3rem"
+                  />
+                  <InputRightElement flex={1} m={1} width="5rem">
+                    <Button 
+                      id="check"
+                      type="checkbox"
+                      value={showPassword}
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      cursor="pointer"
+                      size="md"
+                      height="2rem"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </Button> 
+                  </InputRightElement>
+                </InputGroup>
               </Box>
-              <Text mt={2} textAlign="center">
-                <Link color="teal.500">Forgot Password?</Link>
+              <Text mt={6} textAlign="center">
+                <Link color="teal.500" onClick={() => navigate("/forget-password")}>Forgot Password?</Link>
               </Text>
               <Button
-                mt={2}
+                ml={4}
+                mt={8}
                 colorScheme="teal"
-                width="100%"
+                minWidth="30vw"
                 onClick={handleSubmit}
                 backgroundColor={colorMode === "light" ? "#000000" : "#A96CDE"}
+                height="3rem"
               >
                 Sign In
               </Button>
-              <Text mt={2} textAlign="center">
-                Don't have an account with us? <Link color="teal.500" onClick={() => navigate("/register")}>Sign Up</Link>
+              <Text mt={8} textAlign="center">
+                Don't have an account with us? 
+                <Link 
+                  color="teal.500" 
+                  onClick={() => navigate("/register")}
+                >
+                 &nbsp;Sign Up
+                </Link>
               </Text>
           </Box>
         </Flex>

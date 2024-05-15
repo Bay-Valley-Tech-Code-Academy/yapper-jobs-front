@@ -14,6 +14,7 @@ import SavedJobs from "./pages/Saved-Jobs/SavedJobs";
 import ResumeBuilder from "./pages/Resume-Builder/ResumeBuilder";
 import Applications from "./pages/Applications/Applications";
 import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
+import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Login />} />
           <Route path="/confirm-password" element={<ConfirmPassword />} />
+          <Route path="/forget-password" element={<ForgetPassword/>} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
