@@ -17,7 +17,11 @@ import {
   Wrap,
   MenuItem,
 } from "@chakra-ui/react";
-import { ChevronDownIcon, SmallCloseIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  SmallCloseIcon,
+  TriangleDownIcon,
+} from "@chakra-ui/icons";
 import {
   certificationOptions,
   benefitOptions,
@@ -28,16 +32,15 @@ import {
   industryOptions,
 } from "../options";
 
-function FilterMenu({ isLargerThanSmall, selectedFilters, setSelectedFilters, onFilterClick }) {
+function FilterMenu({
+  isLargerThanSmall,
+  selectedFilters,
+  setSelectedFilters,
+  onFilterClick,
+}) {
   const [salaryRange, setSalaryRange] = useState([150000]); // Initial salary range
 
-//   const handleFilterClick = (value) => {
-//     const updatedFilters = [...selectedFilters];
-//       updatedFilters.push(value);
-//     onFilterClick(updatedFilters);
-//   };
-
-const handleFilterClick = (value, group) => {
+  const handleFilterClick = (value, group) => {
     const updatedFilters = { ...selectedFilters };
     if (!updatedFilters[group]) {
       updatedFilters[group] = [value];
@@ -45,18 +48,18 @@ const handleFilterClick = (value, group) => {
       if (!updatedFilters[group].includes(value)) {
         updatedFilters[group].push(value);
       } else {
-        updatedFilters[group] = updatedFilters[group].filter((item) => item !== value);
+        updatedFilters[group] = updatedFilters[group].filter(
+          (item) => item !== value
+        );
       }
     }
     onFilterClick(updatedFilters);
   };
 
-
   const handleSalaryChange = (newRange) => {
     setSalaryRange(newRange);
     setSelectedFilters({ ...selectedFilters, Salary: newRange });
   };
-
 
   return (
     <>
@@ -78,21 +81,25 @@ const handleFilterClick = (value, group) => {
                   flexWrap="wrap"
                   direction={isLargerThanSmall ? "row" : "column"}
                 >
-                  <MenuItem onClick={() => setSelectedFilters({})}>Clear <SmallCloseIcon/></MenuItem>
+                    {/* Clears the filters selected */}
+                  <MenuItem onClick={() => setSelectedFilters({})}>
+                    Clear <SmallCloseIcon />
+                  </MenuItem>
                   {/* Experience Level */}
                   <MenuOptionGroup title="Experience Level" type="checkbox">
                     {experienceOptions.map((option) => (
                       <MenuItemOption
                         key={`experience${option.id}`}
                         value={option.value}
-                        onClick={() => handleFilterClick(option.label, "Experience")}
+                        onClick={() =>
+                          handleFilterClick(option.label, "Experience")
+                        }
                       >
                         {option.label}
                       </MenuItemOption>
                     ))}
                   </MenuOptionGroup>
                 </Flex>
-                {/* Benefits */}
                 <Flex direction={isLargerThanSmall ? "row" : "column"}>
                   {/* Employment Type */}
                   <MenuOptionGroup title="Employment Type" type="checkbox">
@@ -100,7 +107,9 @@ const handleFilterClick = (value, group) => {
                       <MenuItemOption
                         key={`employment${option.id}`}
                         value={option.value}
-                        onClick={() => handleFilterClick(option.label, "Employment")}
+                        onClick={() =>
+                          handleFilterClick(option.label, "Employment")
+                        }
                       >
                         {option.label}
                       </MenuItemOption>
@@ -112,7 +121,9 @@ const handleFilterClick = (value, group) => {
                       <MenuItemOption
                         key={`size${option.id}`}
                         value={option.value}
-                        onClick={() => handleFilterClick(option.label, "Company Size")}
+                        onClick={() =>
+                          handleFilterClick(option.label, "Company Size")
+                        }
                       >
                         {option.label}
                       </MenuItemOption>
@@ -124,35 +135,42 @@ const handleFilterClick = (value, group) => {
                       <MenuItemOption
                         key={`location${option.id}`}
                         value={option.value}
-                        onClick={() => handleFilterClick(option.label, "Location")}
+                        onClick={() =>
+                          handleFilterClick(option.label, "Location")
+                        }
                       >
                         {option.label}
                       </MenuItemOption>
                     ))}
                   </MenuOptionGroup>
-                <MenuOptionGroup title="Benefits" type="checkbox">
-                  {benefitOptions.map((option) => (
-                    <MenuItemOption
-                      key={`benefits${option.id}`}
-                      value={option.value}
-                      onClick={() => handleFilterClick(option.label, "Benefits")}
-                    >
-                      {option.label}
-                    </MenuItemOption>
-                  ))}
-                </MenuOptionGroup>
-                {/* Certifications */}
-                <MenuOptionGroup title="Certifications" type="checkbox">
-                  {certificationOptions.map((option) => (
-                    <MenuItemOption
-                      key={`certifications${option.id}`}
-                      value={option.value}
-                      onClick={() => handleFilterClick(option.label, "Certifications")}
-                    >
-                      {option.label}
-                    </MenuItemOption>
-                  ))}
-                </MenuOptionGroup>
+                  {/* Benefits */}
+                  <MenuOptionGroup title="Benefits" type="checkbox">
+                    {benefitOptions.map((option) => (
+                      <MenuItemOption
+                        key={`benefits${option.id}`}
+                        value={option.value}
+                        onClick={() =>
+                          handleFilterClick(option.label, "Benefits")
+                        }
+                      >
+                        {option.label}
+                      </MenuItemOption>
+                    ))}
+                  </MenuOptionGroup>
+                  {/* Certifications */}
+                  <MenuOptionGroup title="Certifications" type="checkbox">
+                    {certificationOptions.map((option) => (
+                      <MenuItemOption
+                        key={`certifications${option.id}`}
+                        value={option.value}
+                        onClick={() =>
+                          handleFilterClick(option.label, "Certifications")
+                        }
+                      >
+                        {option.label}
+                      </MenuItemOption>
+                    ))}
+                  </MenuOptionGroup>
                 </Flex>
               </Wrap>
               {/* Salary Range Slider */}
@@ -199,7 +217,9 @@ const handleFilterClick = (value, group) => {
                           <MenuItemOption
                             key={`industry${option.id}`}
                             value={option.value}
-                            onClick={() => handleFilterClick(option.label, "Industry")}
+                            onClick={() =>
+                              handleFilterClick(option.label, "Industry")
+                            }
                           >
                             {option.label}
                           </MenuItemOption>
@@ -214,7 +234,9 @@ const handleFilterClick = (value, group) => {
                           <MenuItemOption
                             key={`industry2${option.id}`}
                             value={option.value}
-                            onClick={() => handleFilterClick(option.label, "Industry")}
+                            onClick={() =>
+                              handleFilterClick(option.label, "Industry")
+                            }
                           >
                             {option.label}
                           </MenuItemOption>
