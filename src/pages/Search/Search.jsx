@@ -20,8 +20,6 @@ function Search() {
     setMaxJobCards((prevMax) => prevMax + 5);
   };
 
-  console.log(selectedJob)
-
   //gets the max cards depending on the value of the state variable
   const jobCards = jobs.slice(0, maxJobCards);
 
