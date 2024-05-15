@@ -67,7 +67,7 @@ function JobSummary({ selectedJob }) {
           <Button
             colorScheme="purple"
             variant="solid"
-            onClick={() => navigate('/apply')}
+            onClick={() => navigate(`../apply/${selectedJob}`)}
           >
             Apply Now
           </Button>

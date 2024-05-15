@@ -51,7 +51,7 @@ function JobCard(props) {
             spacing={{ base: "2", md: "4" }}
             justify="flex-start"
           >
-            <Button colorScheme="purple" size="sm" onClick={() => navigate("/apply")}>
+            <Button colorScheme="purple" size="sm" onClick={() => navigate(`../apply/${props.selectedJob}`)}>
               Apply
             </Button>
             <IconButton

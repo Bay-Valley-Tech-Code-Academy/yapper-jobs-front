@@ -45,7 +45,7 @@ function Search() {
           <Text>{jobs.length} jobs</Text>
           {/* Display JobCards */}
           {jobCards.map((job) => (
-            <JobCard key={job.id} {...job} setSelectedJob={setSelectedJob}/>
+            <JobCard key={job.id} {...job} selectedJob={selectedJob} setSelectedJob={setSelectedJob}/>
           ))}
           {/* Get more Jobs */}
           {jobs.length > maxJobCards && (
