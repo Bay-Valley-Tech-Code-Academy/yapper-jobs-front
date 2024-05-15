@@ -35,7 +35,7 @@ function NavBar() {
       width="100%" overflowX="hidden" position="relative">
       <Flex justify="space-between" align="center" position="relative">
       <Image src="/yapperjoblogo.png" alt="Yapper Jobs Logo" height="35px" 
-        onClick={() => navigate("/main")} 
+        onClick={() => navigate("/search")} 
         cursor="pointer" 
       />
         {isLargerThanMobile ? (
