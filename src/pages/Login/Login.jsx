@@ -26,34 +26,29 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //checks if fields are filled out
-    if(!email || !password) {
-      alert("Please fill out login information");
-      return;
+    if (!email || !password) {
+        alert("Please fill out login information");
+        return;
     }
-    //trying react query
-    
-    // const response await fetch("", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({email, password})
-    // })
-    // if(!response.ok)
-    //     throw new ResponseError("Failed sign in request", response);
 
-    //   return await response.json();
+    const response = await fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+    });
 
+    if (!response.ok)
+        throw new Error("Sign in request failed", response);
 
-    //other code to try
+    const data = await response.json();
+    console.log("User logged in successfully:", data);
 
-    // try {
-    //   navigate("/search");
-    // } catch(err) {
-    //   console.log("Failed to sign in")
-    // }
-  }
+    navigate("/search"); //comment out the rest of code if u wanna test the routing
+
+    return data;
+}
 
   return (
     <ChakraProvider>
@@ -70,6 +65,7 @@ function Login() {
         alignItems="center"
       >
         <Flex direction="column" alignItems="center">
+          {/* idk how to make login box responsive */}
           <Box 
             bg={colorMode === "light" ? "#FFFFFF" : "#0B1215"} 
             p={10} 
@@ -78,6 +74,8 @@ function Login() {
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
+
+              {/* change light/dark mode button layout to match w/ register */}
               <Button
                 onClick={toggleColorMode}
                 mr={2}
@@ -115,6 +113,7 @@ function Login() {
                     minWidth="30vw"
                     height="3rem"
                   />
+                  {/* hide and show password :D */}
                   <InputRightElement flex={1} m={1} width="5rem">
                     <Button 
                       id="check"
