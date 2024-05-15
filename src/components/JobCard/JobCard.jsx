@@ -15,19 +15,28 @@ import {
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md"; // Assuming you're using Material Icons for the save/unsave icon
 import { FaMapMarkerAlt } from "react-icons/fa";
 
-
 function JobCard(props) {
   const navigate = useNavigate();
 
   const handleClick = (id) => {
-    props.setSelectedJob(id)
-  }
+    props.setSelectedJob(id);
+  };
+
+  const handleApplyClick = (id) => {
+    props.setSelectedJob(id);
+    navigate(`../apply/${id}`);
+  };
 
   return (
     <>
       <Flex direction="column" maxW="400px" mx="auto">
         <Box p="4">
-          <Heading as="h2" size="md" cursor="pointer" onClick={() => handleClick(props.id)}>
+          <Heading
+            as="h2"
+            size="md"
+            cursor="pointer"
+            onClick={() => handleClick(props.id)}
+          >
             {props.title}
           </Heading>
           <Text fontSize="sm" color="gray.600">
@@ -42,16 +51,19 @@ function JobCard(props) {
             <Icon as={FaMapMarkerAlt} />
             <Text fontSize="sm">{props.location}</Text>
           </Stack>
-            <Text fontSize="sm" mb="4" maxHeight="110px"
-            overflow="hidden">
-              {props.jobDescription}
-            </Text>
+          <Text fontSize="sm" mb="4" maxHeight="110px" overflow="hidden">
+            {props.jobDescription}
+          </Text>
           <Stack
             direction={{ base: "column", md: "row" }}
             spacing={{ base: "2", md: "4" }}
             justify="flex-start"
           >
-            <Button colorScheme="purple" size="sm" onClick={() => navigate(`../apply/${props.selectedJob}`)}>
+            <Button
+              colorScheme="purple"
+              size="sm"
+              onClick={() => handleApplyClick(props.id)}
+            >
               Apply
             </Button>
             <IconButton
