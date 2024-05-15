@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Flex,
   Box,
@@ -16,6 +17,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 
 
 function JobCard(props) {
+  const navigate = useNavigate();
+
   const handleClick = (id) => {
     props.setSelectedJob(id)
   }
@@ -48,7 +51,7 @@ function JobCard(props) {
             spacing={{ base: "2", md: "4" }}
             justify="flex-start"
           >
-            <Button colorScheme="purple" size="sm">
+            <Button colorScheme="purple" size="sm" onClick={() => navigate("/apply")}>
               Apply
             </Button>
             <IconButton
