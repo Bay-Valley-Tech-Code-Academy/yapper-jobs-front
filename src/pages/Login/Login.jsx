@@ -20,6 +20,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isEmployer, setIsEmployer] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
 
@@ -45,7 +46,16 @@ function Login() {
     const data = await response.json();
     console.log("User logged in successfully:", data);
 
-    navigate("/search"); //comment out the rest of code if u wanna test the routing
+    // navigate("/search"); <--- uncomment this and comment rest of code to test routing
+
+    //checks if user is employer or job seeker
+    if(data.role === "employer") {
+      navigate("/employer-main");
+      setIsEmployer(true);
+    } else {
+      navigate("/search");
+      setIsEmployer(false);
+    }
 
     return data;
 }
