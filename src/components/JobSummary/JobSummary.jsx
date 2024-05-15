@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
 import { jobs } from "../../jobs";
 
 function JobSummary({ selectedJob }) {
+  const navigate = useNavigate();
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
 
   if (!isLargerThanSmall) {
@@ -65,7 +67,7 @@ function JobSummary({ selectedJob }) {
           <Button
             colorScheme="purple"
             variant="solid"
-            // onClick={onApplyClick}
+            onClick={() => navigate(`../apply/${selectedJob}`)}
           >
             Apply Now
           </Button>
