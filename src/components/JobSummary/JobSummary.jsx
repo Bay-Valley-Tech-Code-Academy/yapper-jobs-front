@@ -11,20 +11,28 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
+import { jobs } from "../../jobs";
 
-function JobSummary() {
+function JobSummary({selectedJob}) {
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
 
   if (!isLargerThanSmall) {
     return null; // Render nothing if the screen size is smaller than 30em
   }
+
+  const job = jobs.find((job) => job.id === selectedJob);
+
+  if (!job) {
+    return <Text>No job found with ID: {selectedJob}</Text>;
+  }
+
   return (
     <>
       <Box height="100%" ml="3%">
         <Stack direction="column" mb="2">
-          <Heading size="md">Full Stack Developer</Heading>
+          <Heading size="md">{job.title}</Heading>
           <Text fontSize="sm" color="gray.600">
-            Google
+            {job.company}
           </Text>
           <Stack direction="row" justify="space-between" align="center">
             <IconButton
@@ -38,7 +46,7 @@ function JobSummary() {
         <Stack direction="row" spacing="4" align="center" mb="2">
           <Stack direction="row" spacing="1">
             <Icon as={FaMapMarkerAlt} />
-            <Text fontSize="sm">Modesto, CA</Text>
+            <Text fontSize="sm">{job.location}</Text>
           </Stack>
           {/* {isFullTime && ( */}
           <Text fontSize="sm" fontWeight="bold">
@@ -47,27 +55,7 @@ function JobSummary() {
           {/* )} */}
         </Stack>
         <Text fontSize="sm" mb="4" overflowY="auto" maxHeight="500px">
-          Another locum tenens opportunity has arrived in California! Our client
-          is looking for a nurse practitioner specializing in
-          hematology/oncology to begin coverage in early August. Hours include
-          8a - 5p shifts from Mondays - Fridays. The selected locum will be
-          handling new patient consults, follow ups, and general hem/onc cases.
-          There is a chance for an extension with this opportunity. This
-          facility uses Epic. Want to learn more? Apply today! Barton Associates
-          specializes in providing the healthcare industry with best-in-class
-          staffing services throughout the United States. Since its inception,
-          Barton has prided itself on building exceptional relationships with
-          both its clients and providers, all of which originates from their
-          world-class training program and strong commitment to their employees.
-          Healthcare staffing is a nearly. Astound Business Solutions is
-          currently searching for an Account Executive for our Central Valley,
-          CA territory which covers the geographical areas of Stockton, Lathrop,
-          Manteca, Modesto and Ripon. This position is responsible for promoting
-          and selling fiber services to business customers throughout a specific
-          region via cold calling, networking, mailing and door-to-door
-          canvassing. Also responsible for presenting and selling the full line
-          of Astound Broadband Powered by Wave products including voice, video
-          and data services.
+         {job.jobDescription}
         </Text>
         <Stack direction="row" justify="flex-start" spacing="4">
           <Button

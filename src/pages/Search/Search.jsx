@@ -12,13 +12,15 @@ import JobCard from "../../components/JobCard/JobCard";
 import { jobs } from "../../jobs";
 
 function Search() {
-
+  const [selectedJob, setSelectedJob] = useState("")
   const [maxJobCards, setMaxJobCards] = useState(10); //shows up to 10 job cards initially
 
   //add 5 more job cards on click
   const handleShowMore = () => {
     setMaxJobCards((prevMax) => prevMax + 5);
   };
+
+  console.log(selectedJob)
 
   //gets the max cards depending on the value of the state variable
   const jobCards = jobs.slice(0, maxJobCards);
@@ -45,7 +47,7 @@ function Search() {
           <Text>{jobs.length} jobs</Text>
           {/* Display JobCards */}
           {jobCards.map((job) => (
-            <JobCard key={job.id} {...job} />
+            <JobCard key={job.id} {...job} setSelectedJob={setSelectedJob}/>
           ))}
           {/* Get more Jobs */}
           {jobs.length > maxJobCards && (
@@ -56,7 +58,7 @@ function Search() {
         </Box>
         {/* JobSummary Component */}
         <Box width={{ base: "0%", sm: "60%" }}>
-          <JobSummary />
+          <JobSummary selectedJob={selectedJob}/>
         </Box>
       </Flex>
     </div>

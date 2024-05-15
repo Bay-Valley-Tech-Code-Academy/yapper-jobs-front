@@ -13,12 +13,18 @@ import {
 } from "@chakra-ui/react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md"; // Assuming you're using Material Icons for the save/unsave icon
 import { FaMapMarkerAlt } from "react-icons/fa";
+
+
 function JobCard(props) {
+  const handleClick = (id) => {
+    props.setSelectedJob(id)
+  }
+
   return (
     <>
       <Flex direction="column" maxW="400px" mx="auto">
         <Box p="4">
-          <Heading as="h2" size="md">
+          <Heading as="h2" size="md" cursor="pointer" onClick={() => handleClick(props.id)}>
             {props.title}
           </Heading>
           <Text fontSize="sm" color="gray.600">
