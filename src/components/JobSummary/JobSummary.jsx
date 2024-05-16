@@ -36,8 +36,8 @@ function JobSummary({ selectedJob }) {
     <>
       <Box height="100%" ml="3%">
         <Stack direction="column" mb="2">
-          <Heading size="md">{job.title}</Heading>
-          <Text fontSize="sm" color="gray.600">
+          <Heading size="3xl">{job.title}</Heading>
+          <Text fontSize="xl" color="gray.600">
             {job.company}
           </Text>
           <Stack direction="row" justify="space-between" align="center">
@@ -54,13 +54,11 @@ function JobSummary({ selectedJob }) {
             <Icon as={FaMapMarkerAlt} />
             <Text fontSize="sm">{job.location}</Text>
           </Stack>
-          {/* {isFullTime && ( */}
           <Text fontSize="sm" fontWeight="bold">
-            Full-time
+            {job.status}
           </Text>
-          {/* )} */}
         </Stack>
-        <Text fontSize="sm" mb="4" overflowY="auto" maxHeight="500px">
+        <Text fontSize="md" mb="4" overflowY="auto" maxHeight="500px">
           {job.jobDescription}
         </Text>
         <Stack direction="row" justify="flex-start" spacing="4">
@@ -77,7 +75,7 @@ function JobSummary({ selectedJob }) {
         </Stack>
         <Divider mt={4} />
         <Text mb={4} mt={4}>
-          Industry: Technology
+          Industry: {job.industry}
         </Text>
         <Heading mb={4}>About the company</Heading>
         <Text ml={4}>

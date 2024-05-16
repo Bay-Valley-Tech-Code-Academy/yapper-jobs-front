@@ -61,6 +61,10 @@ function FilterMenu({
     setSelectedFilters({ ...selectedFilters, Salary: newRange });
   };
 
+  const isOptionSelected = (optionLabel, group) => {
+    return selectedFilters[group] && selectedFilters[group].includes(optionLabel);
+  };
+
   return (
     <>
       <Menu closeOnSelect={false} isLazy>
@@ -91,6 +95,7 @@ function FilterMenu({
                       <MenuItemOption
                         key={`experience${option.id}`}
                         value={option.value}
+                        isChecked={isOptionSelected(option.label, "Experience")}
                         onClick={() =>
                           handleFilterClick(option.label, "Experience")
                         }
