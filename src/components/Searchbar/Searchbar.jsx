@@ -26,7 +26,6 @@ function Searchbar() {
   };
 
   return (
-    <>
       <Flex
         alignItems="center"
         justifyContent="space-between"
@@ -65,7 +64,6 @@ function Searchbar() {
           </Button>
         </Flex>
       </Flex>
-    </>
   );
 }
 

@@ -36,7 +36,7 @@ function JobSummary({ selectedJob }) {
     <>
       <Box height="100%" ml="3%">
         <Stack direction="column" mb="2">
-          <Heading size="3xl">{job.title}</Heading>
+          <Heading size="2xl">{job.title}</Heading>
           <Text fontSize="xl" color="gray.600">
             {job.company}
           </Text>

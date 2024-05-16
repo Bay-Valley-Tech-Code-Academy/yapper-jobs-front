@@ -27,7 +27,6 @@ function JobCard(props) {
   };
 
   return (
-    <>
       <Flex direction="column" maxW="400px" mx="auto">
         <Box p="4">
           <Heading
@@ -75,7 +74,6 @@ function JobCard(props) {
           </Stack>
         </Box>
       </Flex>
-    </>
   );
 }
 
