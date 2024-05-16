@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   MenuButton,
   Menu,
@@ -62,7 +62,6 @@ function FilterMenu({
   };
 
   return (
-    <>
       <Menu closeOnSelect={false} isLazy>
         {({ isOpen }) => (
           <>
@@ -249,7 +248,6 @@ function FilterMenu({
           </>
         )}
       </Menu>
-    </>
   );
 }
 

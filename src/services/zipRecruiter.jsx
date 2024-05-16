@@ -16,3 +16,4 @@ const fetchData = async () => {
   };
 
   export {fetchData};
+  

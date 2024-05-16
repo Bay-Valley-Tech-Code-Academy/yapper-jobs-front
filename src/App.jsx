@@ -19,20 +19,6 @@ import PostJob from "./pages/Post-Job/PostJob";
 import { fetchData } from "./services/zipRecruiter";
 
 function App() {
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try{
-  //       const jsonData = await fetchData();
-  //       setData(jsonData);
-  //     } catch(error){
-  //       console.log(error);
-  //     }
-  //   };
-  //   getData();
-  // }, [])
-
-  // console.log(data)
   return (
     <ChakraProvider>
       <BrowserRouter>

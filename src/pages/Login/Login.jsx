@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
+import customColorMode from '/util/toggleColorMode'
 import { 
   ChakraProvider, 
   Box, 
@@ -8,7 +9,6 @@ import {
   Text, 
   Button, 
   Input, 
-  useColorMode, 
   ColorModeScript, 
   Link, 
   InputGroup, 
@@ -21,7 +21,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isEmployer, setIsEmployer] = useState(false);
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { handleToggleColorMode, colors } = customColorMode();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -46,9 +46,8 @@ function Login() {
     const data = await response.json();
     console.log("User logged in successfully:", data);
 
-    // navigate("/search"); <--- uncomment this and comment rest of code to test routing
+    navigate("/search");
 
-    //checks if user is employer or job seeker
     if(data.role === "employer") {
       navigate("/employer-main");
       setIsEmployer(true);
@@ -62,37 +61,34 @@ function Login() {
 
   return (
     <ChakraProvider>
-      <ColorModeScript initialColorMode="dark" />
+      <ColorModeScript initialColorMode="light" />
       <Box
         p={[2, 4, 6, 8]}
+        bgGradient={colors.bgGradient}
+        color={colors.textColor}
         maxWidth="100vw"
         minHeight="100vh"
         margin="auto"
-        bgGradient={colorMode === "light" ? 'linear(to-l, #663399, #D5B4F2)' : '#0B1215'}
-        color={colorMode === "light" ? "#000000" : "#F3F3F3"}
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
         <Flex direction="column" alignItems="center">
-          {/* idk how to make login box responsive */}
           <Box 
-            bg={colorMode === "light" ? "#FFFFFF" : "#0B1215"} 
+            bg={colors.boxColor} 
             p={10} 
             borderRadius="md" 
             width="35vw" 
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
-
-              {/* change light/dark mode button layout to match w/ register */}
               <Button
-                onClick={toggleColorMode}
                 mr={2}
-                color={colorMode === "light" ? "#FFFFFF" : "#000000"}
-                backgroundColor={colorMode === "light" ? "#000000" : "#A96CDE"}
+                onClick={handleToggleColorMode}
+                color={colors.buttonColor}
+                backgroundColor={colors.buttonBgColor}
               >
-                Toggle {colorMode === "light" ? "Dark" : "Light"} Mode
+                Toggle {colors.text} Mode
               </Button>
             </Flex>
             <Heading mb={4} ml={4}>Welcome 🗣️</Heading>
@@ -104,7 +100,7 @@ function Login() {
                     value={email}
                     type="email"
                     onChange={(e) => setEmail(e.target.value)}
-                    _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.800" }}
+                    _hover={{ bg: colors.bgHover }}
                     minWidth="30vw"
                     height="3rem"
                   />
@@ -118,12 +114,11 @@ function Login() {
                     value={password}
                     type={showPassword ? "text" : "password"}
                     onChange={(e) => setPassword(e.target.value)}
+                    _hover={{ bg: colors.bgHover }}
                     isRequired
-                    _hover={{ bg: colorMode === "light" ? "gray.200" : "gray.800" }}
                     minWidth="30vw"
                     height="3rem"
                   />
-                  {/* hide and show password :D */}
                   <InputRightElement flex={1} m={1} width="5rem">
                     <Button 
                       id="check"
@@ -148,7 +143,7 @@ function Login() {
                 colorScheme="teal"
                 minWidth="30vw"
                 onClick={handleSubmit}
-                backgroundColor={colorMode === "light" ? "#000000" : "#A96CDE"}
+                backgroundColor={colors.buttonBgColor}
                 height="3rem"
               >
                 Sign In
