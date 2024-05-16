@@ -23,7 +23,6 @@ function JobCard(props) {
   };
 
   const handleApplyClick = (id) => {
-    props.setSelectedJob(id);
     navigate(`../apply/${id}`);
   };
 
