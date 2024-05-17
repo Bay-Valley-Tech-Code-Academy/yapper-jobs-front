@@ -15,14 +15,14 @@ import ResumeBuilder from "./pages/Resume-Builder/ResumeBuilder";
 import Applications from "./pages/Applications/Applications";
 import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
 import PostJob from "./pages/Post-Job/PostJob";
-import { fetchData } from "./services/zipRecruiter";
+import { fetchZipRecruiterData } from "./services/zipRecruiter";
 
 function App() {
   // const [data, setData] = useState([]);
   // useEffect(() => {
   //   const getData = async () => {
   //     try{
-  //       const jsonData = await fetchData();
+  //       const jsonData = await fetchZipRecruiterData();
   //       setData(jsonData);
   //     } catch(error){
   //       console.log(error);

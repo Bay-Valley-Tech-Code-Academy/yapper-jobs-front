@@ -65,6 +65,7 @@ function FilterMenu({
     },
   ];
 
+  //adds the filter option to the selectedFilter
   const handleFilterClick = (value, group) => {
     const updatedFilters = { ...selectedFilters };
     if (!updatedFilters[group]) {
@@ -81,6 +82,7 @@ function FilterMenu({
     onFilterClick(updatedFilters);
   };
 
+  //slider for the income
   const handleSalaryChange = (newRange) => {
     setSalaryRange(newRange);
     setSelectedFilters({ ...selectedFilters, Salary: newRange });
