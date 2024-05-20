@@ -11,7 +11,7 @@ function customColorMode() {
             buttonColor: '#FFFFFF',
             buttonBgColor: "#000000",
             bgHover: 'gray.200',
-            text: 'light',
+            text: 'dark',
         },
         dark: {
             bgGradient: '#0B1215',
@@ -20,7 +20,7 @@ function customColorMode() {
             buttonColor: '#000000',
             buttonBgColor: '#A96CDE',
             bgHover: 'gray.800',
-            text: 'dark',
+            text: 'light',
         },
     };
 

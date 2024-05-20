@@ -23,7 +23,6 @@ function JobCard(props) {
   };
 
   const handleApplyClick = (id) => {
-    props.setSelectedJob(id);
     navigate(`../apply/${id}`);
   };
 
@@ -42,7 +41,7 @@ function JobCard(props) {
             {props.company}
           </Text>
           <Text fontSize="sm" fontWeight="bold">
-            Full-Time
+            {props.status}
           </Text>
           <Stack direction="row" spacing="2" mt="2" mb="4">
             {" "}

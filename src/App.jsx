@@ -16,7 +16,7 @@ import Applications from "./pages/Applications/Applications";
 import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
-import { fetchData } from "./services/zipRecruiter";
+import { fetchZipRecruiterData } from "./services/zipRecruiter";
 
 function App() {
   return (

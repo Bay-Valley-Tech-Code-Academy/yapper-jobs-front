@@ -9,6 +9,28 @@ function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
   const [maxJobCards, setMaxJobCards] = useState(10); //shows up to 10 job cards initially
 
+  const renderJobCards = () => {
+    return jobCards.map((job) => (
+      <JobCard
+        key={job.id}
+        {...job}
+        selectedJob={selectedJob}
+        setSelectedJob={setSelectedJob}
+      />
+    ));
+  };
+
+  const renderShowMoreButton = () => {
+    if (jobs.length > maxJobCards) {
+      return (
+        <Button onClick={handleShowMore} mt="4">
+          Show More
+        </Button>
+      );
+    }
+    return null;
+  };
+
   //add 5 more job cards on click
   const handleShowMore = () => {
     setMaxJobCards((prevMax) => prevMax + 5);
@@ -47,20 +69,9 @@ function Search() {
             <Text>{jobs.length} jobs</Text>
           </Box>
           {/* Display JobCards */}
-          {jobCards.map((job) => (
-            <JobCard
-              key={job.id}
-              {...job}
-              selectedJob={selectedJob}
-              setSelectedJob={setSelectedJob}
-            />
-          ))}
+          {renderJobCards()}
           {/* Get more Jobs */}
-          {jobs.length > maxJobCards && (
-            <Button onClick={handleShowMore} mt="4">
-              Show More
-            </Button>
-          )}
+          {renderShowMoreButton()}
         </Box>
         {/* JobSummary Component */}
         <Box width={{ base: "0%", sm: "60%" }}>
