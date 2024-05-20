@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Heading, Text, Flex, Box, Button } from "@chakra-ui/react";
 import Searchbar from "../../components/Searchbar/Searchbar";
 import JobSummary from "../../components/JobSummary/JobSummary";
@@ -8,6 +8,28 @@ import { jobs } from "../../jobs";
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
   const [maxJobCards, setMaxJobCards] = useState(10); //shows up to 10 job cards initially
+  const [savedJobs, setSavedJobs] = useState([]);
+
+  useEffect(() => {
+    // Load saved jobs from local storage when the component mounts
+    const saved = localStorage.getItem("savedJobs");
+    if (saved) {
+      setSavedJobs(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save the saved jobs to local storage whenever it changes
+    localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+  }, [savedJobs]);
+
+  const handleSaveJob = (id) => {
+    if (savedJobs.includes(id)) {
+      setSavedJobs(savedJobs.filter((jobId) => jobId !== id));
+    } else {
+      setSavedJobs([...savedJobs, id]);
+    }
+  };
 
   const renderJobCards = () => {
     return jobCards.map((job) => (
@@ -16,6 +38,8 @@ function Search() {
         {...job}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
+        savedJobs={savedJobs}
+        handleSaveJob={handleSaveJob}
       />
     ));
   };
@@ -75,7 +99,8 @@ function Search() {
         </Box>
         {/* JobSummary Component */}
         <Box width={{ base: "0%", sm: "60%" }}>
-          <JobSummary selectedJob={selectedJob} />
+          <JobSummary selectedJob={selectedJob} savedJobs={savedJobs}
+            handleSaveJob={handleSaveJob} />
         </Box>
       </Flex>
     </div>

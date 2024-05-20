@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   MenuButton,
   Menu,
@@ -23,6 +23,19 @@ import SavedJobCard from "../../components/SavedJobCard";
 import AppliedJobCard from "../../components/AppliedJobCard";
 
 function SavedJobs() {
+  const [savedJobs, setSavedJobs] = useState([]);
+
+  useEffect(() => {
+    // Load saved jobs from local storage when the component mounts
+    const saved = localStorage.getItem("savedJobs");
+    if (saved) {
+      setSavedJobs(JSON.parse(saved));
+    }
+  }, []);
+
+  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.id));
+  console.log(savedJobDetails)
+
   return (
     <Box bg="#F4F4F4">
       <Flex justifyContent="center">
@@ -41,7 +54,7 @@ function SavedJobs() {
         <Box width={{ base: "100%", sm: "50%" }} mr={4}>
           
           <Heading>Saved Jobs</Heading>
-          {jobs.map((job) => (
+          {savedJobDetails.map((job) => (
             <SavedJobCard key={job.id} {...job} />
           ))}
         </Box>

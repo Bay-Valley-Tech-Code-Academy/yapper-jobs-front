@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
@@ -66,10 +66,11 @@ function JobCard(props) {
             </Button>
             <IconButton
               aria-label="Save/Unsave"
-              icon={<MdFavorite />}
+              icon={props.savedJobs.includes(props.id) ? <MdFavorite /> : <MdFavoriteBorder />}
               colorScheme="purple"
               variant="ghost"
               size="sm"
+              onClick={() => props.handleSaveJob(props.id)}
             />
           </Stack>
         </Box>

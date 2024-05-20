@@ -1,6 +1,6 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
+import { BrowserRouter, Routes, Route, json } from "react-router-dom";
 import "./App.css";
 import Search from "./pages/Search/Search";
 import Apply from "./pages/Apply/Apply";
@@ -19,6 +19,20 @@ import PostJob from "./pages/Post-Job/PostJob";
 import { fetchZipRecruiterData } from "./services/zipRecruiter";
 
 function App() {
+  // const [data, setData] = useState([]);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try{
+  //       const jsonData = await fetchZipRecruiterData();
+  //       setData(jsonData);
+  //     } catch(error){
+  //       console.log(error);
+  //     }
+  //   };
+  //   getData();
+  // }, [])
+
+  // console.log(data)
   return (
     <ChakraProvider>
       <BrowserRouter>

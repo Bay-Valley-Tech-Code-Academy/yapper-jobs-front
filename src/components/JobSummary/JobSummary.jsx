@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -14,13 +14,10 @@ import {
 import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
 import { jobs } from "../../jobs";
 
-function JobSummary({ selectedJob }) {
+
+function JobSummary({ selectedJob, savedJobs, handleSaveJob }) {
   const navigate = useNavigate();
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
-
-  if (!isLargerThanSmall) {
-    return null; // Render nothing if the screen size is smaller than 30em
-  }
 
   const job = jobs.find((job) => job.id === selectedJob);
 
@@ -32,6 +29,8 @@ function JobSummary({ selectedJob }) {
     );
   }
 
+  console.log("Saved Jobs: " + savedJobs)
+
   return (
     <>
       <Box height="100%" ml="3%">
@@ -41,11 +40,11 @@ function JobSummary({ selectedJob }) {
             {job.company}
           </Text>
           <Stack direction="row" justify="space-between" align="center">
-            <IconButton
+            {/* <IconButton
               icon={<Icon as={FaRegBookmark} />}
               aria-label="Save Job"
-              // onClick={onSaveClick}
-            />
+              onClick={handleSaveJob}
+            /> */}
             <Text fontSize="sm">1d ago</Text>
           </Stack>
         </Stack>
@@ -69,8 +68,8 @@ function JobSummary({ selectedJob }) {
           >
             Apply Now
           </Button>
-          <Button colorScheme="gray" variant="outline">
-            Save
+          <Button colorScheme="gray" variant="outline" onClick={() => handleSaveJob(selectedJob)}>
+          {savedJobs.includes(selectedJob) ? 'Unsave' : 'Save'}
           </Button>
         </Stack>
         <Divider mt={4} />
