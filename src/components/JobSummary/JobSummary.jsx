@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -6,19 +6,26 @@ import {
   Heading,
   Text,
   Stack,
-  IconButton,
   Icon,
   Divider,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { jobs } from "../../jobs";
+import useJobStore from "../../store/job-store";
 
-
-function JobSummary({ selectedJob, savedJobs, handleSaveJob }) {
+function JobSummary({ selectedJob, handleSaveJob }) {
   const navigate = useNavigate();
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
+  const { savedJobs } = useJobStore((state) => ({
+    savedJobs: state.savedJobs,
+  }));
 
+  if (!isLargerThanSmall) {
+    return null; // Render nothing if the screen size is smaller than 30em
+  }
+
+  //get job details matching the id of selected job to the jobs JSON
   const job = jobs.find((job) => job.id === selectedJob);
 
   if (!job) {
@@ -29,8 +36,6 @@ function JobSummary({ selectedJob, savedJobs, handleSaveJob }) {
     );
   }
 
-  console.log("Saved Jobs: " + savedJobs)
-
   return (
     <>
       <Box height="100%" ml="3%">
@@ -40,11 +45,6 @@ function JobSummary({ selectedJob, savedJobs, handleSaveJob }) {
             {job.company}
           </Text>
           <Stack direction="row" justify="space-between" align="center">
-            {/* <IconButton
-              icon={<Icon as={FaRegBookmark} />}
-              aria-label="Save Job"
-              onClick={handleSaveJob}
-            /> */}
             <Text fontSize="sm">1d ago</Text>
           </Stack>
         </Stack>
@@ -68,8 +68,12 @@ function JobSummary({ selectedJob, savedJobs, handleSaveJob }) {
           >
             Apply Now
           </Button>
-          <Button colorScheme="gray" variant="outline" onClick={() => handleSaveJob(selectedJob)}>
-          {savedJobs.includes(selectedJob) ? 'Unsave' : 'Save'}
+          <Button
+            colorScheme="gray"
+            variant="outline"
+            onClick={() => handleSaveJob(selectedJob)}
+          >
+            {savedJobs.includes(selectedJob) ? "Unsave" : "Save"}
           </Button>
         </Stack>
         <Divider mt={4} />
@@ -97,7 +101,7 @@ function JobSummary({ selectedJob, savedJobs, handleSaveJob }) {
             calendar year and varies based on state and/or local laws
           </li>
           <li>Tuition reimbursement program</li>
-          <li> Employee discount program</li>
+          <li>Employee discount program</li>
         </ul>
       </Box>
     </>

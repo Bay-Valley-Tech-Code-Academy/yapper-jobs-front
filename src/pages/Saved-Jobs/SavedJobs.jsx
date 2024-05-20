@@ -1,40 +1,51 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import {
-  MenuButton,
-  Menu,
-  MenuList,
   Flex,
   Box,
-  Button,
   Heading,
-  Text,
-  MenuOptionGroup,
-  MenuItemOption,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  Wrap,
-  MenuItem,
 } from "@chakra-ui/react";
 import "./SavedJobs.css";
 import { jobs } from "../../jobs";
 import SavedJobCard from "../../components/SavedJobCard";
 import AppliedJobCard from "../../components/AppliedJobCard";
+import useJobStore from "../../store/job-store";
 
 function SavedJobs() {
-  const [savedJobs, setSavedJobs] = useState([]);
 
-  useEffect(() => {
-    // Load saved jobs from local storage when the component mounts
-    const saved = localStorage.getItem("savedJobs");
-    if (saved) {
-      setSavedJobs(JSON.parse(saved));
-    }
-  }, []);
+  const { savedJobs, removeJob } = useJobStore((state) => ({
+    savedJobs: state.savedJobs,
+    removeJob: state.removeJob,
+  })); // Use the store(zustand)
 
-  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.id));
-  console.log(savedJobDetails)
+  //remove from saved jobs
+  const handleRemoveJob = (id) => {
+    removeJob(id);
+  };
+
+  //fetch details from jobs JSON matching with job id of savedJobs
+  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.id))
+
+  // Render SavedJobCard component
+  const renderSavedJobs = () => {
+    return savedJobDetails.length === 0 ? (
+      <Box mt={8}><Heading>No Saved jobs</Heading></Box>
+    ) : (
+      savedJobDetails.map((job) => (
+        <SavedJobCard key={job.id} {...job} handleRemoveJob={handleRemoveJob} />
+      ))
+    )
+  }
+
+  //Render AppliedJobs component
+  const renderAppliedJobs = () => {
+    return jobs.length === 0 ? (
+      <Box mt={8}><Heading>No Application Status Available</Heading></Box>
+    ) : (
+      jobs.map((job) => (
+        <AppliedJobCard key={job.id} {...job} />
+      ))
+    )
+  }
 
   return (
     <Box bg="#F4F4F4">
@@ -52,17 +63,12 @@ function SavedJobs() {
       >
         
         <Box width={{ base: "100%", sm: "50%" }} mr={4}>
-          
           <Heading>Saved Jobs</Heading>
-          {savedJobDetails.map((job) => (
-            <SavedJobCard key={job.id} {...job} />
-          ))}
+          {renderSavedJobs()}
         </Box>
         <Box width={{ base: "100%", sm: "50%" }} mr={4}>
           <Heading>Application Status</Heading>
-          {jobs.map((job) => (
-            <AppliedJobCard key={job.id} {...job} />
-          ))}
+          {renderAppliedJobs()}
         </Box>
       </Flex>
     </Box>
