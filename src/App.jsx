@@ -1,20 +1,22 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from "@chakra-ui/react";
 import "./App.css";
-import Main from "./pages/Main/Main";
+import Search from "./pages/Search/Search";
 import Apply from "./pages/Apply/Apply";
 import EmployerMain from "./pages/Employer-Main/EmployerMain";
 import ProfileEmployer from "./pages/Profile-Employer/ProfileEmployer";
 import ProfileSeeker from "./pages/Profile-Seeker/ProfileSeeker";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
-import Layout from "./components/Layout";
+import Layout from "./Layout/Layout";
 import SavedJobs from "./pages/Saved-Jobs/SavedJobs";
 import ResumeBuilder from "./pages/Resume-Builder/ResumeBuilder";
 import Applications from "./pages/Applications/Applications";
 import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
+import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
+import { fetchZipRecruiterData } from "./services/zipRecruiter";
 
 function App() {
   return (
@@ -23,7 +25,7 @@ function App() {
         <Routes>
           {/* Routes with Navbar */}
           <Route element={<Layout />}>
-            <Route path="/main" element={<Main />} />
+            <Route path="/search" element={<Search />} />
             <Route path="apply/:jobId" element={<Apply />} />
             <Route path="employer-main" element={<EmployerMain />} />
             <Route path="profile-employer" element={<ProfileEmployer />} />
@@ -37,6 +39,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Login />} />
           <Route path="/confirm-password" element={<ConfirmPassword />} />
+          <Route path="/forget-password" element={<ForgetPassword/>} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
