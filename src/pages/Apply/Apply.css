@@ -17,7 +17,7 @@
     border: none;
     padding: 0.5em 1em;
     border-radius: 1em;
-    margin-bottom: 20px;
+    margin-bottom: 2em;
     cursor: pointer;
     max-width: 15em;
   }
@@ -34,7 +34,7 @@
   }
   
   .job-description {
-    border: 2px solid #000000;
+    border: 0.2em solid #000000;
     padding: 0.5em;
     margin-bottom: 1em;
     max-width: 40em;
@@ -49,7 +49,7 @@
   .questions-title {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 1em;
     margin-bottom: 0.5em;
   }
   
@@ -61,10 +61,10 @@
   .form-group input,
   .form-group textarea {
     width: 100%;
-    padding: 10px;
+    padding: 0.5em;
     margin-bottom: 1em;
     border: 1px solid #ffffff;
-    border-radius: 5px;
+    border-radius: 0.25em;
     background-color: rgb(95, 94, 94);
     box-sizing: border-box;
   }
