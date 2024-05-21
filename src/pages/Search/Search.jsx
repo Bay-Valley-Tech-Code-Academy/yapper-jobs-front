@@ -5,6 +5,7 @@ import JobSummary from "../../components/JobSummary/JobSummary";
 import JobCard from "../../components/JobCard/JobCard";
 import { jobs } from "../../jobs";
 import useJobStore from "../../store/job-store"; // Import the store
+import customColorMode from "../../../util/toggleColorMode"; // Import custom color mode
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
@@ -14,6 +15,7 @@ function Search() {
     addJob: state.addJob,
     removeJob: state.removeJob,
   })); // Use the store
+  const { handleToggleColorMode, colors } = customColorMode();
 
   const handleSaveJob = (id) => {
     if (savedJobs.includes(id)) {
@@ -55,40 +57,37 @@ function Search() {
   const jobCards = jobs.slice(0, maxJobCards);
 
   return (
-    <div
-      style={{
-        backgroundColor: "#F4F4F4",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-      }}
+    <Box
+      bg={colors.bgGradient}
+      color={colors.textColor}
+      display="flex"
+      flexDirection="column"
+      height="100%"
     >
+      <Flex justifyContent="flex-end" p={4}>
+        <Button
+          onClick={handleToggleColorMode}
+          color={colors.buttonColor}
+          backgroundColor={colors.buttonBgColor}
+        >
+          Toggle {colors.text} Mode
+        </Button>
+      </Flex>
       <Heading textAlign="center" m="4">
         Search Jobs
       </Heading>
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        width="80%"
-        mx="auto"
-        px="4"
-        mb="4"
-      >
+      <Flex justifyContent="center" alignItems="center" width="80%" mx="auto" px="4" mb="4">
         <Searchbar />
       </Flex>
       <Flex maxW="90%" maxH="100vh" mx="auto" px="4">
-        {/* JobCards Component */}
         <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto">
           <Box ml="10" p="3">
             <Heading>Search Results</Heading>
             <Text>{jobs.length} jobs</Text>
           </Box>
-          {/* Display JobCards */}
           {renderJobCards()}
-          {/* Get more Jobs */}
           {renderShowMoreButton()}
         </Box>
-        {/* JobSummary Component */}
         <Box width={{ base: "0%", sm: "60%" }}>
           <JobSummary
             selectedJob={selectedJob}
@@ -97,7 +96,7 @@ function Search() {
           />
         </Box>
       </Flex>
-    </div>
+    </Box>
   );
 }
 
