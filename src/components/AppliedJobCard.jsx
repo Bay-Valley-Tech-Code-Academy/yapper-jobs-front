@@ -2,6 +2,21 @@ import React from 'react'
 import { Flex, Heading, Box, Text } from '@chakra-ui/react';
 
 function AppliedJobCard(props) {
+
+  //change font color based on font color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Submitted':
+        return 'green';
+      case 'Viewed':
+        return 'yellow';
+      case 'Rejected':
+        return 'red';
+      default:
+        return 'black';
+    }
+  };
+
   return (
     <Flex>
     <Box p={4} m={2}>

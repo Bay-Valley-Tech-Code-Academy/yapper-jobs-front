@@ -28,7 +28,7 @@ function SavedJobCard(props) {
           Apply Now
         </Button>
         <IconButton
-          aria-label="Save/Unsave"
+          aria-label="Unsave"
           icon={<MdFavorite />}
           colorScheme="purple"
           variant="ghost"

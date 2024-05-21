@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Flex,
-  Box,
-  Heading,
-} from "@chakra-ui/react";
+import { Flex, Box, Heading } from "@chakra-ui/react";
 import "./SavedJobs.css";
 import { jobs } from "../../jobs";
 import SavedJobCard from "../../components/SavedJobCard";
@@ -11,7 +7,6 @@ import AppliedJobCard from "../../components/AppliedJobCard";
 import useJobStore from "../../store/job-store";
 
 function SavedJobs() {
-
   const { savedJobs, removeJob } = useJobStore((state) => ({
     savedJobs: state.savedJobs,
     removeJob: state.removeJob,
@@ -23,29 +18,31 @@ function SavedJobs() {
   };
 
   //fetch details from jobs JSON matching with job id of savedJobs
-  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.id))
+  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.id));
 
   // Render SavedJobCard component
   const renderSavedJobs = () => {
     return savedJobDetails.length === 0 ? (
-      <Box mt={8}><Heading>No Saved jobs</Heading></Box>
+      <Box mt={8}>
+        <Heading>No Saved jobs</Heading>
+      </Box>
     ) : (
       savedJobDetails.map((job) => (
         <SavedJobCard key={job.id} {...job} handleRemoveJob={handleRemoveJob} />
       ))
-    )
-  }
+    );
+  };
 
-  //Render AppliedJobs component
+  //Render AppliedJobs component. Unable to apply to jobs for now so it only renders the jobs json for now
   const renderAppliedJobs = () => {
     return jobs.length === 0 ? (
-      <Box mt={8}><Heading>No Application Status Available</Heading></Box>
+      <Box mt={8}>
+        <Heading>No Application Status Available</Heading>
+      </Box>
     ) : (
-      jobs.map((job) => (
-        <AppliedJobCard key={job.id} {...job} />
-      ))
-    )
-  }
+      jobs.map((job) => <AppliedJobCard key={job.id} {...job} />)
+    );
+  };
 
   return (
     <Box bg="#F4F4F4">
@@ -61,7 +58,6 @@ function SavedJobs() {
         direction={{ base: "column", sm: "row" }}
         justifyContent="space-between"
       >
-        
         <Box width={{ base: "100%", sm: "50%" }} mr={4}>
           <Heading>Saved Jobs</Heading>
           {renderSavedJobs()}
