@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
-import customColorMode from '/util/toggleColorMode'
+import CustomColorMode from '/util/toggleColorMode'
 import { 
   ChakraProvider, 
   Box, 
@@ -13,7 +13,8 @@ import {
   Link, 
   InputGroup, 
   InputRightElement,
-  FormControl 
+  FormControl,
+  useToast
 } from "@chakra-ui/react";
 
 function Login() {
@@ -21,42 +22,68 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isEmployer, setIsEmployer] = useState(false);
-  const { handleToggleColorMode, colors } = customColorMode();
+  const { handleToggleColorMode, colors } = CustomColorMode();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-        alert("Please fill out login information");
+      toast({
+        title: "Error",
+        description: "Please fill out login information",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
         return;
     }
 
-    const response = await fetch("", {
+    try {
+      const response = await fetch("", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ email, password })
-    });
+      });
 
-    if (!response.ok)
-        throw new Error("Sign in request failed", response);
+      if (!response.ok)
+          throw new Error("Sign in request failed", response);
 
-    const data = await response.json();
-    console.log("User logged in successfully:", data);
+      const data = await response.json();
+      console.log("User logged in successfully:", data);
 
-    navigate("/search");
-
-    if(data.role === "employer") {
-      navigate("/employer-main");
-      setIsEmployer(true);
-    } else {
+      toast({
+        title: "Success",
+        description: "Login success",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
       navigate("/search");
-      setIsEmployer(false);
-    }
 
-    return data;
+      if(data.role === "employer") {
+        navigate("/employer-main");
+        setIsEmployer(true);
+      } else {
+        navigate("/search");
+        setIsEmployer(false);
+      }
+
+      return data;
+    } catch(err) {
+      toast({
+        title: "Error",
+        description: "Failed to login",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.err("Failed to log in");
+    }
+    
 }
 
   return (
@@ -88,7 +115,7 @@ function Login() {
                 color={colors.buttonColor}
                 backgroundColor={colors.buttonBgColor}
               >
-                Toggle {colors.text} Mode
+                {colors.icon}
               </Button>
             </Flex>
             <Heading mb={4} ml={4}>Welcome 🗣️</Heading>

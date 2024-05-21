@@ -1,6 +1,7 @@
 import { useColorMode } from '@chakra-ui/react'
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
-function customColorMode() {
+function CustomColorMode() {
     const { colorMode, toggleColorMode } = useColorMode();
 
     const colors = {
@@ -11,7 +12,7 @@ function customColorMode() {
             buttonColor: '#FFFFFF',
             buttonBgColor: "#000000",
             bgHover: 'gray.200',
-            text: 'dark',
+            icon: <MoonIcon />,
         },
         dark: {
             bgGradient: '#0B1215',
@@ -20,7 +21,7 @@ function customColorMode() {
             buttonColor: '#000000',
             buttonBgColor: '#A96CDE',
             bgHover: 'gray.800',
-            text: 'light',
+            icon: <SunIcon />,
         },
     };
 
@@ -33,4 +34,4 @@ function customColorMode() {
     return { colorMode, handleToggleColorMode, colors: currentColors };
 }
 
-export default customColorMode
+export default CustomColorMode

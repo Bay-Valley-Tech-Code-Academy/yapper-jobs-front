@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
-import customColorMode from '/util/toggleColorMode'
+import CustomColorMode from '/util/toggleColorMode'
 import { 
     ChakraProvider, 
     Box, 
@@ -10,23 +10,66 @@ import {
     Heading,
     Input,
     Link,
-    Text
+    Text,
+    useToast
 } from "@chakra-ui/react";
 
 function ForgetPassword() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
-    const { handleToggleColorMode, colors } = customColorMode();
+    const toast = useToast();
+    const { handleToggleColorMode, colors } = CustomColorMode();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if(!email) {
+            toast({
+                title: "Error",
+                description: "Please fill out email",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            return;
+        }
 
+        try {
+            const response = await fetch("/forget-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "applications/json"
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if(!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to send email");
+            }
+
+            toast({
+                title: "Success",
+                description: "Email sent",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+            navigate("/");
+        } catch(error) {
+            toast({
+                title: "Error",
+                description: "Email not found",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
     }
 
   return (
     <ChakraProvider>
-        <ColorModeScript initialColorMode="dark" />
+        <ColorModeScript initialColorMode="light" />
         <Box
             p={[2, 4, 6, 8]}
             maxWidth="100vw"
@@ -34,10 +77,10 @@ function ForgetPassword() {
             margin="auto"
             bgGradient={colors.bgGradient}
             color={colors.textColor}
-            display="flex"                justifyContent="center"
+            display="flex"                
+            justifyContent="center"
             alignItems="center"
         >
-            {/* Light mode toggle for header for now, if needed, copy login or register page for formatting and layout */}
             <Flex direction="column" alignItems="center">
                 <Box 
                     bg={colors.boxColor}
@@ -53,7 +96,7 @@ function ForgetPassword() {
                             color={colors.buttonColor} 
                             backgroundColor={colors.buttonBgColor}
                         >
-                            Toggle {colors.text} Mode
+                            {colors.icon}
                         </Button>
                     </Flex>
                     <Heading pt={10} ml={4} textAlign="center">Forget Password?</Heading>
