@@ -1,6 +1,5 @@
 import React from "react";
 import { Flex, Box, Heading, Button } from "@chakra-ui/react";
-import "./SavedJobs.css";
 import { jobs } from "../jobs";
 import SavedJobCard from "../components/SavedJobCard";
 import AppliedJobCard from "../components/AppliedJobCard";

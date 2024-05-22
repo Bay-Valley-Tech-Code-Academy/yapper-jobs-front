@@ -18,17 +18,17 @@ function Search() {
   })); // Use the store
   const { handleToggleColorMode, colors } = customColorMode();
   const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   const getJobAPIData = async () => {
-  //     try{
-  //       const jsonData = await fetchJobAPI();
-  //       setData(jsonData);
-  //     } catch(error){
-  //       console.log(error);
-  //     }
-  //   };
-  //   getJobAPIData();
-  // }, [])
+  useEffect(() => {
+    const getJobAPIData = async () => {
+      try{
+        const jsonData = await fetchJobAPI();
+        setData(jsonData);
+      } catch(error){
+        console.log(error);
+      }
+    };
+    getJobAPIData();
+  }, [])
 
   console.log(data);
 
