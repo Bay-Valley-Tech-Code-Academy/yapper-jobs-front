@@ -7,11 +7,11 @@ function AppliedJobCard(props) {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Submitted':
-        return 'green';
+        return '#59A96A';
       case 'Viewed':
-        return 'yellow';
+        return '#B87A00';
       case 'Declined':
-        return 'red';
+        return '#DD0426';
       default:
         return 'black';
     }
