@@ -9,8 +9,8 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import FilterMenu from "../FilterMenu";
-import SearchInput from "../SearchInput";
+import FilterMenu from "./FilterMenu";
+import SearchInput from "./SearchInput";
 
 function Searchbar() {
   const searchRef = useRef();

@@ -17,22 +17,9 @@ import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
 import { fetchZipRecruiterData } from "./services/zipRecruiter";
+import { fetchJobAPI } from "./services/jobsAPI";
 
 function App() {
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try{
-  //       const jsonData = await fetchZipRecruiterData();
-  //       setData(jsonData);
-  //     } catch(error){
-  //       console.log(error);
-  //     }
-  //   };
-  //   getData();
-  // }, [])
-
-  // console.log(data)
   return (
     <ChakraProvider>
       <BrowserRouter>

@@ -12,15 +12,14 @@ import {
 } from "@chakra-ui/react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import useJobStore from "../../store/job-store";
+import useJobStore from "../store/job-store";
 
 function JobCard(props) {
   const navigate = useNavigate();
 
-  const { savedJobs } = useJobStore((state)=> ({
+  const { savedJobs } = useJobStore((state) => ({
     savedJobs: state.savedJobs,
   }));
-
 
   const handleClick = (id) => {
     props.setSelectedJob(id);
@@ -45,7 +44,7 @@ function JobCard(props) {
           {props.company}
         </Text>
         <Text fontSize="sm" fontWeight="bold">
-          {props.status}
+          {props.type}
         </Text>
         <Stack direction="row" spacing="2" mt="2" mb="4">
           <Icon as={FaMapMarkerAlt} />

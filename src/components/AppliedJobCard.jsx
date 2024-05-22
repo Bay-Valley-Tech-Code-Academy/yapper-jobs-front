@@ -10,7 +10,7 @@ function AppliedJobCard(props) {
         return 'green';
       case 'Viewed':
         return 'yellow';
-      case 'Rejected':
+      case 'Declined':
         return 'red';
       default:
         return 'black';
@@ -24,7 +24,7 @@ function AppliedJobCard(props) {
             {props.title}
         </Heading>
         <Text>{props.company} | {props.location}</Text>
-        <Text><strong>Status:</strong> Submitted</Text>
+        <Text><strong>Status:</strong> <span style={{color: getStatusColor(props.status)}}>{props.status}</span></Text>
     </Box>
 </Flex>
   )

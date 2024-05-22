@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Heading, Text, Flex, Box, Button } from "@chakra-ui/react";
-import Searchbar from "../../components/Searchbar/Searchbar";
-import JobSummary from "../../components/JobSummary/JobSummary";
-import JobCard from "../../components/JobCard/JobCard";
+import Searchbar from "../../components/Searchbar";
+import JobSummary from "../../components/JobSummary";
+import JobCard from "../../components/JobCard";
 import { jobs } from "../../jobs";
 import useJobStore from "../../store/job-store"; // Import the store
 import customColorMode from "../../../util/toggleColorMode"; // Import custom color mode
+import { fetchJobAPI } from "../../services/jobsAPI";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
@@ -16,6 +17,20 @@ function Search() {
     removeJob: state.removeJob,
   })); // Use the store
   const { handleToggleColorMode, colors } = customColorMode();
+  const [data, setData] = useState([]);
+  // useEffect(() => {
+  //   const getJobAPIData = async () => {
+  //     try{
+  //       const jsonData = await fetchJobAPI();
+  //       setData(jsonData);
+  //     } catch(error){
+  //       console.log(error);
+  //     }
+  //   };
+  //   getJobAPIData();
+  // }, [])
+
+  console.log(data);
 
   const handleSaveJob = (id) => {
     if (savedJobs.includes(id)) {
@@ -76,7 +91,14 @@ function Search() {
       <Heading textAlign="center" m="4">
         Search Jobs
       </Heading>
-      <Flex justifyContent="center" alignItems="center" width="80%" mx="auto" px="4" mb="4">
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        width="80%"
+        mx="auto"
+        px="4"
+        mb="4"
+      >
         <Searchbar />
       </Flex>
       <Flex maxW="90%" maxH="100vh" mx="auto" px="4">

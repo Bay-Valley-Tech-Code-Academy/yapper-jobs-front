@@ -11,8 +11,8 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { jobs } from "../../jobs";
-import useJobStore from "../../store/job-store";
+import { jobs } from "../jobs";
+import useJobStore from "../store/job-store";
 
 function JobSummary({ selectedJob, handleSaveJob }) {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ function JobSummary({ selectedJob, handleSaveJob }) {
             <Text fontSize="sm">{job.location}</Text>
           </Stack>
           <Text fontSize="sm" fontWeight="bold">
-            {job.status}
+            {job.type}
           </Text>
         </Stack>
         <Text fontSize="md" mb="4" overflowY="auto" maxHeight="500px">
