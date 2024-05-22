@@ -1,10 +1,11 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import CustomColorMode from '/util/toggleColorMode'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CustomColorMode from '/util/toggleColorMode';
+import { usePasswordToggle } from '/util/passwordUtils';
 import { 
-  ChakraProvider, 
-  Box, 
-  ColorModeScript, 
+  ChakraProvider,
+  Box,
+  ColorModeScript,
   Flex,
   Button,
   Heading,
@@ -13,15 +14,15 @@ import {
   InputRightElement,
   Link,
   Text,
-  useToast
-} from "@chakra-ui/react";
+  useToast 
+} from '@chakra-ui/react';
 
 function ResetPassword() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [verifyPassword, setVerifyPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showVerifiedPassword, setShowVerifiedPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [verifyPassword, setVerifyPassword] = useState('');
+  const { showPassword, togglePasswordVisibility } = usePasswordToggle();
+  const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
   const { handleToggleColorMode, colors } = CustomColorMode();
   const toast = useToast();
 
@@ -31,185 +32,183 @@ function ResetPassword() {
     const specialChar = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
 
     if(!password || !verifyPassword) {
-        toast({
-            title: "Error",
-            description: "Please fill out the information",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-        });
-        return;
+      toast({
+        title: 'Error',
+        description: 'Please fill out the information',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
     }
 
     if(password.length < 12) {
-        toast({
-            title: "Error",
-            description: "Password must be at least 12 characters long",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-        });
+      toast({
+        title: 'Error',
+        description: 'Password must be at least 12 characters long',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } else if (!specialChar.test(password)) {
-        toast({
-            title: "Error",
-            description: "Password must have at least one special character",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
+      toast({
+        title: 'Error',
+        description: 'Password must have at least one special character',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } else if (password !== verifyPassword) {
-        toast({
-            title: "Error",
-            description: "Passwords do not match",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-        });
+      toast({
+        title: 'Error',
+        description: 'Passwords do not match',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } else {
-        try {
-            const response = await fetch("/reset-password", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ password })
+      try {
+        const response = await fetch('/reset-password', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ password })
         });
 
         if(!response.ok) {
-            throw new Error("Password reset request failed");
+          throw new Error('Password reset request failed');
         }
 
         toast({
-            title: "Success",
-            description: "Password reset",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
+          title: 'Success',
+          description: 'Password reset',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
 
-        navigate("/");
+        navigate('/');
 
-        } catch (err) {
-            toast({
-                title: "Error",
-                description: "Failed to reset password",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-        }
+      } catch (err) {
+        toast({
+          title: 'Error',
+          description: 'Failed to reset password',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     } 
   }
 
   return (
     <ChakraProvider>
-        <ColorModeScript initialColorMode="dark" />
-        <Box
-            p={[2, 4, 6, 8]}
-            maxWidth="100vw"
-            minHeight="100vh"
-            margin="auto"
-            bgGradient={colors.bgGradient}
-            color={colors.textColor}
-            display="flex"                
-            justifyContent="center"
-            alignItems="center"
-        >
-            <Flex direction="column" alignItems="center">
-                <Box 
-                    bg={colors.boxColor}
-                    p={10} 
-                    borderRadius="md" 
-                    width="30vw" 
-                    minHeight="65vh"
-                >
-                    <Flex justifyContent="flex-end">
-                        <Button 
-                            onClick={handleToggleColorMode} 
-                            mr={2} 
-                            color={colors.buttonColor} 
-                            backgroundColor={colors.buttonBgColor}
-                        >
-                            {colors.icon}
-                        </Button>
-                    </Flex>
-                    <Heading pt={10} ml={4} textAlign="center">Reset Password</Heading>
-                    <Heading pt={10} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters, must include at least 1 numeric value and 1 special character.</Heading>
-                    <Box flex={1} m={4} pt={6} position="relative">
-                        <InputGroup>
-                            <Input 
-                                placeholder="password"
-                                value={password}
-                                type={showPassword ? "text" : "password"}
-                                _hover={{bg: colors.bgHover}}
-                                minWidth="20vw"
-                                height="3rem"
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <InputRightElement flex={1} m={1} width="5rem">
-                                <Button 
-                                    id="check"
-                                    type="checkbox"
-                                    value={showPassword}
-                                    onClick={() => setShowPassword((prev) => !prev)}
-                                    cursor="pointer"
-                                    size="md"
-                                    height="2rem"
-                                >
-                                    {showPassword ? "Hide" : "Show"}
-                                </Button> 
-                            </InputRightElement>
-                        </InputGroup>
-                        <InputGroup>
-                            <Input 
-                                mt={4}
-                                placeholder="verify password"
-                                value={verifyPassword}
-                                type={showVerifiedPassword ? "text" : "password"}
-                                _hover={{bg: colors.bgHover}}
-                                minWidth="20vw"
-                                height="3rem"
-                                onChange={(e) => setVerifyPassword(e.target.value)}
-                            />
-                            <InputRightElement flex={1} m={1} width="5rem">
-                                <Button 
-                                    id="check"
-                                    type="checkbox"
-                                    value={showVerifiedPassword}
-                                    onClick={() => setShowVerifiedPassword((prev) => !prev)}
-                                    cursor="pointer"
-                                    size="md"
-                                    height="2rem"
-                                    marginTop="2rem"
-                                >
-                                    {showVerifiedPassword ? "Hide" : "Show"}
-                                </Button> 
-                            </InputRightElement>
-                        </InputGroup>
-                        <Button
-                            mt={8}
-                            minWidth="24.2vw"
-                            backgroundColor={colors.buttonBgColor}
-                            color={colors.buttonColor}
-                            height="3rem"
-                            onClick={handleSubmit}
-                        >
-                            Reset Password
-                        </Button>
-                    </Box>
-                    <Text mt={8} display="flex" justifyContent="center">
-                        <Link 
-                            color="teal.500"
-                            onClick={() => navigate("/")}
-                        >
-                            Go back to Login
-                        </Link> 
-                    </Text>
-                </Box>
+      <ColorModeScript initialColorMode="dark" />
+      <Box
+        p={[2, 4, 6, 8]}
+        maxWidth="100vw"
+        minHeight="100vh"
+        margin="auto"
+        bgGradient={colors.bgGradient}
+        color={colors.textColor}
+        display="flex"                
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Flex direction="column" alignItems="center">
+          <Box 
+            bg={colors.boxColor}
+            p={10} 
+            borderRadius="md" 
+            width="30vw" 
+            minHeight="65vh"
+          >
+            <Flex justifyContent="flex-end">
+              <Button 
+                onClick={handleToggleColorMode} 
+                mr={2} 
+                color={colors.buttonColor} 
+                backgroundColor={colors.buttonBgColor}
+              >
+                {colors.icon}
+              </Button>
             </Flex>
-        </Box>
+            <Heading pt={10} ml={4} textAlign="center">Reset Password</Heading>
+            <Heading pt={10} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters, must include at least 1 numeric value and 1 special character.</Heading>
+            <Box flex={1} m={4} pt={6} position="relative">
+              <InputGroup>
+                <Input 
+                  placeholder="password"
+                  value={password}
+                  type={showPassword ? 'text' : 'password'}
+                  _hover={{bg: colors.bgHover}}
+                  minWidth="20vw"
+                  height="3rem"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement flex={1} m={1} width="5rem">
+                  <Button 
+                    id="check"
+                    type="checkbox"
+                    onClick={togglePasswordVisibility}
+                    cursor="pointer"
+                    size="md"
+                    height="2rem"
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </Button> 
+                </InputRightElement>
+              </InputGroup>
+              <InputGroup>
+                <Input 
+                  mt={4}
+                  placeholder="verify password"
+                  value={verifyPassword}
+                  type={showVerifiedPassword ? 'text' : 'password'}
+                  _hover={{bg: colors.bgHover}}
+                  minWidth="20vw"
+                  height="3rem"
+                  onChange={(e) => setVerifyPassword(e.target.value)}
+                />
+                <InputRightElement flex={1} m={1} width="5rem">
+                  <Button 
+                    id="check"
+                    type="checkbox"
+                    onClick={toggleVerifiedPasswordVisibility}
+                    cursor="pointer"
+                    size="md"
+                    height="2rem"
+                    marginTop="2rem"
+                  >
+                    {showVerifiedPassword ? 'Hide' : 'Show'}
+                  </Button> 
+                </InputRightElement>
+              </InputGroup>
+              <Button
+                mt={8}
+                minWidth="24.2vw"
+                backgroundColor={colors.buttonBgColor}
+                color={colors.buttonColor}
+                height="3rem"
+                onClick={handleSubmit}
+              >
+                Reset Password
+              </Button>
+            </Box>
+            <Text mt={8} display="flex" justifyContent="center">
+              <Link 
+                color="teal.500"
+                onClick={() => navigate('/')}
+              >
+                Go back to Login
+              </Link> 
+            </Text>
+          </Box>
+        </Flex>
+      </Box>
     </ChakraProvider>
-  )
+  );
 }
 
-export default ResetPassword
+export default ResetPassword;
