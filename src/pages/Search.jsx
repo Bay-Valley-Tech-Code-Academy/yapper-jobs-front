@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Heading, Text, Flex, Box, Button } from "@chakra-ui/react";
-import Searchbar from "../../components/Searchbar";
-import JobSummary from "../../components/JobSummary";
-import JobCard from "../../components/JobCard";
-import { jobs } from "../../jobs";
-import useJobStore from "../../store/job-store"; // Import the store
-import customColorMode from "../../../util/toggleColorMode"; // Import custom color mode
-import { fetchJobAPI } from "../../services/jobsAPI";
+import Searchbar from "../components/Searchbar";
+import JobSummary from "../components/JobSummary";
+import JobCard from "../components/JobCard";
+import { jobs } from "../jobs";
+import useJobStore from "../store/job-store"; // Import the store
+import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
+import { fetchJobAPI } from "../services/jobsAPI";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
