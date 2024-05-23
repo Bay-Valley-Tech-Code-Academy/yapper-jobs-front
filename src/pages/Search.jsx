@@ -6,7 +6,7 @@ import JobCard from "../components/JobCard";
 import { jobs } from "../jobs";
 import useJobStore from "../store/job-store"; // Import the store
 import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
-import { fetchJobAPI } from "../services/jobsAPI";
+import { fetchJobAPI } from "../services/jobsAPI.mjs";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
@@ -17,20 +17,20 @@ function Search() {
     removeJob: state.removeJob,
   })); // Use the store
   const { handleToggleColorMode, colors } = customColorMode();
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const getJobAPIData = async () => {
-      try{
-        const jsonData = await fetchJobAPI();
-        setData(jsonData);
-      } catch(error){
-        console.log(error);
-      }
-    };
-    getJobAPIData();
-  }, [])
+  // const [data, setData] = useState([]);
+  // useEffect(() => {
+  //   const getJobAPIData = async () => {
+  //     try{
+  //       const jsonData = await fetchJobAPI();
+  //       setData(jsonData);
+  //     } catch(error){
+  //       console.log(error);
+  //     }
+  //   };
+  //   getJobAPIData();
+  // }, [])
 
-  console.log(data);
+  // console.log(data);
 
   const handleSaveJob = (id) => {
     if (savedJobs.includes(id)) {

@@ -20,7 +20,7 @@ function SavedJobCard(props) {
         <Text fontSize="md">
           {props.company} | {props.location}
         </Text>
-        <Text>{props.status}</Text>
+        <Text>{props.type}</Text>
         <Button
           colorScheme="purple"
           onClick={() => navigate(`../apply/${props.id}`)}

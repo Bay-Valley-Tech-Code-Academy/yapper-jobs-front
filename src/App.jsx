@@ -17,7 +17,7 @@ import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
 import { fetchZipRecruiterData } from "./services/zipRecruiter";
-import { fetchJobAPI } from "./services/jobsAPI";
+import { fetchJobAPI } from "./services/jobsAPI.mjs";
 
 function App() {
   return (
