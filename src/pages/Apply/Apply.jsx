@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
-import './Apply.css';
-import { jobs } from "../../jobs";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Text,
+  Heading,
+  VStack,
+  Flex,
+} from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { jobs } from "../../jobs";
 
 function Apply() {
   const { jobId } = useParams();
@@ -29,124 +40,167 @@ function Apply() {
   };
 
   return (
-    <div className="apply-container">
-      <h2 className="apply-header">Apply To Job</h2>
-      <button className="upload-resume-btn">Upload Resume</button>
-      <div className="job-info">
-        <div>
-          <div className="job-description">
-            <p>{job.jobDescription}</p>
-          </div>
-        </div>
-        <div>
-          <div className="job-info-item">
-            <strong>{job.title}</strong>
-          </div>
-          <div className="job-info-item">
-            <strong>Company:</strong> {job.company}
-          </div>
-          <div className="job-info-item">
-            <strong>Location:</strong> {job.location}
-          </div>
-          <div className="job-info-item">
-            <strong>Status:</strong> {job.status}
-          </div>
-        </div>
-      </div>
-      <h3 className="questions-title">Questions</h3>
+    <Box className="apply-container" pl="5%">
+      <Heading as="h2" className="apply-header" mt="1em" mb="1em" fontSize="32px" fontWeight="bold">
+        Apply To Job
+      </Heading>
+      <Button
+        className="upload-resume-btn"
+        bg="#663399"
+        color="white"
+        border="none"
+        px="0.5em"
+        py="0.25em"
+        borderRadius="1em"
+        mb="2em"
+        _hover={{ bg: "teal" }}
+        maxW="10em"
+      >
+        Upload Resume
+      </Button>
+      <Flex className="job-info" mb="3em" flexDirection="row" alignItems="center">
+        <Box className="job-description" border="2px solid #000" p="0.5em" mb="1em" maxW="40em">
+          <Text>{job.jobDescription}</Text>
+        </Box>
+        <VStack align="start" ml="10em" spacing="0.5em">
+          <Text className="job-info-item" fontSize="22px"><strong>{job.title}</strong></Text>
+          <Text className="job-info-item" fontSize="22px"><strong>Company:</strong> {job.company}</Text>
+          <Text className="job-info-item" fontSize="22px"><strong>Location:</strong> {job.location}</Text>
+          <Text className="job-info-item" fontSize="22px"><strong>Status:</strong> {job.status}</Text>
+        </VStack>
+      </Flex>
+      <Heading as="h3" className="questions-title" mt="1em" mb="0.5em" fontSize="24px" fontWeight="bold">
+        Questions
+      </Heading>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="phoneNumber">Phone Number:</label>
-          <input
-            type="tel"
-            id="phoneNumber"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="city">City:</label>
-          <input
-            type="text"
-            id="city"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="state">State:</label>
-          <input
-            type="text"
-            id="state"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="commute">Will you be able to make the commute? (Yes/No):</label>
-          <select
-            id="commute"
-            value={commute}
-            onChange={(e) => setCommute(e.target.value)}
-            required
+        <VStack spacing="0.75em" align="stretch">
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="firstName">First Name:</FormLabel>
+            <Input
+              id="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            />
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="lastName">Last Name:</FormLabel>
+            <Input
+              id="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            />
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="phoneNumber">Phone Number:</FormLabel>
+            <Input
+              id="phoneNumber"
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            />
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="city">City:</FormLabel>
+            <Input
+              id="city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            />
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="state">State:</FormLabel>
+            <Input
+              id="state"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            />
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="commute">Will you be able to make the commute? (Yes/No):</FormLabel>
+            <Select
+              id="commute"
+              value={commute}
+              onChange={(e) => setCommute(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            >
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </Select>
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="authorizedToWork">Are you authorized to work in the United States? (Yes/No):</FormLabel>
+            <Select
+              id="authorizedToWork"
+              value={authorizedToWork}
+              onChange={(e) => setAuthorizedToWork(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            >
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </Select>
+          </FormControl>
+          <FormControl isRequired className="form-group" maxW="30em">
+            <FormLabel htmlFor="isVeteran">Are you a veteran? (Yes/No):</FormLabel>
+            <Select
+              id="isVeteran"
+              value={isVeteran}
+              onChange={(e) => setIsVeteran(e.target.value)}
+              bg="rgb(95, 94, 94)"
+              border="1px solid #fff"
+              borderRadius="0.25em"
+              p="0.5em"
+            >
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </Select>
+          </FormControl>
+          <Button
+            type="submit"
+            bg="#663399"
+            color="white"
+            border="none"
+            px="0.5em"
+            py="0.25em"
+            borderRadius="1em"
+            cursor="pointer"
+            mt="1em"
+            _hover={{ bg: "teal" }}
+            maxW="10em"
           >
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="authorizedToWork">Are you authorized to work in the United States? (Yes/No):</label>
-          <select
-            id="authorizedToWork"
-            value={authorizedToWork}
-            onChange={(e) => setAuthorizedToWork(e.target.value)}
-            required
-          >
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="isVeteran">Are you a veteran? (Yes/No):</label>
-          <select
-            id="isVeteran"
-            value={isVeteran}
-            onChange={(e) => setIsVeteran(e.target.value)}
-            required
-          >
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <button type="submit">Submit</button>
+            Submit
+          </Button>
+        </VStack>
       </form>
-    </div>
+    </Box>
   );
 }
 
