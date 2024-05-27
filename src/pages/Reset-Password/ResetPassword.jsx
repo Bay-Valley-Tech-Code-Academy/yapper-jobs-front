@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomColorMode from '/util/toggleColorMode';
 import { usePasswordToggle } from '/util/passwordUtils';
+import CustomColorMode from '/util/toggleColorMode';
 import { 
   ChakraProvider,
   Box,
@@ -28,10 +28,10 @@ function ResetPassword() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-
-    const specialChar = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
-
-    if(!password || !verifyPassword) {
+  
+    const specialChar = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#$%^&*]).{12,}$');
+  
+    if (!password || !verifyPassword) {
       toast({
         title: 'Error',
         description: 'Please fill out the information',
@@ -41,19 +41,11 @@ function ResetPassword() {
       });
       return;
     }
-
-    if(password.length < 12) {
+  
+    if (password.length < 12) {
       toast({
         title: 'Error',
         description: 'Password must be at least 12 characters long',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    } else if (!specialChar.test(password)) {
-      toast({
-        title: 'Error',
-        description: 'Password must have at least one special character',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -66,20 +58,28 @@ function ResetPassword() {
         duration: 5000,
         isClosable: true,
       });
+    } else if (!specialChar.test(password)) {
+      toast({
+        title: 'Error',
+        description: 'Password must have at least one special character',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } else {
       try {
-        const response = await fetch('/reset-password', {
+        const response = await fetch('http://localhost:3000/reset-password', {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ password })
+          body: JSON.stringify({ newPassword: password }),
         });
-
-        if(!response.ok) {
+  
+        if (!response.ok) {
           throw new Error('Password reset request failed');
         }
-
+  
         toast({
           title: 'Success',
           description: 'Password reset',
@@ -87,9 +87,7 @@ function ResetPassword() {
           duration: 5000,
           isClosable: true,
         });
-
-        navigate('/');
-
+  
       } catch (err) {
         toast({
           title: 'Error',
@@ -99,8 +97,8 @@ function ResetPassword() {
           isClosable: true,
         });
       }
-    } 
-  }
+    }
+  };
 
   return (
     <ChakraProvider>
@@ -135,7 +133,7 @@ function ResetPassword() {
               </Button>
             </Flex>
             <Heading pt={10} ml={4} textAlign="center">Reset Password</Heading>
-            <Heading pt={10} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters, must include at least 1 numeric value and 1 special character.</Heading>
+            <Heading pt={10} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters and must include at least 1 special character.</Heading>
             <Box flex={1} m={4} pt={6} position="relative">
               <InputGroup>
                 <Input 

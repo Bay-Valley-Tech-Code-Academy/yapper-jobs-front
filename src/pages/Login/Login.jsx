@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomColorMode from '/util/toggleColorMode';
 import { usePasswordToggle } from '/util/passwordUtils';
+import CustomColorMode from '/util/toggleColorMode';
 import { 
   ChakraProvider, 
   Box, 
@@ -19,13 +19,22 @@ import {
 } from '@chakra-ui/react';
 
 function Login() {
+  const navigate = useNavigate();
+  const toast = useToast();
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
-  const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const [isEmployer, setIsEmployer] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { handleToggleColorMode, colors } = CustomColorMode();
-  const toast = useToast();
-  const navigate = useNavigate();
+  
+  //switches from seeker login to employer login
+  const toggleUserType = () => {
+    setIsEmployer(!isEmployer);
+  }
+
+  //loading before getting redirected to search/ main employer page
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,31 +50,27 @@ function Login() {
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      const response = await fetch('', {
+      const endpoint = isEmployer ? "http://localhost:3000/login/employer" : "http://localhost:3000/login/seeker";
+
+      const loginPromise = fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, pass }),
+      }).then(response => {
+        if (!response.ok) throw new Error('Sign in request failed');
+        return response.json();
       });
 
-      if (!response.ok) throw new Error('Sign in request failed');
+      const data = await Promise.all([loginPromise, delay(1000)]).then(values => values[0]);
 
-      const data = await response.json();
-      console.log('User logged in successfully:', data);
-
-      toast({
-        title: 'Success',
-        description: 'Login success',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
       navigate(data.role === 'employer' ? '/employer-main' : '/search');
       setIsEmployer(data.role === 'employer');
 
-      return data;
     } catch (err) {
       toast({
         title: 'Error',
@@ -75,8 +80,10 @@ function Login() {
         isClosable: true,
       });
       console.error('Failed to log in', err);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  };  
 
   return (
     <ChakraProvider>
@@ -93,11 +100,11 @@ function Login() {
         alignItems="center"
       >
         <Flex direction="column" alignItems="center">
-          <Box 
-            bg={colors.boxColor} 
-            p={10} 
-            borderRadius="md" 
-            width="35vw" 
+          <Box
+            bg={colors.boxColor}
+            p={10}
+            borderRadius="md"
+            width="30vw"
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
@@ -112,6 +119,15 @@ function Login() {
             </Flex>
             <Heading mb={4} ml={4}>Welcome 🗣️</Heading>
             <Heading mb={4} ml={4}>Sign in to Yapper Jobs</Heading>
+            <Button
+              onClick={toggleUserType}
+              mt={4}
+              ml={4}
+              backgroundColor={colors.buttonBgColor}
+              color={colors.buttonColor}
+            >
+              {isEmployer ? "Switch to Seeker" : "Switch to Employer"}
+            </Button>
             <Box flex={1} m={4} mt={10} position="relative">
               <FormControl isRequired>
                 <Input
@@ -120,7 +136,7 @@ function Login() {
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
                   _hover={{ bg: colors.bgHover }}
-                  minWidth="30vw"
+                  minWidth="20vw"
                   height="3rem"
                 />
               </FormControl>
@@ -134,11 +150,11 @@ function Login() {
                   onChange={(e) => setPass(e.target.value)}
                   _hover={{ bg: colors.bgHover }}
                   isRequired
-                  minWidth="30vw"
+                  minWidth="20vw"
                   height="3rem"
                 />
                 <InputRightElement flex={1} m={1} width="5rem">
-                  <Button 
+                  <Button
                     id="check"
                     type="checkbox"
                     onClick={togglePasswordVisibility}
@@ -147,26 +163,29 @@ function Login() {
                     height="2rem"
                   >
                     {showPassword ? 'Hide' : 'Show'}
-                  </Button> 
+                  </Button>
                 </InputRightElement>
               </InputGroup>
             </Box>
             <Text mt={6} textAlign="center">
               <Link color="teal.500" onClick={() => navigate('/forget-password')}>Forgot Password?</Link>
             </Text>
-            <Button
-              ml={4}
-              mt={8}
-              colorScheme="teal"
-              minWidth="30vw"
-              onClick={handleSubmit}
-              backgroundColor={colors.buttonBgColor}
-              height="3rem"
-            >
-              Sign In
-            </Button>
+            <Box flex={1} ml={4} position="relative">
+              <Button
+                mt={10}
+                minWidth="24.2vw"
+                onClick={handleSubmit}
+                backgroundColor={colors.buttonBgColor}
+                color={colors.buttonColor}
+                height="3rem"
+                isLoading={isLoading}
+                loadingText="Signing In..."
+              >
+                Sign In as {isEmployer ? "Employer" : "Seeker"}
+              </Button>
+            </Box>
             <Text mt={8} textAlign="center">
-              Don't have an account with us? 
+              Don't have an account with us?
               <Link color="teal.500" onClick={() => navigate('/register')}>
                 &nbsp;Sign Up
               </Link>

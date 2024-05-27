@@ -16,13 +16,14 @@ import {
 
 function ForgetPassword() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
     const toast = useToast();
+    const [email, setEmail] = useState("");
     const { handleToggleColorMode, colors } = CustomColorMode();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        //checks if email has been filled out
         if(!email) {
             toast({
                 title: "Error",
@@ -35,7 +36,7 @@ function ForgetPassword() {
         }
 
         try {
-            const response = await fetch("/forget-password", {
+            const response = await fetch("/http://localhost:3000/forget-password", { 
                 method: "POST",
                 headers: {
                     "Content-Type": "applications/json"
@@ -55,7 +56,6 @@ function ForgetPassword() {
                 duration: 5000,
                 isClosable: true,
             });
-            navigate("/");
         } catch(error) {
             toast({
                 title: "Error",
@@ -67,74 +67,74 @@ function ForgetPassword() {
         }
     }
 
-  return (
-    <ChakraProvider>
-        <ColorModeScript initialColorMode="light" />
-        <Box
-            p={[2, 4, 6, 8]}
-            maxWidth="100vw"
-            minHeight="100vh"
-            margin="auto"
-            bgGradient={colors.bgGradient}
-            color={colors.textColor}
-            display="flex"                
-            justifyContent="center"
-            alignItems="center"
-        >
-            <Flex direction="column" alignItems="center">
-                <Box 
-                    bg={colors.boxColor}
-                    p={10} 
-                    borderRadius="md" 
-                    width="30vw" 
-                    minHeight="65vh"
-                >
-                    <Flex justifyContent="flex-end">
-                        <Button 
-                            onClick={handleToggleColorMode} 
-                            mr={2} 
-                            color={colors.buttonColor} 
-                            backgroundColor={colors.buttonBgColor}
-                        >
-                            {colors.icon}
-                        </Button>
-                    </Flex>
-                    <Heading pt={10} ml={4} textAlign="center">Forget Password?</Heading>
-                    <Heading pt={10} ml={4} size="md" textAlign="center">Type in your email below and we'll send you a reset password</Heading>
-                    <Box flex={1} m={4} pt={10} position="relative">
-                        <Input 
-                            placeholder="email"
-                            value={email}
-                            type="email"
-                            onChange={(e) => setEmail(e.target.value)}
-                            _hover={{bg: colors.bgHover}}
-                            minWidth="20vw"
-                            height="3rem"
-                        />
-                        <Button
-                            mt={10}
-                            minWidth="24.2vw"
-                            onClick={handleSubmit}
-                            backgroundColor={colors.buttonBgColor}
-                            color={colors.buttonColor}
-                            height="3rem"
-                        >
-                            Send Email
-                        </Button>
+    return (
+        <ChakraProvider>
+            <ColorModeScript initialColorMode="light" />
+            <Box
+                p={[2, 4, 6, 8]}
+                maxWidth="100vw"
+                minHeight="100vh"
+                margin="auto"
+                bgGradient={colors.bgGradient}
+                color={colors.textColor}
+                display="flex"                
+                justifyContent="center"
+                alignItems="center"
+            >
+                <Flex direction="column" alignItems="center">
+                    <Box 
+                        bg={colors.boxColor}
+                        p={10} 
+                        borderRadius="md" 
+                        width="30vw" 
+                        minHeight="65vh"
+                    >
+                        <Flex justifyContent="flex-end">
+                            <Button 
+                                onClick={handleToggleColorMode} 
+                                mr={2} 
+                                color={colors.buttonColor} 
+                                backgroundColor={colors.buttonBgColor}
+                            >
+                                {colors.icon}
+                            </Button>
+                        </Flex>
+                        <Heading pt={10} ml={4} textAlign="center">Forget Password?</Heading>
+                        <Heading pt={10} ml={4} size="md" textAlign="center">Type in your email below and we'll send you a reset password</Heading>
+                        <Box flex={1} m={4} pt={10} position="relative">
+                            <Input 
+                                placeholder="email"
+                                value={email}
+                                type="email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                _hover={{bg: colors.bgHover}}
+                                minWidth="20vw"
+                                height="3rem"
+                            />
+                            <Button
+                                mt={10}
+                                minWidth="24.2vw"
+                                onClick={handleSubmit}
+                                backgroundColor={colors.buttonBgColor}
+                                color={colors.buttonColor}
+                                height="3rem"
+                            >
+                                Send Email
+                            </Button>
+                        </Box>
+                        <Text mt={10} display="flex" justifyContent="center">
+                            <Link 
+                                color="teal.500"
+                                onClick={() => navigate("/")}
+                            >
+                                Go back to Login
+                            </Link> 
+                        </Text>
                     </Box>
-                    <Text mt={10} display="flex" justifyContent="center">
-                        <Link 
-                            color="teal.500"
-                            onClick={() => navigate("/")}
-                        >
-                            Go back to Login
-                        </Link> 
-                    </Text>
-                </Box>
-            </Flex>
-        </Box>
-    </ChakraProvider>
-  )
+                </Flex>
+            </Box>
+        </ChakraProvider>
+    )
 }
 
-export default ForgetPassword
+export default ForgetPassword;
