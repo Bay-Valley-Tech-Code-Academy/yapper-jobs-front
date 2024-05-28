@@ -1,4 +1,4 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 
 function customColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -12,10 +12,11 @@ function customColorMode() {
       buttonBgColor: '#000000',
       bgHover: 'gray.300',
       logoSrc: '/yapperjoblogo.png',
-      buttonHoverColor: '#A96CDE', // Purple
+      buttonHoverColor: '#A96CDE',
       buttonHoverBgColor: '#333333',
       hyperlinkColor: '#3182CE',
       hyperlinkTextDecoration: 'underline',
+      dividerColor: 'gray.200',
     },
     dark: {
       bgGradient: '#0B1215',
@@ -29,6 +30,7 @@ function customColorMode() {
       buttonHoverBgColor: '#FFFFFF',
       hyperlinkColor: 'cyan',
       hyperlinkTextDecoration: 'underline',
+      dividerColor: 'gray.700',
     },
   };
 
