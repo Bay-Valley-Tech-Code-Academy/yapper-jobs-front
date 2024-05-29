@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Box, Circle, Image, Input } from "@chakra-ui/react";
-import TestPic from "./yapper-jobs-defualt-seeker-img.jpg";
+import TestPic from "/yapper-jobs-defualt-seeker-img.jpg";
 
 function ProfileSeekerImg() {
     const inputRef = useRef(null);
