@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
+import { apiService } from '../../services/apiRequests';
 import { 
   ChakraProvider, 
   Box, 
@@ -27,13 +28,11 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { handleToggleColorMode, colors } = CustomColorMode();
-  
-  //switches from seeker login to employer login
+
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
-  }
+  };
 
-  //loading before getting redirected to search/ main employer page
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
@@ -53,20 +52,10 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const endpoint = isEmployer ? "http://localhost:3000/login/employer" : "http://localhost:3000/login/seeker";
-
-      const loginPromise = fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, pass }),
-      }).then(response => {
-        if (!response.ok) throw new Error('Sign in request failed');
-        return response.json();
-      });
-
-      const data = await Promise.all([loginPromise, delay(1000)]).then(values => values[0]);
+      const data = await Promise.all([
+        apiService.login(email, pass, isEmployer),
+        delay(1000)
+      ]).then(values => values[0]);
 
       navigate(data.role === 'employer' ? '/employer-main' : '/search');
       setIsEmployer(data.role === 'employer');
@@ -83,7 +72,7 @@ function Login() {
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
 
   return (
     <ChakraProvider>

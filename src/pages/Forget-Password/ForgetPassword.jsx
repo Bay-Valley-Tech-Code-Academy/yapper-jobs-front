@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import CustomColorMode from '/util/toggleColorMode'
+import { apiService } from '../../services/apiRequests';
 import { 
     ChakraProvider, 
     Box, 
@@ -34,20 +35,8 @@ function ForgetPassword() {
             });
             return;
         }
-
         try {
-            const response = await fetch("/http://localhost:3000/forget-password", { 
-                method: "POST",
-                headers: {
-                    "Content-Type": "applications/json"
-                },
-                body: JSON.stringify({ email })
-            });
-
-            if(!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Failed to send email");
-            }
+            await apiService.forgetPassword(email);
 
             toast({
                 title: "Success",

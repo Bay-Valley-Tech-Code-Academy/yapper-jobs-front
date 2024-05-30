@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
+import { apiService } from '../../services/apiRequests';
 import { 
   ChakraProvider,
   Box,
@@ -68,17 +69,7 @@ function ResetPassword() {
       });
     } else {
       try {
-        const response = await fetch('http://localhost:3000/reset-password', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ newPassword: password }),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Password reset request failed');
-        }
+        await apiService.resetPassword(password);
   
         toast({
           title: 'Success',
