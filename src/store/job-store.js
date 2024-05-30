@@ -17,3 +17,4 @@ const useJobStore = create((set) => ({
   }));
 
   export default useJobStore;
+  
