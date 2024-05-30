@@ -26,6 +26,7 @@ function Search() {
     fetchJobs();
   }, []);
 
+  //save a job to the savedJobs array
   const handleSaveJob = (id) => {
     if (savedJobs.includes(id)) {
       removeJob(id); //removeJob
@@ -100,9 +101,9 @@ function Search() {
         px="4"
         mb="4"
       >
-        <Searchbar />
+        <Searchbar jobs={jobs}/>
       </Flex>
-      <Flex maxW="90%" maxH="100vh" mx="auto" px="4">
+      <Flex width="80%" maxH="100vh" mx="auto" px="4">
         <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto">
           <Box ml="10" p="3">
             <Heading>Search Results</Heading>

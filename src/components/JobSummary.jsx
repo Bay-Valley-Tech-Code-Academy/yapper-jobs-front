@@ -31,9 +31,11 @@ function JobSummary({ selectedJob, handleSaveJob }) {
   
   if (!job) {
     return (
-      <Box height="100%" ml="3%">
+      // Render this if no job is selected
+      //Render a box with a heading of "Job Selected" aligned in the center
+      <Box height="100%" width="300px" ml="10%">
         <Heading>No Job Selected</Heading>
-      </Box>
+        </Box>
     );
   }
 
