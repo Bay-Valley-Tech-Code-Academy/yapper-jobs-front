@@ -52,7 +52,7 @@ function JobSummary({ selectedJob, handleSaveJob }) {
         <Stack direction="row" spacing="4" align="center" mb="2">
           <Stack direction="row" spacing="1">
             <Icon as={FaMapMarkerAlt} />
-            <Text fontSize="sm">{job.location}</Text>
+            <Text fontSize="sm">{job.city}, {job.state}</Text>
           </Stack>
           <Text fontSize="sm" fontWeight="bold">
             {job.employment_type}

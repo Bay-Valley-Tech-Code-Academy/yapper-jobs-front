@@ -18,7 +18,7 @@ function SavedJobCard(props) {
           {props.title}
         </Heading>
         <Text fontSize="md">
-          {props.company} | {props.location}
+          {props.company} | {props.city}, {props.state}
         </Text>
         <Text>{props.employment_type}</Text>
         <Button
