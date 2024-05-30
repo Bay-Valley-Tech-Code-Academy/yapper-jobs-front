@@ -13,17 +13,17 @@ function SavedJobCard(props) {
           as="h2"
           size="lg"
           cursor="pointer"
-          onClick={() => navigate(`../apply/${props.id}`)}
+          onClick={() => navigate(`../apply/${props.job_id}`)}
         >
           {props.title}
         </Heading>
         <Text fontSize="md">
           {props.company} | {props.location}
         </Text>
-        <Text>{props.type}</Text>
+        <Text>{props.employment_type}</Text>
         <Button
           colorScheme="purple"
-          onClick={() => navigate(`../apply/${props.id}`)}
+          onClick={() => navigate(`../apply/${props.job_id}`)}
         >
           Apply Now
         </Button>
@@ -33,7 +33,7 @@ function SavedJobCard(props) {
           colorScheme="purple"
           variant="ghost"
           size="sm"
-          onClick={() => props.handleRemoveJob(props.id)}
+          onClick={() => props.handleRemoveJob(props.job_id)}
         />
       </Box>
     </Flex>

@@ -1,139 +1,139 @@
-{
-  "status": "OK",
-  "request_id": "57240d80-c164-4c19-8549-ba8696cae137",
-  "parameters": {
-    "query": "software developer in usa",
-    "page": 1,
-    "num_pages": 20,
-    "remote_jobs_only": false,
-    "employment_types": [
-      "FULLTIME",
-      "PARTTIME",
-      "CONTRACTOR"
-    ]
-  },
-  "data": [
-    {
-      "job_id": "78JOlX8JXS2ye59ZAAAAAA==",
-      "employer_name": "SAIC Career Site",
-      "employer_logo": null,
-      "employer_website": null,
-      "employer_company_type": null,
-      "job_publisher": "SAIC Careers",
-      "job_employment_type": "FULLTIME",
-      "job_title": "Software Developer",
-      "job_apply_link": "https://jobs.saic.com/jobs/14208787-software-developer",
-      "job_apply_is_direct": false,
-      "job_apply_quality_score": 0.8434,
-      "apply_options": [
-        {
-          "publisher": "SAIC Careers",
-          "apply_link": "https://jobs.saic.com/jobs/14208787-software-developer",
-          "is_direct": false
-        },
-        {
-          "publisher": "Dice",
-          "apply_link": "https://www.dice.com/job-detail/322da4bc-1c6d-4c23-be6c-7d0719ae07f3",
-          "is_direct": false
-        },
-        {
-          "publisher": "Glassdoor",
-          "apply_link": "https://www.glassdoor.com/job-listing/software-developer-saic-JV_IC1130353_KO0,18_KE19,23.htm?jl=1009221738503",
-          "is_direct": false
-        },
-        {
-          "publisher": "ZipRecruiter",
-          "apply_link": "https://www.ziprecruiter.com/c/SAIC/Job/Software-Developer/-in-Chantilly,VA?jid=60514d0800e5dcd4",
-          "is_direct": false
-        },
-        {
-          "publisher": "Jooble",
-          "apply_link": "https://jooble.org/jdp/-8093386302729672865",
-          "is_direct": false
-        },
-        {
-          "publisher": "LinkedIn",
-          "apply_link": "https://www.linkedin.com/jobs/view/software-developer-at-saic-3885210588",
-          "is_direct": false
-        },
-        {
-          "publisher": "Upskillist Careers",
-          "apply_link": "https://jobbio.upskillist.com/job/software-developer-73-at-saic-2",
-          "is_direct": false
-        },
-        {
-          "publisher": "Talent.com",
-          "apply_link": "https://www.talent.com/view?id=af5147cf10ce",
-          "is_direct": false
-        }
-      ],
-      "job_description": "Description\n\nINTRODUCTION: The Sponsor supports a diverse set of corporate goals across the organization by conducting technical risk assessments and providing technical risk mitigation guidance on the use of various enabling technologies. The Sponsor requires subject matter expertise in technical risk analysis of enterprise and mission systems, IT systems and networks, mobile and wireless networks, cloud-based computing, network management platforms, communication protocols, scripting or programming products, configuration scripts, and IT hardware and software products in support of Sponsor’s technical risk assessment activities. The Sponsor also requires software development to maintain an online infrastructure, evaluating and extracting relevant data, web development, and software coding.\n\nWORK REQUIREMENTS: Software Development; HRR; Yes\n\n• Work with applications in the Sponsor’s cloud environment such as AWS, Oracle, Google, Microsoft Azure, and IBM.\n\n• Provide support for the implementation, design and building enhancements, and long-term maintenance of a new application.\n\n• Design and develop the application in a Web environment.\n\n• Analyze user needs and develop software solutions.\n\n• Design software or customize software to optimize operational efficiency.\n\n• Perform testing, debugging and quality assurance of the application.\n\n• Play a major role in implementing a modern, high profile, mission enabling application used daily.\n\nQualifications\n\nRequired Skills:\n• Demonstrated experience with Front-end web development tools such as Node and NPN.\n• Demonstrated experience using Java Script Object Notion (JSON) for Application Program Interface (API) development.\n• Demonstrated experience with software development languages such as TypeScript and JavaScript.\n• Demonstrated experience with strongly typed programing language concepts.\n• Demonstrated experience with Node NPM software language.\n• Demonstrated experience with Integrated Development Environment (IDE) software such as Visual Studio.\n• Demonstrated experience with software development Mark Up Languages such as JSON, CSS, and HTML.\n• Demonstrated experience with RESTful interfaces.\n• Demonstrated experience developing and maintaining redundant applications hosted in Linux or Unix using Apache server.\n\nDesired Skills:\n• Demonstrated experience using Java or Java using Spring.\n• Demonstrated experience with Sponsor networks, systems, and services.\n• Demonstrated experience with the Sponsor’s authentication and authorization process.\n• Demonstrated experience delivering solutions with cloud services such as AWS, Oracle, Google, Microsoft Azure, or IBM.\n• Demonstrated experience with Apache Tomcat.\n• Demonstrated experience with Continuous integration systems (Jenkins).\n• Demonstrated experience upgrading and refining existing production applications (working with legacy code).\n• Demonstrated experience with JIRA.\n• Certifications: AWS Certification or similar.\n\nSAIC accepts applications on an ongoing basis and there is no deadline.\n\nCovid Policy: SAIC does not require COVID-19 vaccinations or boosters. Customer site vaccination requirements must be followed when work is performed at a customer site.",
-      "job_is_remote": false,
-      "job_posted_at_timestamp": 1714694400,
-      "job_posted_at_datetime_utc": "2024-05-03T00:00:00.000Z",
-      "job_city": "Chantilly",
-      "job_state": "VA",
-      "job_country": "US",
-      "job_latitude": 38.89428,
-      "job_longitude": -77.4311,
-      "job_benefits": null,
-      "job_google_link": "https://www.google.com/search?gl=us&hl=en&rciv=jb&q=software+developer+in+usa&start=0&chips=employment_type:FULLTIME,employment_type:PARTTIME,employment_type:CONTRACTOR&schips=employment_type;FULLTIME;PARTTIME;CONTRACTOR&ibp=htl;jobs&htidocid=78JOlX8JXS2ye59ZAAAAAA%3D%3D#fpstate=tldetail&htivrt=jobs&htiq=software+developer+in+usa&htidocid=78JOlX8JXS2ye59ZAAAAAA%3D%3D",
-      "job_offer_expiration_datetime_utc": null,
-      "job_offer_expiration_timestamp": null,
-      "job_required_experience": {
-        "no_experience_required": false,
-        "required_experience_in_months": null,
-        "experience_mentioned": true,
-        "experience_preferred": false
-      },
-      "job_required_skills": null,
-      "job_required_education": {
-        "postgraduate_degree": false,
-        "professional_certification": false,
-        "high_school": false,
-        "associates_degree": false,
-        "bachelors_degree": false,
-        "degree_mentioned": false,
-        "degree_preferred": false,
-        "professional_certification_mentioned": true
-      },
-      "job_experience_in_place_of_education": false,
-      "job_min_salary": null,
-      "job_max_salary": null,
-      "job_salary_currency": null,
-      "job_salary_period": null,
-      "job_highlights": {
-        "Qualifications": [
-          "Demonstrated experience with Front-end web development tools such as Node and NPN",
-          "Demonstrated experience using Java Script Object Notion (JSON) for Application Program Interface (API) development",
-          "Demonstrated experience with software development languages such as TypeScript and JavaScript",
-          "Demonstrated experience with strongly typed programing language concepts",
-          "Demonstrated experience with Node NPM software language",
-          "Demonstrated experience with Integrated Development Environment (IDE) software such as Visual Studio",
-          "Demonstrated experience with software development Mark Up Languages such as JSON, CSS, and HTML",
-          "Demonstrated experience with RESTful interfaces",
-          "Demonstrated experience developing and maintaining redundant applications hosted in Linux or Unix using Apache server"
-        ],
-        "Responsibilities": [
-          "The Sponsor requires subject matter expertise in technical risk analysis of enterprise and mission systems, IT systems and networks, mobile and wireless networks, cloud-based computing, network management platforms, communication protocols, scripting or programming products, configuration scripts, and IT hardware and software products in support of Sponsor’s technical risk assessment activities",
-          "The Sponsor also requires software development to maintain an online infrastructure, evaluating and extracting relevant data, web development, and software coding",
-          "Work with applications in the Sponsor’s cloud environment such as AWS, Oracle, Google, Microsoft Azure, and IBM",
-          "Provide support for the implementation, design and building enhancements, and long-term maintenance of a new application",
-          "Design and develop the application in a Web environment",
-          "Analyze user needs and develop software solutions",
-          "Design software or customize software to optimize operational efficiency",
-          "Perform testing, debugging and quality assurance of the application",
-          "Play a major role in implementing a modern, high profile, mission enabling application used daily"
-        ]
-      },
-      "job_job_title": null,
-      "job_posting_language": "en",
-      "job_onet_soc": "15113200",
-      "job_onet_job_zone": "4",
-      "job_occupational_categories": null,
-      "job_naics_code": null,
-      "job_naics_name": null
+  {
+    "status": "OK",
+    "request_id": "57240d80-c164-4c19-8549-ba8696cae137",
+    "parameters": {
+      "query": "software developer in usa",
+      "page": 1,
+      "num_pages": 20,
+      "remote_jobs_only": false,
+      "employment_types": [
+        "FULLTIME",
+        "PARTTIME",
+        "CONTRACTOR"
+      ]
     },
+    "data": [
+      {
+        "job_id": "78JOlX8JXS2ye59ZAAAAAA==",
+        "employer_name": "SAIC Career Site",
+        "employer_logo": null,
+        "employer_website": null,
+        "employer_company_type": null,
+        "job_publisher": "SAIC Careers",
+        "job_employment_type": "FULLTIME",
+        "job_title": "Software Developer",
+        "job_apply_link": "https://jobs.saic.com/jobs/14208787-software-developer",
+        "job_apply_is_direct": false,
+        "job_apply_quality_score": 0.8434,
+        "apply_options": [
+          {
+            "publisher": "SAIC Careers",
+            "apply_link": "https://jobs.saic.com/jobs/14208787-software-developer",
+            "is_direct": false
+          },
+          {
+            "publisher": "Dice",
+            "apply_link": "https://www.dice.com/job-detail/322da4bc-1c6d-4c23-be6c-7d0719ae07f3",
+            "is_direct": false
+          },
+          {
+            "publisher": "Glassdoor",
+            "apply_link": "https://www.glassdoor.com/job-listing/software-developer-saic-JV_IC1130353_KO0,18_KE19,23.htm?jl=1009221738503",
+            "is_direct": false
+          },
+          {
+            "publisher": "ZipRecruiter",
+            "apply_link": "https://www.ziprecruiter.com/c/SAIC/Job/Software-Developer/-in-Chantilly,VA?jid=60514d0800e5dcd4",
+            "is_direct": false
+          },
+          {
+            "publisher": "Jooble",
+            "apply_link": "https://jooble.org/jdp/-8093386302729672865",
+            "is_direct": false
+          },
+          {
+            "publisher": "LinkedIn",
+            "apply_link": "https://www.linkedin.com/jobs/view/software-developer-at-saic-3885210588",
+            "is_direct": false
+          },
+          {
+            "publisher": "Upskillist Careers",
+            "apply_link": "https://jobbio.upskillist.com/job/software-developer-73-at-saic-2",
+            "is_direct": false
+          },
+          {
+            "publisher": "Talent.com",
+            "apply_link": "https://www.talent.com/view?id=af5147cf10ce",
+            "is_direct": false
+          }
+        ],
+        "job_description": "Description\n\nINTRODUCTION: The Sponsor supports a diverse set of corporate goals across the organization by conducting technical risk assessments and providing technical risk mitigation guidance on the use of various enabling technologies. The Sponsor requires subject matter expertise in technical risk analysis of enterprise and mission systems, IT systems and networks, mobile and wireless networks, cloud-based computing, network management platforms, communication protocols, scripting or programming products, configuration scripts, and IT hardware and software products in support of Sponsor’s technical risk assessment activities. The Sponsor also requires software development to maintain an online infrastructure, evaluating and extracting relevant data, web development, and software coding.\n\nWORK REQUIREMENTS: Software Development; HRR; Yes\n\n• Work with applications in the Sponsor’s cloud environment such as AWS, Oracle, Google, Microsoft Azure, and IBM.\n\n• Provide support for the implementation, design and building enhancements, and long-term maintenance of a new application.\n\n• Design and develop the application in a Web environment.\n\n• Analyze user needs and develop software solutions.\n\n• Design software or customize software to optimize operational efficiency.\n\n• Perform testing, debugging and quality assurance of the application.\n\n• Play a major role in implementing a modern, high profile, mission enabling application used daily.\n\nQualifications\n\nRequired Skills:\n• Demonstrated experience with Front-end web development tools such as Node and NPN.\n• Demonstrated experience using Java Script Object Notion (JSON) for Application Program Interface (API) development.\n• Demonstrated experience with software development languages such as TypeScript and JavaScript.\n• Demonstrated experience with strongly typed programing language concepts.\n• Demonstrated experience with Node NPM software language.\n• Demonstrated experience with Integrated Development Environment (IDE) software such as Visual Studio.\n• Demonstrated experience with software development Mark Up Languages such as JSON, CSS, and HTML.\n• Demonstrated experience with RESTful interfaces.\n• Demonstrated experience developing and maintaining redundant applications hosted in Linux or Unix using Apache server.\n\nDesired Skills:\n• Demonstrated experience using Java or Java using Spring.\n• Demonstrated experience with Sponsor networks, systems, and services.\n• Demonstrated experience with the Sponsor’s authentication and authorization process.\n• Demonstrated experience delivering solutions with cloud services such as AWS, Oracle, Google, Microsoft Azure, or IBM.\n• Demonstrated experience with Apache Tomcat.\n• Demonstrated experience with Continuous integration systems (Jenkins).\n• Demonstrated experience upgrading and refining existing production applications (working with legacy code).\n• Demonstrated experience with JIRA.\n• Certifications: AWS Certification or similar.\n\nSAIC accepts applications on an ongoing basis and there is no deadline.\n\nCovid Policy: SAIC does not require COVID-19 vaccinations or boosters. Customer site vaccination requirements must be followed when work is performed at a customer site.",
+        "job_is_remote": false,
+        "job_posted_at_timestamp": 1714694400,
+        "job_posted_at_datetime_utc": "2024-05-03T00:00:00.000Z",
+        "job_city": "Chantilly",
+        "job_state": "VA",
+        "job_country": "US",
+        "job_latitude": 38.89428,
+        "job_longitude": -77.4311,
+        "job_benefits": null,
+        "job_google_link": "https://www.google.com/search?gl=us&hl=en&rciv=jb&q=software+developer+in+usa&start=0&chips=employment_type:FULLTIME,employment_type:PARTTIME,employment_type:CONTRACTOR&schips=employment_type;FULLTIME;PARTTIME;CONTRACTOR&ibp=htl;jobs&htidocid=78JOlX8JXS2ye59ZAAAAAA%3D%3D#fpstate=tldetail&htivrt=jobs&htiq=software+developer+in+usa&htidocid=78JOlX8JXS2ye59ZAAAAAA%3D%3D",
+        "job_offer_expiration_datetime_utc": null,
+        "job_offer_expiration_timestamp": null,
+        "job_required_experience": {
+          "no_experience_required": false,
+          "required_experience_in_months": null,
+          "experience_mentioned": true,
+          "experience_preferred": false
+        },
+        "job_required_skills": null,
+        "job_required_education": {
+          "postgraduate_degree": false,
+          "professional_certification": false,
+          "high_school": false,
+          "associates_degree": false,
+          "bachelors_degree": false,
+          "degree_mentioned": false,
+          "degree_preferred": false,
+          "professional_certification_mentioned": true
+        },
+        "job_experience_in_place_of_education": false,
+        "job_min_salary": null,
+        "job_max_salary": null,
+        "job_salary_currency": null,
+        "job_salary_period": null,
+        "job_highlights": {
+          "Qualifications": [
+            "Demonstrated experience with Front-end web development tools such as Node and NPN",
+            "Demonstrated experience using Java Script Object Notion (JSON) for Application Program Interface (API) development",
+            "Demonstrated experience with software development languages such as TypeScript and JavaScript",
+            "Demonstrated experience with strongly typed programing language concepts",
+            "Demonstrated experience with Node NPM software language",
+            "Demonstrated experience with Integrated Development Environment (IDE) software such as Visual Studio",
+            "Demonstrated experience with software development Mark Up Languages such as JSON, CSS, and HTML",
+            "Demonstrated experience with RESTful interfaces",
+            "Demonstrated experience developing and maintaining redundant applications hosted in Linux or Unix using Apache server"
+          ],
+          "Responsibilities": [
+            "The Sponsor requires subject matter expertise in technical risk analysis of enterprise and mission systems, IT systems and networks, mobile and wireless networks, cloud-based computing, network management platforms, communication protocols, scripting or programming products, configuration scripts, and IT hardware and software products in support of Sponsor’s technical risk assessment activities",
+            "The Sponsor also requires software development to maintain an online infrastructure, evaluating and extracting relevant data, web development, and software coding",
+            "Work with applications in the Sponsor’s cloud environment such as AWS, Oracle, Google, Microsoft Azure, and IBM",
+            "Provide support for the implementation, design and building enhancements, and long-term maintenance of a new application",
+            "Design and develop the application in a Web environment",
+            "Analyze user needs and develop software solutions",
+            "Design software or customize software to optimize operational efficiency",
+            "Perform testing, debugging and quality assurance of the application",
+            "Play a major role in implementing a modern, high profile, mission enabling application used daily"
+          ]
+        },
+        "job_job_title": null,
+        "job_posting_language": "en",
+        "job_onet_soc": "15113200",
+        "job_onet_job_zone": "4",
+        "job_occupational_categories": null,
+        "job_naics_code": null,
+        "job_naics_name": null
+      },
     {
       "job_id": "oIyI4-hZYqK4h9upAAAAAA==",
       "employer_name": "Walmart",

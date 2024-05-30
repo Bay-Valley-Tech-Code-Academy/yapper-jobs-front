@@ -11,11 +11,12 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { jobs } from "../jobs";
+import useApiStore from '../store/api-store';
 import useJobStore from "../store/job-store";
 
 function JobSummary({ selectedJob, handleSaveJob }) {
   const navigate = useNavigate();
+  const jobs = useApiStore((state) => state.jobs);
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
   const { savedJobs } = useJobStore((state) => ({
     savedJobs: state.savedJobs,
@@ -24,10 +25,10 @@ function JobSummary({ selectedJob, handleSaveJob }) {
   if (!isLargerThanSmall) {
     return null; // Render nothing if the screen size is smaller than 30em
   }
-
+  
   //get job details matching the id of selected job to the jobs JSON
-  const job = jobs.find((job) => job.id === selectedJob);
-
+  const job = jobs.find((job) => job.job_id === selectedJob);
+  
   if (!job) {
     return (
       <Box height="100%" ml="3%">
@@ -54,11 +55,11 @@ function JobSummary({ selectedJob, handleSaveJob }) {
             <Text fontSize="sm">{job.location}</Text>
           </Stack>
           <Text fontSize="sm" fontWeight="bold">
-            {job.type}
+            {job.employment_type}
           </Text>
         </Stack>
         <Text fontSize="md" mb="4" overflowY="auto" maxHeight="500px">
-          {job.jobDescription}
+          {job.job_desccription}
         </Text>
         <Stack direction="row" justify="flex-start" spacing="4">
           <Button

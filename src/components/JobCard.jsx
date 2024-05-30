@@ -36,7 +36,7 @@ function JobCard(props) {
           as="h2"
           size="md"
           cursor="pointer"
-          onClick={() => handleClick(props.id)}
+          onClick={() => handleClick(props.job_id)}
         >
           {props.title}
         </Heading>
@@ -44,14 +44,14 @@ function JobCard(props) {
           {props.company}
         </Text>
         <Text fontSize="sm" fontWeight="bold">
-          {props.type}
+          {props.employment_type}
         </Text>
         <Stack direction="row" spacing="2" mt="2" mb="4">
           <Icon as={FaMapMarkerAlt} />
           <Text fontSize="sm">{props.location}</Text>
         </Stack>
         <Text fontSize="sm" mb="4" maxHeight="110px" overflow="hidden">
-          {props.jobDescription}
+          {props.job_description}
         </Text>
         <Stack
           direction={{ base: "column", md: "row" }}
@@ -61,14 +61,14 @@ function JobCard(props) {
           <Button
             colorScheme="purple"
             size="sm"
-            onClick={() => handleApplyClick(props.id)}
+            onClick={() => handleApplyClick(props.job_id)}
           >
             Apply
           </Button>
           <IconButton
             aria-label="Save/Unsave"
             icon={
-              savedJobs.includes(props.id) ? (
+              savedJobs.includes(props.job_id) ? (
                 <MdFavorite />
               ) : (
                 <MdFavoriteBorder />
@@ -77,7 +77,7 @@ function JobCard(props) {
             colorScheme="purple"
             variant="ghost"
             size="sm"
-            onClick={() => props.handleSaveJob(props.id)}
+            onClick={() => props.handleSaveJob(props.job_id)}
           />
         </Stack>
       </Box>

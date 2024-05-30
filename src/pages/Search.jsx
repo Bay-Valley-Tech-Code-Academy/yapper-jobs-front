@@ -3,34 +3,28 @@ import { Heading, Text, Flex, Box, Button } from "@chakra-ui/react";
 import Searchbar from "../components/Searchbar";
 import JobSummary from "../components/JobSummary";
 import JobCard from "../components/JobCard";
-import { jobs } from "../jobs";
 import useJobStore from "../store/job-store"; // Import the store
 import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
-import { fetchJobAPI } from "../services/jobsAPI.mjs";
+import useApiStore from "../store/api-store";
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { useMediaQuery } from "@chakra-ui/react";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
+  // const [jobsData, setJobsData] = useState([]);
   const [maxJobCards, setMaxJobCards] = useState(10); // Shows up to 10 job cards initially
+  const { jobs, fetchJobs } = useApiStore();
   const { savedJobs, addJob, removeJob } = useJobStore((state) => ({
     savedJobs: state.savedJobs,
     addJob: state.addJob,
     removeJob: state.removeJob,
   })); // Use the store
-  const { handleToggleColorMode, colors } = customColorMode();
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   const getJobAPIData = async () => {
-  //     try{
-  //       const jsonData = await fetchJobAPI();
-  //       setData(jsonData);
-  //     } catch(error){
-  //       console.log(error);
-  //     }
-  //   };
-  //   getJobAPIData();
-  // }, [])
+  const { colors, colorMode, toggleColorMode } = customColorMode();
+  const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
 
-  // console.log(data);
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   const handleSaveJob = (id) => {
     if (savedJobs.includes(id)) {
@@ -43,7 +37,7 @@ function Search() {
   const renderJobCards = () => {
     return jobCards.map((job) => (
       <JobCard
-        key={job.id}
+        key={job.job_id}
         {...job}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
@@ -81,11 +75,18 @@ function Search() {
     >
       <Flex justifyContent="flex-end" p={4}>
         <Button
-          onClick={handleToggleColorMode}
+          onClick={toggleColorMode}
           color={colors.buttonColor}
           backgroundColor={colors.buttonBgColor}
         >
-          Toggle {colors.text} Mode
+          {/* Toggle {colorMode === "light" ? "Dark" : "Light"} Mode */}
+          {isLargerThanSmall ? (
+            `Toggle ${colorMode === "light" ? "Dark" : "Light"} Mode`
+          ) : colorMode === "light" ? (
+            <MoonIcon />
+          ) : (
+            <SunIcon />
+          )}
         </Button>
       </Flex>
       <Heading textAlign="center" m="4">

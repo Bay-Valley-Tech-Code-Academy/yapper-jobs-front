@@ -1,9 +1,12 @@
 import React from "react";
 import { Flex, Box, Heading, Button } from "@chakra-ui/react";
-import { jobs } from "../jobs";
+// import { jobs } from "../jobs";
 import SavedJobCard from "../components/SavedJobCard";
 import AppliedJobCard from "../components/AppliedJobCard";
 import useJobStore from "../store/job-store";
+import useApiStore from "../store/api-store";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useMediaQuery } from "@chakra-ui/react";
 import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
 
 function SavedJobs() {
@@ -11,7 +14,10 @@ function SavedJobs() {
     savedJobs: state.savedJobs,
     removeJob: state.removeJob,
   })); // Use the store(zustand)
-  const { handleToggleColorMode, colors } = customColorMode();
+  const {jobs } = useApiStore();
+  const { colors, colorMode, toggleColorMode } = customColorMode();
+  const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
+
 
   //remove from saved jobs
   const handleRemoveJob = (id) => {
@@ -19,7 +25,7 @@ function SavedJobs() {
   };
 
   //fetch details from jobs JSON matching with job id of savedJobs
-  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.id));
+  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.job_id));
 
   // Render SavedJobCard component
   const renderSavedJobs = () => {
@@ -29,7 +35,7 @@ function SavedJobs() {
       </Box>
     ) : (
       savedJobDetails.map((job) => (
-        <SavedJobCard key={job.id} {...job} handleRemoveJob={handleRemoveJob} />
+        <SavedJobCard key={job.job_id} {...job} handleRemoveJob={handleRemoveJob} />
       ))
     );
   };
@@ -41,7 +47,7 @@ function SavedJobs() {
         <Heading>No Application Status Available</Heading>
       </Box>
     ) : (
-      jobs.map((job) => <AppliedJobCard key={job.id} {...job} />)
+      jobs.map((job) => <AppliedJobCard key={job.job_id} {...job} />)
     );
   };
 
@@ -49,11 +55,17 @@ function SavedJobs() {
     <Box bg={colors.bgGradient} color={colors.textColor}>
       <Flex justifyContent="flex-end" p={4}>
         <Button
-          onClick={handleToggleColorMode}
+          onClick={toggleColorMode}
           color={colors.buttonColor}
           backgroundColor={colors.buttonBgColor}
         >
-          Toggle {colors.text} Mode
+                    {isLargerThanSmall ? (
+            `Toggle ${colorMode === "light" ? "Dark" : "Light"} Mode`
+          ) : colorMode === "light" ? (
+            <MoonIcon />
+          ) : (
+            <SunIcon />
+          )}
         </Button>
       </Flex>
       <Flex justifyContent="center">

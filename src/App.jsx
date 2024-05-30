@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter, Routes, Route, json } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Search from "./pages/Search";
 import Apply from "./pages/Apply/Apply";
@@ -16,10 +15,9 @@ import Applications from "./pages/Applications/Applications";
 import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
-import { fetchZipRecruiterData } from "./services/zipRecruiter";
-import { fetchJobAPI } from "./services/jobsAPI.mjs";
 
 function App() {
+
   return (
     <ChakraProvider>
       <BrowserRouter>

@@ -112,7 +112,7 @@ const Register = () => {
       return;
     }
     console.log("Form submitted");
-    navigate("/login");
+    navigate("/");
   };
 
   const toastTheme = extendTheme({
