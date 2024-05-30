@@ -48,7 +48,12 @@ function JobCard(props) {
         </Text>
         <Stack direction="row" spacing="2" mt="2" mb="4">
           <Icon as={FaMapMarkerAlt} />
-          <Text fontSize="sm">{props.city}, {props.state}</Text>
+          {/* <Text fontSize="sm">{props.city}, {props.state}</Text> */}
+          <Text fontSize="sm">
+            {props.city || props.state
+              ? `${props.city}, ${props.state}`
+              : "No location specified"}
+          </Text>
         </Stack>
         <Text fontSize="sm" mb="4" maxHeight="110px" overflow="hidden">
           {props.job_description}
