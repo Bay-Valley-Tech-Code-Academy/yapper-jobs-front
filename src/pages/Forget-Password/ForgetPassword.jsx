@@ -89,7 +89,7 @@ function ForgetPassword() {
                             </Button>
                         </Flex>
                         <Heading pt={10} ml={4} textAlign="center">Forget Password?</Heading>
-                        <Heading pt={10} ml={4} size="md" textAlign="center">Type in your email below and we'll send you a reset password</Heading>
+                        <Heading pt={10} ml={4} size="md" textAlign="center">Type in your email below and we&apos;ll send you a reset password</Heading>
                         <Box flex={1} m={4} pt={10} position="relative">
                             <Input 
                                 placeholder="email"

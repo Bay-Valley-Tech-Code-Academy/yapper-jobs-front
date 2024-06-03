@@ -175,7 +175,7 @@ function Login() {
               </Button>
             </Box>
             <Text mt={8} textAlign="center">
-              Don't have an account with us?
+              Don&apos;t have an account with us?
               <Link color="teal.500" onClick={() => navigate('/register')}>
                 &nbsp;Sign Up
               </Link>
