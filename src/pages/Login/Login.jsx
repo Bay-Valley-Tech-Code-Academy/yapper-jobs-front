@@ -1,62 +1,78 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import customColorMode from "/util/toggleColorMode";
-import {
-  ChakraProvider,
-  Box,
-  Flex,
-  Heading,
-  Text,
-  Button,
-  Input,
-  ColorModeScript,
-  Link,
-  InputGroup,
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { usePasswordToggle } from '/util/passwordUtils';
+import CustomColorMode from '/util/toggleColorMode';
+import { apiService } from '../../services/apiRequests';
+import { 
+  ChakraProvider, 
+  Box, 
+  Flex, 
+  Heading, 
+  Text, 
+  Button, 
+  Input, 
+  ColorModeScript, 
+  Link, 
+  InputGroup, 
   InputRightElement,
   FormControl,
-} from "@chakra-ui/react";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+  useToast 
+} from '@chakra-ui/react';
+
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isEmployer, setIsEmployer] = useState(false);
-  const { colors, colorMode, toggleColorMode } = customColorMode();
   const navigate = useNavigate();
+  const toast = useToast();
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
+  const [isEmployer, setIsEmployer] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showPassword, togglePasswordVisibility } = usePasswordToggle();
+  const { toggleColorMode, colors } = CustomColorMode();
+
+  const toggleUserType = () => {
+    setIsEmployer(!isEmployer);
+  };
+
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please fill out login information");
+    if (!email || !pass) {
+      toast({
+        title: 'Error',
+        description: 'Please fill out login information',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
       return;
     }
 
-    const response = await fetch("", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    setIsLoading(true);
 
-    if (!response.ok) throw new Error("Sign in request failed", response);
+    try {
+      const data = await Promise.all([
+        apiService.login(email, pass, isEmployer),
+        delay(1000)
+      ]).then(values => values[0]);
 
-    const data = await response.json();
-    console.log("User logged in successfully:", data);
+      navigate(data.role === 'employer' ? '/employer-main' : '/search');
+      setIsEmployer(data.role === 'employer');
 
-    navigate("/search");
-
-    if (data.role === "employer") {
-      navigate("/employer-main");
-      setIsEmployer(true);
-    } else {
-      navigate("/search");
-      setIsEmployer(false);
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: 'Failed to login',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      console.error('Failed to log in', err);
+    } finally {
+      setIsLoading(false);
     }
-
-    return data;
   };
 
   return (
@@ -78,7 +94,7 @@ function Login() {
             bg={colors.boxColor}
             p={10}
             borderRadius="md"
-            width="35vw"
+            width="30vw"
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
@@ -88,15 +104,20 @@ function Login() {
                 color={colors.buttonColor}
                 backgroundColor={colors.buttonBgColor}
               >
-                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                {colors.icon}
               </Button>
             </Flex>
-            <Heading mb={4} ml={4}>
-              Welcome 🗣️
-            </Heading>
-            <Heading mb={4} ml={4}>
-              Sign in to Yapper Jobs
-            </Heading>
+            <Heading mb={4} ml={4}>Welcome 🗣️</Heading>
+            <Heading mb={4} ml={4}>Sign in to Yapper Jobs</Heading>
+            <Button
+              onClick={toggleUserType}
+              mt={4}
+              ml={4}
+              backgroundColor={colors.buttonBgColor}
+              color={colors.buttonColor}
+            >
+              {isEmployer ? "Switch to Seeker" : "Switch to Employer"}
+            </Button>
             <Box flex={1} m={4} mt={10} position="relative">
               <FormControl isRequired>
                 <Input
@@ -105,7 +126,7 @@ function Login() {
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
                   _hover={{ bg: colors.bgHover }}
-                  minWidth="30vw"
+                  minWidth="20vw"
                   height="3rem"
                 />
               </FormControl>
@@ -114,51 +135,48 @@ function Login() {
               <InputGroup>
                 <Input
                   placeholder="password"
-                  value={password}
-                  type={showPassword ? "text" : "password"}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={pass}
+                  type={showPassword ? 'text' : 'password'}
+                  onChange={(e) => setPass(e.target.value)}
                   _hover={{ bg: colors.bgHover }}
                   isRequired
-                  minWidth="30vw"
+                  minWidth="20vw"
                   height="3rem"
                 />
                 <InputRightElement flex={1} m={1} width="5rem">
                   <Button
                     id="check"
                     type="checkbox"
-                    value={showPassword}
-                    onClick={() => setShowPassword((prev) => !prev)}
+                    onClick={togglePasswordVisibility}
                     cursor="pointer"
                     size="md"
                     height="2rem"
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? 'Hide' : 'Show'}
                   </Button>
                 </InputRightElement>
               </InputGroup>
             </Box>
             <Text mt={6} textAlign="center">
-              <Link
-                color="teal.500"
-                onClick={() => navigate("/forget-password")}
-              >
-                Forgot Password?
-              </Link>
+              <Link color="teal.500" onClick={() => navigate('/forget-password')}>Forgot Password?</Link>
             </Text>
-            <Button
-              ml={4}
-              mt={8}
-              colorScheme="teal"
-              minWidth="30vw"
-              onClick={handleSubmit}
-              backgroundColor={colors.buttonBgColor}
-              height="3rem"
-            >
-              Sign In
-            </Button>
+            <Box flex={1} ml={4} position="relative">
+              <Button
+                mt={10}
+                minWidth="24.2vw"
+                onClick={handleSubmit}
+                backgroundColor={colors.buttonBgColor}
+                color={colors.buttonColor}
+                height="3rem"
+                isLoading={isLoading}
+                loadingText="Signing In..."
+              >
+                Sign In as {isEmployer ? "Employer" : "Seeker"}
+              </Button>
+            </Box>
             <Text mt={8} textAlign="center">
               Don't have an account with us?
-              <Link color="teal.500" onClick={() => navigate("/register")}>
+              <Link color="teal.500" onClick={() => navigate('/register')}>
                 &nbsp;Sign Up
               </Link>
             </Text>

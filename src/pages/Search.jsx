@@ -80,7 +80,6 @@ function Search() {
           color={colors.buttonColor}
           backgroundColor={colors.buttonBgColor}
         >
-          {/* Toggle {colorMode === "light" ? "Dark" : "Light"} Mode */}
           {isLargerThanSmall ? (
             `Toggle ${colorMode === "light" ? "Dark" : "Light"} Mode`
           ) : colorMode === "light" ? (
