@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   Box,
   Heading,
@@ -6,98 +6,225 @@ import {
   FormLabel,
   Input,
   Select,
+  Textarea,
   HStack,
   VStack,
   Container,
   Tooltip,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Button,
+  useDisclosure,
+  IconButton,
+  List,
+  ListItem,
+  Divider,
+  Flex,
 } from '@chakra-ui/react';
+import { HamburgerIcon, SunIcon, MoonIcon } from '@chakra-ui/icons'; 
+import customColorMode from '../../../util/toggleColorMode';
+
+const sections = [
+  { id: 'job-position-name', label: 'Job Position:' },
+  { id: 'company', label: 'Company:' },
+  { id: 'location', label: 'Location:' },
+  { id: 'job-type', label: 'Job Type:' },
+  { id: 'salary', label: 'Salary:' },
+  { id: 'industry', label: 'Industry:' },
+  { id: 'skills', label: 'Skills:' },
+  { id: 'benefits', label: 'Benefits:' },
+  { id: 'company-size', label: 'Company Size:' },
+  { id: 'job-description', label: 'Job Description:' },
+];
 
 const JobPosting = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
+  const [activeSection, setActiveSection] = useState(null);
+  const { colorMode, toggleColorMode, colors } = customColorMode();
+
+  const sectionRefs = useRef(
+    sections.reduce((acc, section) => {
+      acc[section.id] = React.createRef();
+      return acc;
+    }, {})
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.7,
+      }
+    );
+
+    Object.values(sectionRefs.current).forEach((ref) => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      Object.values(sectionRefs.current).forEach((ref) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, []);
+
+  const handleJumpToSection = (id) => {
+    sectionRefs.current[id].current.scrollIntoView({ behavior: 'smooth' });
+    onClose(); // Close drawer when clicked
+  };
+
   return (
     <Container maxW="container.md" p={4}>
+      <Flex justifyContent="flex-end">
+        <Tooltip label={`Switch to ${colorMode === "light" ? "dark" : "light"} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
+          <Button
+            onClick={toggleColorMode}
+            mr={2}
+            color={colors.buttonColor}
+            backgroundColor={colors.buttonBgColor}
+            _hover={{ bg: colors.buttonHoverColor }}
+            size={["sm", "md", "lg"]}
+          >
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </Button>
+        </Tooltip>
+      </Flex>
       <Heading as="h1" mb={6}>
-        Create Posting
+        Create Job Posting
       </Heading>
-      <VStack spacing={4} align="stretch">
-        <FormControl id="job-position-name" isRequired>
-          <FormLabel fontWeight="bold">Job Position Name</FormLabel>
-          <Input placeholder="Enter job position name" />
-        </FormControl>
+      <HStack align="start" spacing={4}>
+        {/* Sidebar of Contents */}
+        <Box as="nav" display={{ base: 'none', md: 'block' }} width="200px" position="sticky" top="20px">
+          <List spacing={3}>
+            {sections.map((section) => (
+              <ListItem key={section.id}>
+                <Button
+                  variant="link"
+                  onClick={() => handleJumpToSection(section.id)}
+                  textDecoration={activeSection === section.id ? 'line-through' : 'none'}
+                  fontWeight={activeSection === section.id ? 'bold' : 'normal'}
+                >
+                  {section.label}
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
 
-        <FormControl fontWeight="bold" id="company" isRequired>
-          <FormLabel fontWeight="bold">Company</FormLabel>
-          <Input placeholder="Enter company name" />
-        </FormControl>
+        <Divider orientation="vertical" />
 
-        <FormControl id="job-type" isRequired>
-          <FormLabel fontWeight="bold">Job Type</FormLabel>
-          <HStack spacing={4}>
-            <Select placeholder="Select job type">
-              <option value="full-time">Full Time</option>
-              <option value="part-time">Part Time</option>
-              <option value="contract">Contract</option>
-            </Select>
-            <Select placeholder="Select work location">
-              <option value="remote">Remote</option>
-              <option value="onsite">Onsite</option>
-              <option value="hybrid">Hybrid</option>
-            </Select>
-          </HStack>
-        </FormControl>
+        {/* Drawer for mobile */}
+        <Box display={{ base: 'block', md: 'none' }} position="sticky" top="20px">
+          <IconButton
+            ref={btnRef}
+            icon={<HamburgerIcon />}
+            onClick={onOpen}
+            aria-label="Open menu"
+          />
+          <Drawer
+            isOpen={isOpen}
+            placement="left"
+            onClose={onClose}
+            finalFocusRef={btnRef}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>Menu</DrawerHeader>
 
-        <FormControl id="salary" isRequired>
-          <FormLabel fontWeight="bold">Salary</FormLabel>
-          <HStack spacing={4}>
-            <Input placeholder="Min salary" />
-            <Input placeholder="Max salary" />
-          </HStack>
-        </FormControl>
+              <DrawerBody>
+                <List spacing={3}>
+                  {sections.map((section) => (
+                    <ListItem key={section.id}>
+                      <Button
+                        variant="link"
+                        onClick={() => handleJumpToSection(section.id)}
+                        textDecoration={activeSection === section.id ? 'line-through' : 'none'}
+                        fontWeight={activeSection === section.id ? 'bold' : 'normal'}
+                      >
+                        {section.label}
+                      </Button>
+                    </ListItem>
+                  ))}
+                </List>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </Box>
 
-        <FormControl id="location" isRequired>
-          <FormLabel fontWeight="bold">Location</FormLabel>
-          <Input placeholder="Enter job location" />
-        </FormControl>
-
-        <FormControl id="company-size" isRequired>
-          <FormLabel fontWeight="bold">Company Size</FormLabel>
-          <Select placeholder="Select company size">
-            <option value="1">1 Employee</option>
-            <option value="5+">5+ Employees</option>
-            <option value="25+">25+ Employees</option>
-            <option value="100+">100+ Employees</option>
-          </Select>
-        </FormControl>
-
-        <FormControl id="industry" isRequired>
-          <FormLabel fontWeight="bold">Industry</FormLabel>
-          <Select placeholder="Select industry" fontWeight="bold">
-            <option value="Technology">Technology</option>
-            <option value="Healthcare">Healthcare</option>
-            <option value="Finance">Finance</option>
-            <option value="Education">Education</option>
-            <option value="Other">Other</option>
-          </Select>
-        </FormControl>
-
-        <FormControl id="skills" isRequired>
-          <FormLabel fontWeight="bold">Skills</FormLabel>
-          <Tooltip label="List required skills separated by commas">
-            <Input placeholder="Enter required skills" />
-          </Tooltip>
-        </FormControl>
-
-        <FormControl id="benefits" isRequired>
-          <FormLabel fontWeight="bold">Benefits</FormLabel>
-          <Tooltip label="List Benefits (separated by commas)">
-            <Input placeholder="Enter benefits" />
-          </Tooltip>
-        </FormControl>
-
-        <FormControl id="job-description" isRequired>
-          <FormLabel fontWeight="bold">Job Description</FormLabel>
-          <Input placeholder="Enter job description" />
-        </FormControl>
-      </VStack>
+        {/* Main form */}
+        <VStack spacing={4} align="stretch" flex="1">
+          {sections.map((section, index) => (
+            <React.Fragment key={section.id}>
+              <Box ref={sectionRefs.current[section.id]} id={section.id} py={3}>
+                <FormControl isRequired>
+                  <FormLabel fontWeight="bold">{section.label}</FormLabel>
+                  {section.id === 'job-type' ? (
+                    <HStack spacing={4}>
+                      <Select placeholder="Select job type" height="60px">
+                        <option value="full-time">Full Time</option>
+                        <option value="part-time">Part Time</option>
+                        <option value="contract">Contract</option>
+                      </Select>
+                      <Select placeholder="Select work location" height="60px">
+                        <option value="remote">Remote</option>
+                        <option value="onsite">Onsite</option>
+                        <option value="hybrid">Hybrid</option>
+                      </Select>
+                    </HStack>
+                  ) : section.id === 'salary' ? (
+                    <HStack spacing={4}>
+                      <Input placeholder="Min salary" height="60px" />
+                      <Input placeholder="Max salary" height="60px" />
+                    </HStack>
+                  ) : section.id === 'company-size' ? (
+                    <Select placeholder="Select company size" height="60px">
+                      <option value="1">1 Employee</option>
+                      <option value="5+">5+ Employees</option>
+                      <option value="25+">25+ Employees</option>
+                      <option value="100+">100+ Employees</option>
+                    </Select>
+                  ) : section.id === 'industry' ? (
+                    <Select placeholder="Select industry" height="50px">
+                      <option value="Technology">Technology</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Education">Education</option>
+                      <option value="Other">Other</option>
+                    </Select>
+                  ) : section.id === 'skills' || section.id === 'benefits' ? (
+                    <Tooltip label={section.id === 'skills' ? 'List required skills separated by commas' : 'List Benefits (separated by commas)'}>
+                      <Input placeholder={`Enter ${section.label.toLowerCase()}`} height="50px" />
+                    </Tooltip>
+                  ) : section.id === 'job-description' ? (
+                    <Textarea placeholder="Enter job description" resize="vertical" />
+                  ) : (
+                    <Input placeholder={`Enter ${section.label.toLowerCase()}`} height="50px" />
+                  )}
+                </FormControl>
+              </Box>
+              {index !== sections.length - 1 && <Divider />} {/* Divider between every section */}
+            </React.Fragment>
+          ))}
+        </VStack>
+      </HStack>
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 import { useColorMode } from '@chakra-ui/react';
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
-function customColorMode() {
+function CustomColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const colors = {
@@ -13,7 +13,7 @@ function customColorMode() {
       buttonBgColor: '#000000',
       bgHover: 'gray.300',
       logoSrc: '/yapperjoblogo.png',
-      buttonHoverColor: '#A96CDE', // Purple
+      buttonHoverColor: '#A96CDE',
       buttonHoverBgColor: '#333333',
       hyperlinkColor: '#3182CE',
       hyperlinkTextDecoration: 'underline',
