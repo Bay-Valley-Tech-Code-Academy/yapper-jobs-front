@@ -28,7 +28,7 @@ function Login() {
   const [isEmployer, setIsEmployer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
-  const { handleToggleColorMode, colors } = CustomColorMode();
+  const { toggleColorMode, colors } = CustomColorMode();
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
@@ -100,7 +100,7 @@ function Login() {
             <Flex justifyContent="flex-end">
               <Button
                 mr={2}
-                onClick={handleToggleColorMode}
+                onClick={toggleColorMode}
                 color={colors.buttonColor}
                 backgroundColor={colors.buttonBgColor}
               >
