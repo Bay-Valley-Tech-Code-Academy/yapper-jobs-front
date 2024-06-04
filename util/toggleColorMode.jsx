@@ -26,6 +26,7 @@ function CustomColorMode() {
         },
     };
 import { useColorMode } from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
 function customColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -43,6 +44,7 @@ function customColorMode() {
       buttonHoverBgColor: '#333333',
       hyperlinkColor: '#3182CE',
       hyperlinkTextDecoration: 'underline',
+      icon: <MoonIcon />
     },
     dark: {
       bgGradient: '#0B1215',
@@ -56,6 +58,7 @@ function customColorMode() {
       buttonHoverBgColor: '#FFFFFF',
       hyperlinkColor: 'cyan',
       hyperlinkTextDecoration: 'underline',
+      icon: <SunIcon />
     },
   };
 
@@ -63,5 +66,5 @@ function customColorMode() {
 
   return { colorMode, toggleColorMode, colors: currentColors };
 }
-
-export default customColorMode;
+  
+export default CustomColorMode

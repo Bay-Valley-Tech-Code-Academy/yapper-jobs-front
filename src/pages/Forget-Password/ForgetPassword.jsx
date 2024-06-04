@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import CustomColorMode from '/util/toggleColorMode'
+import { apiService } from '../../services/apiRequests';
+
 import { 
     ChakraProvider, 
     Box, 
