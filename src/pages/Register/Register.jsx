@@ -112,7 +112,7 @@ const Register = () => {
       return;
     }
     console.log("Form submitted");
-    navigate("/login");
+    navigate("/");
   };
 
   const toastTheme = extendTheme({
@@ -160,7 +160,7 @@ const Register = () => {
                   _hover={{ bg: colors.buttonHoverColor }}
                   size={["sm", "md", "lg"]}
                 >
-                  {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                  {colors.icon}
                 </Button>
               </Tooltip>
             </Flex>

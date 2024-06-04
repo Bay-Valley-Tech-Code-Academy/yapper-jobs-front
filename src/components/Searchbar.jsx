@@ -9,17 +9,21 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import FilterMenu from "../FilterMenu";
-import SearchInput from "../SearchInput";
+import FilterMenu from "./FilterMenu";
+import SearchInput from "./SearchInput";
+import useApiStore from "../store/api-store";
 
-function Searchbar() {
+function Searchbar({jobs}) {
+  const filterJobs = useApiStore(state => state.filterJobs);
   const searchRef = useRef();
 
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+
 
   const handleSearch = () => {
-    console.log(selectedFilters);
+    filterJobs(searchRef.current.value);
   };
 
   const handleFilterClick = (filters) => {

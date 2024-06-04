@@ -6,29 +6,36 @@ import {
   Heading,
   Text,
   Stack,
-  IconButton,
   Icon,
   Divider,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
-import { jobs } from "../../jobs";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import useApiStore from '../store/api-store';
+import useJobStore from "../store/job-store";
 
-function JobSummary({ selectedJob }) {
+function JobSummary({ selectedJob, handleSaveJob }) {
   const navigate = useNavigate();
+  const jobs = useApiStore((state) => state.jobs);
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
+  const { savedJobs } = useJobStore((state) => ({
+    savedJobs: state.savedJobs,
+  }));
 
   if (!isLargerThanSmall) {
     return null; // Render nothing if the screen size is smaller than 30em
   }
-
-  const job = jobs.find((job) => job.id === selectedJob);
-
+  
+  //get job details matching the id of selected job to the jobs JSON
+  const job = jobs.find((job) => job.job_id === selectedJob);
+  
   if (!job) {
     return (
-      <Box height="100%" ml="3%">
+      // Render this if no job is selected
+      //Render a box with a heading of "Job Selected" aligned in the center
+      <Box height="100%" width="300px" ml="10%">
         <Heading>No Job Selected</Heading>
-      </Box>
+        </Box>
     );
   }
 
@@ -41,25 +48,20 @@ function JobSummary({ selectedJob }) {
             {job.company}
           </Text>
           <Stack direction="row" justify="space-between" align="center">
-            <IconButton
-              icon={<Icon as={FaRegBookmark} />}
-              aria-label="Save Job"
-              // onClick={onSaveClick}
-            />
             <Text fontSize="sm">1d ago</Text>
           </Stack>
         </Stack>
         <Stack direction="row" spacing="4" align="center" mb="2">
           <Stack direction="row" spacing="1">
             <Icon as={FaMapMarkerAlt} />
-            <Text fontSize="sm">{job.location}</Text>
+            <Text fontSize="sm">{job.city}, {job.state}</Text>
           </Stack>
           <Text fontSize="sm" fontWeight="bold">
-            {job.status}
+            {job.employment_type}
           </Text>
         </Stack>
         <Text fontSize="md" mb="4" overflowY="auto" maxHeight="500px">
-          {job.jobDescription}
+          {job.job_desccription}
         </Text>
         <Stack direction="row" justify="flex-start" spacing="4">
           <Button
@@ -69,8 +71,12 @@ function JobSummary({ selectedJob }) {
           >
             Apply Now
           </Button>
-          <Button colorScheme="gray" variant="outline">
-            Save
+          <Button
+            colorScheme="gray"
+            variant="outline"
+            onClick={() => handleSaveJob(selectedJob)}
+          >
+            {savedJobs.includes(selectedJob) ? "Unsave" : "Save"}
           </Button>
         </Stack>
         <Divider mt={4} />
@@ -98,7 +104,7 @@ function JobSummary({ selectedJob }) {
             calendar year and varies based on state and/or local laws
           </li>
           <li>Tuition reimbursement program</li>
-          <li> Employee discount program</li>
+          <li>Employee discount program</li>
         </ul>
       </Box>
     </>

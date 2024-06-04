@@ -32,8 +32,9 @@ function Login() {
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
-  };
+  }
 
+  //loading before getting redirected to search/ main employer page
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
