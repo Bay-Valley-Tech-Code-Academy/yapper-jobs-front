@@ -29,11 +29,11 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
-
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
-  };
+  }
 
+  //loading before getting redirected to search/ main employer page
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
