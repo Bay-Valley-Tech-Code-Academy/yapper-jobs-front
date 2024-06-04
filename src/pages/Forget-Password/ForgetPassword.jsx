@@ -20,7 +20,7 @@ function ForgetPassword() {
     const navigate = useNavigate();
     const toast = useToast();
     const [email, setEmail] = useState("");
-    const { handleToggleColorMode, colors } = CustomColorMode();
+    const { toggleColorMode, colors } = CustomColorMode();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -93,7 +93,7 @@ function ForgetPassword() {
                     >
                         <Flex justifyContent="flex-end">
                             <Button 
-                                onClick={handleToggleColorMode} 
+                                onClick={toggleColorMode} 
                                 mr={2} 
                                 color={colors.buttonColor} 
                                 backgroundColor={colors.buttonBgColor}
