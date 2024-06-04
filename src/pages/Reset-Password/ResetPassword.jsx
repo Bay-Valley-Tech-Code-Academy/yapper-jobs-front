@@ -24,7 +24,7 @@ function ResetPassword() {
   const [verifyPassword, setVerifyPassword] = useState('');
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
-  const { handleToggleColorMode, colors } = CustomColorMode();
+  const { toggleColorMode, colors } = CustomColorMode();
   const toast = useToast();
 
   const handleSubmit = async(e) => {
@@ -69,6 +69,7 @@ function ResetPassword() {
       });
     } else {
       try {
+        
         await apiService.resetPassword(password);
   
         toast({
@@ -115,7 +116,7 @@ function ResetPassword() {
           >
             <Flex justifyContent="flex-end">
               <Button 
-                onClick={handleToggleColorMode} 
+                onClick={toggleColorMode} 
                 mr={2} 
                 color={colors.buttonColor} 
                 backgroundColor={colors.buttonBgColor}

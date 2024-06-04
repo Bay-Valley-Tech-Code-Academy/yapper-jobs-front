@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import CustomColorMode from '/util/toggleColorMode'
 import { apiService } from '../../services/apiRequests';
+
 import { 
     ChakraProvider, 
     Box, 
@@ -19,7 +20,7 @@ function ForgetPassword() {
     const navigate = useNavigate();
     const toast = useToast();
     const [email, setEmail] = useState("");
-    const { handleToggleColorMode, colors } = CustomColorMode();
+    const { toggleColorMode, colors } = CustomColorMode();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,8 +36,20 @@ function ForgetPassword() {
             });
             return;
         }
+
         try {
-            await apiService.forgetPassword(email);
+            const response = await fetch("/http://localhost:3000/forget-password", { 
+                method: "POST",
+                headers: {
+                    "Content-Type": "applications/json"
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if(!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to send email");
+            }
 
             toast({
                 title: "Success",
@@ -80,7 +93,7 @@ function ForgetPassword() {
                     >
                         <Flex justifyContent="flex-end">
                             <Button 
-                                onClick={handleToggleColorMode} 
+                                onClick={toggleColorMode} 
                                 mr={2} 
                                 color={colors.buttonColor} 
                                 backgroundColor={colors.buttonBgColor}
