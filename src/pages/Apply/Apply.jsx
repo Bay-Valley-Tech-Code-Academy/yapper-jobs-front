@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -10,38 +10,49 @@ import {
   Heading,
   VStack,
   Flex,
-} from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
-import { jobs } from "../../jobs";
+} from "@chakra-ui/react";
+import useApiStore from "../../store/api-store";
+import { useParams } from "react-router-dom";
 
 function Apply() {
   const { jobId } = useParams();
-  const job = jobs.find((job) => job.id === parseInt(jobId));
+  const { jobs, fetchJobs } = useApiStore();
+  const job = jobs.find((job) => job.job_id === parseInt(jobId));
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [commute, setCommute] = useState('');
-  const [authorizedToWork, setAuthorizedToWork] = useState('');
-  const [isVeteran, setIsVeteran] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [commute, setCommute] = useState("");
+  const [authorizedToWork, setAuthorizedToWork] = useState("");
+  const [isVeteran, setIsVeteran] = useState("");
 
+  useEffect(() => {
+    fetchJobs();
+  }, []);
   const handleSubmit = (event) => {
     event.preventDefault();
-    setFirstName('');
-    setLastName('');
-    setPhoneNumber('');
-    setCity('');
-    setState('');
-    setCommute('');
-    setAuthorizedToWork('');
-    setIsVeteran('');
+    setFirstName("");
+    setLastName("");
+    setPhoneNumber("");
+    setCity("");
+    setState("");
+    setCommute("");
+    setAuthorizedToWork("");
+    setIsVeteran("");
   };
 
   return (
     <Box className="apply-container" pl="5%">
-      <Heading as="h2" className="apply-header" mt="1em" mb="1em" fontSize="32px" fontWeight="bold">
+      <Heading
+        as="h2"
+        className="apply-header"
+        mt="1em"
+        mb="1em"
+        fontSize="32px"
+        fontWeight="bold"
+      >
         Apply To Job
       </Heading>
       <Button
@@ -58,18 +69,44 @@ function Apply() {
       >
         Upload Resume
       </Button>
-      <Flex className="job-info" mb="3em" flexDirection="row" alignItems="center">
-        <Box className="job-description" border="2px solid #000" p="0.5em" mb="1em" maxW="40em">
+      <Flex
+        className="job-info"
+        mb="3em"
+        flexDirection="row"
+        alignItems="center"
+      >
+        <Box
+          className="job-description"
+          border="2px solid #000"
+          p="0.5em"
+          mb="1em"
+          maxW="40em"
+        >
           <Text>{job.jobDescription}</Text>
         </Box>
         <VStack align="start" ml="10em" spacing="0.5em">
-          <Text className="job-info-item" fontSize="22px"><strong>{job.title}</strong></Text>
-          <Text className="job-info-item" fontSize="22px"><strong>Company:</strong> {job.company}</Text>
-          <Text className="job-info-item" fontSize="22px"><strong>Location:</strong> {job.location}</Text>
-          <Text className="job-info-item" fontSize="22px"><strong>Status:</strong> {job.status}</Text>
+          <Text className="job-info-item" fontSize="22px">
+            <strong>{job.title}</strong>
+          </Text>
+          <Text className="job-info-item" fontSize="22px">
+            <strong>Company:</strong> {job.company}
+          </Text>
+          <Text className="job-info-item" fontSize="22px">
+            <strong>Location:</strong> {job.city}, {job.state}
+          </Text>
+          <Text className="job-info-item" fontSize="22px">
+            <strong>Status:</strong> {job.employment_type}
+          </Text>
         </VStack>
       </Flex>
-      <Heading as="h3" className="questions-title" mt="1em" mb="0.5em" fontSize="24px" fontWeight="bold">
+      <Heading
+        as="h3"
+        className="questions-title"
+        mt="1em"
+        mb="0.5em"
+        fontSize="24px"
+        fontWeight="bold"
+      >
         Questions
       </Heading>
       <form onSubmit={handleSubmit}>
@@ -136,7 +173,9 @@ function Apply() {
             />
           </FormControl>
           <FormControl isRequired className="form-group" maxW="30em">
-            <FormLabel htmlFor="commute">Will you be able to make the commute? (Yes/No):</FormLabel>
+            <FormLabel htmlFor="commute">
+              Will you be able to make the commute? (Yes/No):
+            </FormLabel>
             <Select
               id="commute"
               value={commute}
@@ -152,7 +191,9 @@ function Apply() {
             </Select>
           </FormControl>
           <FormControl isRequired className="form-group" maxW="30em">
-            <FormLabel htmlFor="authorizedToWork">Are you authorized to work in the United States? (Yes/No):</FormLabel>
+            <FormLabel htmlFor="authorizedToWork">
+              Are you authorized to work in the United States? (Yes/No):
+            </FormLabel>
             <Select
               id="authorizedToWork"
               value={authorizedToWork}
@@ -168,7 +209,9 @@ function Apply() {
             </Select>
           </FormControl>
           <FormControl isRequired className="form-group" maxW="30em">
-            <FormLabel htmlFor="isVeteran">Are you a veteran? (Yes/No):</FormLabel>
+            <FormLabel htmlFor="isVeteran">
+              Are you a veteran? (Yes/No):
+            </FormLabel>
             <Select
               id="isVeteran"
               value={isVeteran}
