@@ -40,11 +40,14 @@ function customColorMode() {
       buttonBgColor: '#000000',
       bgHover: 'gray.300',
       logoSrc: '/yapperjoblogo.png',
-      buttonHoverColor: '#A96CDE', // Purple
+      buttonHoverColor: '#A96CDE',
       buttonHoverBgColor: '#333333',
       hyperlinkColor: '#3182CE',
       hyperlinkTextDecoration: 'underline',
-      icon: <MoonIcon />
+      dividerColor: 'gray.200',
+      alertBgColor: 'red.500', // Added alert background color for light mode
+      alertTextColor: 'black.300', // Added alert text color for light mode
+      icon: <MoonIcon /> // Icon for light mode
     },
     dark: {
       bgGradient: '#0B1215',
@@ -58,7 +61,10 @@ function customColorMode() {
       buttonHoverBgColor: '#FFFFFF',
       hyperlinkColor: 'cyan',
       hyperlinkTextDecoration: 'underline',
-      icon: <SunIcon />
+      dividerColor: 'gray.700',
+      alertBgColor: 'red.900', // Added alert background color for dark mode
+      alertTextColor: 'red.100', // Added alert text color for dark mode
+      icon: <SunIcon /> // Icon for dark mode
     },
   };
 
@@ -66,5 +72,5 @@ function customColorMode() {
 
   return { colorMode, toggleColorMode, colors: currentColors };
 }
-  
-export default customColorMode
+
+export default customColorMode;
