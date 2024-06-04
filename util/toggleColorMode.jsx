@@ -1,4 +1,5 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { useColorMode } from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
 function customColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -19,6 +20,7 @@ function customColorMode() {
       dividerColor: 'gray.200',
       alertBgColor: 'red.500', // Added alert background color for light mode
       alertTextColor: 'black.300', // Added alert text color for light mode
+      icon: <MoonIcon /> // Icon for light mode
     },
     dark: {
       bgGradient: '#0B1215',
@@ -35,6 +37,7 @@ function customColorMode() {
       dividerColor: 'gray.700',
       alertBgColor: 'red.900', // Added alert background color for dark mode
       alertTextColor: 'red.100', // Added alert text color for dark mode
+      icon: <SunIcon /> // Icon for dark mode
     },
   };
 

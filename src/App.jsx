@@ -13,7 +13,7 @@ import Layout from "./Layout/Layout";
 import SavedJobs from "./pages/Saved-Jobs/SavedJobs";
 import ResumeBuilder from "./pages/Resume-Builder/ResumeBuilder";
 import Applications from "./pages/Applications/Applications";
-import ConfirmPassword from "./pages/Confirm-Password/ConfirmPassword";
+import ResetPassword from "./pages/Reset-Password/ResetPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
 import { fetchZipRecruiterData } from "./services/zipRecruiter";
@@ -38,7 +38,7 @@ function App() {
           {/* Without Navbar */}
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Login />} />
-          <Route path="/confirm-password" element={<ConfirmPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forget-password" element={<ForgetPassword/>} />
         </Routes>
       </BrowserRouter>
