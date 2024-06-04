@@ -82,7 +82,7 @@ function Apply() {
           mb="1em"
           maxW="40em"
         >
-          <Text>{job.jobDescription}</Text>
+          <Text>{job.job_description}</Text>
         </Box>
         <VStack align="start" ml="10em" spacing="0.5em">
           <Text className="job-info-item" fontSize="22px">
