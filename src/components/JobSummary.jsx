@@ -12,16 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import useApiStore from '../store/api-store';
-import useJobStore from "../store/job-store";
+import useSavedJobsStore from "../store/saved-jobs-store";
 
 function JobSummary({ selectedJob, handleSaveJob }) {
   const navigate = useNavigate();
   const jobs = useApiStore((state) => state.jobs);
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
-  const { savedJobs } = useJobStore((state) => ({
-    savedJobs: state.savedJobs,
-  }));
-
+  const {savedJobs} = useSavedJobsStore();
   if (!isLargerThanSmall) {
     return null; // Render nothing if the screen size is smaller than 30em
   }

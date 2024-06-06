@@ -3,35 +3,30 @@ import { Heading, Text, Flex, Box, Button } from "@chakra-ui/react";
 import Searchbar from "../components/Searchbar";
 import JobSummary from "../components/JobSummary";
 import JobCard from "../components/JobCard";
-import useJobStore from "../store/job-store"; // Import the store
 import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
 import useApiStore from "../store/api-store";
+import useSavedJobsStore from "../store/saved-jobs-store";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { useMediaQuery } from "@chakra-ui/react";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
-  // const [jobsData, setJobsData] = useState([]);
   const [maxJobCards, setMaxJobCards] = useState(10); // Shows up to 10 job cards initially
   const { jobs, fetchJobs } = useApiStore();
-  const { savedJobs, addJob, removeJob } = useJobStore((state) => ({
-    savedJobs: state.savedJobs,
-    addJob: state.addJob,
-    removeJob: state.removeJob,
-  })); // Use the store
+  const { fetchSavedJobsId, savedJobs, saveJob } = useSavedJobsStore();
   const { colors, colorMode, toggleColorMode } = customColorMode();
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
 
   useEffect(() => {
     fetchJobs();
+    fetchSavedJobsId();
   }, []);
 
-  //save a job to the savedJobs array
-  const handleSaveJob = (id) => {
-    if (savedJobs.includes(id)) {
-      removeJob(id); //removeJob
-    } else {
-      addJob(id); //addJob if not in savedJobs array
+  const handleSaveJob = async (job_id) => {
+    try {
+      await saveJob(job_id);
+    } catch (error) {
+      console.error("Failed to save job", error);
     }
   };
 
@@ -42,7 +37,6 @@ function Search() {
         {...job}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
-        handleSaveJob={handleSaveJob}
       />
     ));
   };

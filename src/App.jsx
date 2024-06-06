@@ -15,10 +15,12 @@ import Applications from "./pages/Applications/Applications";
 import ResetPassword from "./pages/Reset-Password/ResetPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
 
   return (
+    <AuthProvider>
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
@@ -42,6 +44,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
+    </AuthProvider>
   );
 }
 

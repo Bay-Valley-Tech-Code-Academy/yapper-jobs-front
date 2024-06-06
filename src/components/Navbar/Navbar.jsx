@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { 
-  Box, 
-  Flex, 
-  IconButton, 
-  useMediaQuery, 
-  Drawer, 
-  DrawerOverlay, 
-  DrawerContent, 
-  DrawerCloseButton, 
+import {
+  Box,
+  Flex,
+  IconButton,
+  useMediaQuery,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
   DrawerBody,
   Link as ChakraLink,
-  Image 
+  Image,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { apiService } from "../../services/apiRequests";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -31,40 +32,82 @@ function NavBar() {
   };
 
   return (
-    <Box bg="#A96CDE" color="white" p="4" height="74px"  // BG color, Text color, Padding, Navbar Height
-      width="100%" overflowX="hidden" position="relative">
+    <Box
+      bg="#A96CDE"
+      color="white"
+      p="4"
+      height="74px" // BG color, Text color, Padding, Navbar Height
+      width="100%"
+      overflowX="hidden"
+      position="relative"
+    >
       <Flex justify="space-between" align="center" position="relative">
-      <Image src="/yapperjoblogo.png" alt="Yapper Jobs Logo" height="35px" 
-        onClick={() => navigate("/search")} 
-        cursor="pointer" 
-      />
+        <Image
+          src="/yapperjoblogo.png"
+          alt="Yapper Jobs Logo"
+          height="35px"
+          onClick={() => navigate("/search")}
+          cursor="pointer"
+        />
         {isLargerThanMobile ? (
           <Flex flex="2" justify="flex-end">
             {/* For Seekers */}
             <Flex mr="4">
-              <ChakraLink as={Link} to="/saved-jobs" // Chakra Link
-                mr="4" onClick={handleLinkClick}>
+              <ChakraLink
+                as={Link}
+                to="/saved-jobs" // Chakra Link
+                mr="4"
+                onClick={handleLinkClick}
+              >
                 Your Jobs
               </ChakraLink>
-              <ChakraLink as={Link} to="/resume-builder" 
-                mr="4" onClick={handleLinkClick}>
+              <ChakraLink
+                as={Link}
+                to="/resume-builder"
+                mr="4"
+                onClick={handleLinkClick}
+              >
                 Resume Builder
               </ChakraLink>
-              <ChakraLink as={Link} to="/profile-seeker" onClick={handleLinkClick}>
+              <ChakraLink
+                as={Link}
+                to="/profile-seeker"
+                onClick={handleLinkClick}
+              >
                 Profile
               </ChakraLink>
+              {/* <Box as="button" onClick={apiService.logout} mr="4">
+                <ChakraLink>Logout</ChakraLink>
+              </Box> */}
             </Flex>
             {/* For Employers */}
             <Flex>
-              <ChakraLink as={Link} to="/post-job" mr="4" onClick={handleLinkClick}>
+              <ChakraLink
+                as={Link}
+                to="/post-job"
+                mr="4"
+                onClick={handleLinkClick}
+              >
                 Post Job
               </ChakraLink>
-              <ChakraLink as={Link} to="/applications" mr="4" onClick={handleLinkClick}>
+              <ChakraLink
+                as={Link}
+                to="/applications"
+                mr="4"
+                onClick={handleLinkClick}
+              >
                 View Applications
               </ChakraLink>
-              <ChakraLink as={Link} to="/profile-employer" onClick={handleLinkClick}>
+              <ChakraLink
+                as={Link}
+                to="/profile-employer"
+                onClick={handleLinkClick}
+              >
                 Profile
               </ChakraLink>
+              {/* <Box as="button" onClick={apiService.logout} mr="4">
+                <ChakraLink>Logout</ChakraLink>
+              </Box> */}
             </Flex>
           </Flex>
         ) : (
@@ -76,16 +119,32 @@ function NavBar() {
             mr="2"
           />
         )}
-        <Drawer placement="right" onClose={() => setIsOpen(false)} isOpen={isOpen}>
+        <Drawer
+          placement="right"
+          onClose={() => setIsOpen(false)}
+          isOpen={isOpen}
+        >
           <DrawerOverlay />
-          <DrawerContent bg="#A96CDE"> {/* Drawer BG Color */}
+          <DrawerContent bg="#A96CDE">
+            {" "}
+            {/* Drawer BG Color */}
             <DrawerCloseButton />
             <DrawerBody>
-              <ChakraLink as={Link} to="/saved-jobs" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
+              <ChakraLink
+                as={Link}
+                to="/saved-jobs"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
                 color="#EDF6F9" // Color of text in hamburger menu
-                _hover={{ // On hover change to these settings
+                _hover={{
+                  // On hover change to these settings
                   textDecoration: "none",
                   color: "#0E1428",
                   borderBottom: "1px solid #0E1428",
@@ -93,9 +152,18 @@ function NavBar() {
               >
                 Your Jobs
               </ChakraLink>
-              <ChakraLink as={Link} to="/resume-builder" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+              <ChakraLink
+                as={Link}
+                to="/resume-builder"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9"
                 color="#EDF6F9"
                 _hover={{
                   textDecoration: "none",
@@ -105,9 +173,18 @@ function NavBar() {
               >
                 Resume Builder
               </ChakraLink>
-              <ChakraLink as={Link} to="/profile-seeker" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+              <ChakraLink
+                as={Link}
+                to="/profile-seeker"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9"
                 color="#EDF6F9"
                 _hover={{
                   textDecoration: "none",
@@ -117,9 +194,39 @@ function NavBar() {
               >
                 Profile
               </ChakraLink>
-              <ChakraLink as={Link} to="/post-job" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+              {/* <Box
+                as="button"
+                onClick={() => {
+                  apiService.logout();
+                  setIsOpen(false);
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
+                color="#EDF6F9" // Color of text in hamburger menu
+                _hover={{
+                  // On hover change to these settings
+                  textDecoration: "none",
+                  color: "#0E1428",
+                  borderBottom: "1px solid #0E1428",
+                }}
+              >
+                Logout
+              </Box> */}
+              <ChakraLink
+                as={Link}
+                to="/post-job"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9"
                 color="#EDF6F9"
                 _hover={{
                   textDecoration: "none",
@@ -129,9 +236,18 @@ function NavBar() {
               >
                 Post Job
               </ChakraLink>
-              <ChakraLink as={Link} to="/applications" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+              <ChakraLink
+                as={Link}
+                to="/applications"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9"
                 color="#EDF6F9"
                 _hover={{
                   textDecoration: "none",
@@ -141,9 +257,18 @@ function NavBar() {
               >
                 View Applications
               </ChakraLink>
-              <ChakraLink as={Link} to="/profile-employer" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+              <ChakraLink
+                as={Link}
+                to="/profile-employer"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9"
                 color="#EDF6F9"
                 _hover={{
                   textDecoration: "none",
@@ -153,6 +278,27 @@ function NavBar() {
               >
                 Profile
               </ChakraLink>
+              {/* <Box
+                as="button"
+                onClick={() => {
+                  apiService.logout();
+                  setIsOpen(false);
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
+                color="#EDF6F9" // Color of text in hamburger menu
+                _hover={{
+                  // On hover change to these settings
+                  textDecoration: "none",
+                  color: "#0E1428",
+                  borderBottom: "1px solid #0E1428",
+                }}
+              >
+                Logout
+              </Box> */}
             </DrawerBody>
           </DrawerContent>
         </Drawer>

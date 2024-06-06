@@ -1,46 +1,57 @@
-import React from "react";
+import React, { useState,useContext, useEffect } from "react";
 import { Flex, Box, Heading, Button } from "@chakra-ui/react";
-// import { jobs } from "../jobs";
 import SavedJobCard from "../components/SavedJobCard";
 import AppliedJobCard from "../components/AppliedJobCard";
-import useJobStore from "../store/job-store";
-import useApiStore from "../store/api-store";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useMediaQuery } from "@chakra-ui/react";
-import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
+import customColorMode from "../../util/toggleColorMode";
+import { AuthContext } from "../contexts/AuthContext";
+import useApiStore from "../store/api-store";
+import useSavedJobsStore from "../store/saved-jobs-store"; // Import useSavedJobsStore
 
 function SavedJobs() {
-  const { savedJobs, removeJob } = useJobStore((state) => ({
-    savedJobs: state.savedJobs,
-    removeJob: state.removeJob,
-  })); // Use the store(zustand)
-  const {jobs } = useApiStore();
+  const { jobs } = useApiStore();
   const { colors, colorMode, toggleColorMode } = customColorMode();
+  const { savedJobs, fetchSavedJobs, removeJob } = useSavedJobsStore(); // Destructure fetchSavedJobs from useSavedJobsStore
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
+  const { user } = useContext(AuthContext);
 
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        await fetchSavedJobs(); // Call fetchSavedJobs to fetch saved jobs
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //remove from saved jobs
-  const handleRemoveJob = (id) => {
-    removeJob(id);
+    fetchJobs();
+  }, [fetchSavedJobs]);
+
+  // Function to handle removing a job
+  const handleRemoveJob = async (id) => {
+    try {
+      await removeJob(id);
+      await fetchSavedJobs(); // Fetch the updated list of saved jobs after removing a job
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  //fetch details from jobs JSON matching with job id of savedJobs
-  const savedJobDetails = jobs.filter((job) => savedJobs.includes(job.job_id));
-
-  // Render SavedJobCard component
+  // Function to render saved jobs
   const renderSavedJobs = () => {
-    return savedJobDetails.length === 0 ? (
+    return savedJobs.length === 0 ? (
       <Box mt={8}>
         <Heading>No Saved jobs</Heading>
       </Box>
     ) : (
-      savedJobDetails.map((job) => (
-        <SavedJobCard key={job.job_id} {...job} handleRemoveJob={handleRemoveJob} />
+      savedJobs.map((job) => (
+        <SavedJobCard key={job.job_id} {...job} handleRemoveJob={handleRemoveJob}/>
       ))
     );
   };
 
-  //Render AppliedJobs component. Unable to apply to jobs for now so it only renders the jobs json for now
+  // Function to render applied jobs
   const renderAppliedJobs = () => {
     return jobs.length === 0 ? (
       <Box mt={8}>
@@ -59,7 +70,7 @@ function SavedJobs() {
           color={colors.buttonColor}
           backgroundColor={colors.buttonBgColor}
         >
-                    {isLargerThanSmall ? (
+          {isLargerThanSmall ? (
             `Toggle ${colorMode === "light" ? "Dark" : "Light"} Mode`
           ) : colorMode === "light" ? (
             <MoonIcon />
@@ -70,8 +81,7 @@ function SavedJobs() {
       </Flex>
       <Flex justifyContent="center">
         <Box mt={8} mb={16}>
-          <Heading size="2xl">Your Jobs</Heading>
-        </Box>
+        <Heading size="2xl">{user && user.firstName ? `${user.firstName}'s Jobs` : 'Your Jobs'}</Heading>        </Box>
       </Flex>
       <Flex
         maxW="90%"
