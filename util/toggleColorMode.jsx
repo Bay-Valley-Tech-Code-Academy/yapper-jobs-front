@@ -46,4 +46,4 @@ function CustomColorMode() {
   return { colorMode, toggleColorMode, colors: currentColors };
 }
 
-export default customColorMode;
+export default CustomColorMode;

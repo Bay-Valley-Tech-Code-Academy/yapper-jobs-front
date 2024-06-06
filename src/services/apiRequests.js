@@ -17,7 +17,7 @@ const apiService = {
     },
   
     forgetPassword: async (email) => {
-      const response = await fetch(`${BASE_URL}/forget-password`, {
+      const response = await fetch(`${BASE_URL}/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,13 +33,13 @@ const apiService = {
       return response.json();
     },
   
-    resetPassword: async (newPassword) => {
+    resetPassword: async (newPassword, token) => {
       const response = await fetch(`${BASE_URL}/reset-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ newPassword: newPassword }),
+        body: JSON.stringify({ password: newPassword, token: token }),
       });
   
       if (!response.ok) throw new Error('Password reset request failed');

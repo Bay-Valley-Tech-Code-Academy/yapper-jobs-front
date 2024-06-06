@@ -38,7 +38,10 @@ function ForgetPassword() {
     }
 
     try {
-      await apiService.forgetPassword(email);
+      const { resetToken } = await apiService.forgetPassword(email);
+
+      localStorage.setItem('resetToken', resetToken);
+      
       toast({
         title: "Success",
         description: "Email sent",
@@ -93,7 +96,7 @@ function ForgetPassword() {
               Forget Password?
             </Heading>
             <Heading pt={10} ml={4} size="md" textAlign="center">
-              Type in your email below and we'll send you a reset password
+              Type in your email below and we&apos;ll send you a reset password
             </Heading>
             <Box flex={1} m={4} pt={10} position="relative">
               <Input

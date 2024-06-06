@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
@@ -22,15 +22,30 @@ function ResetPassword() {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
+  const [token, setToken] = useState('');
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
   const toast = useToast();
 
+  useEffect(() => {
+    // Fetch the token from local storage
+    const tokenFromLocalStorage = localStorage.getItem('resetToken');
+    if (tokenFromLocalStorage) {
+      setToken(tokenFromLocalStorage);
+    } else {
+      // If no token is found in local storage, redirect to the forget password page
+      navigate('/forget-password');
+    }
+  }, [navigate]);
+
   const handleSubmit = async(e) => {
     e.preventDefault();
   
-    const specialChar = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#$%^&*]).{12,}$');
+    const specialChar = new RegExp(`[!@#$%^&*()+=.-_]+`);
+
+    console.log(password);
+    console.log(specialChar.test(password));
   
     if (!password || !verifyPassword) {
       toast({
@@ -70,7 +85,7 @@ function ResetPassword() {
     } else {
       try {
         
-        await apiService.resetPassword(password);
+        await apiService.resetPassword(password, token);
   
         toast({
           title: 'Success',
