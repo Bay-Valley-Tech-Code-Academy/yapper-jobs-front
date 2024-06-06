@@ -30,7 +30,8 @@ function JobCard(props) {
   };
 
   const handleSaveJob = (job_id) => {
-    const jwt = localStorage.getItem("jwt");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const jwt = user?.jwt;
     if (!jwt) {
       console.error("No user logged in");
       return;

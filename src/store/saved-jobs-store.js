@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 const BASE_URL = "http://localhost:3000";
+const user = JSON.parse(localStorage.getItem("user"));
+const jwt = user?.jwt;
 const useSavedJobsStore = create((set) => ({
   savedJobs: [],
   fetchSavedJobsId: async () => {
@@ -9,7 +11,7 @@ const useSavedJobsStore = create((set) => ({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${jwt}`,
         },
       });
 
@@ -18,7 +20,7 @@ const useSavedJobsStore = create((set) => ({
       const data = await response.json();
       const savedJobs = data.map((item) => item.job_id);
       set({ savedJobs }); // Set the savedJobs array
-    //   set({ savedJobs: data });
+      //   set({ savedJobs: data });
     } catch (error) {
       console.error("Failed to fetch saved jobs", error);
     }
@@ -29,7 +31,7 @@ const useSavedJobsStore = create((set) => ({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${jwt}`,
         },
       });
 
@@ -47,7 +49,7 @@ const useSavedJobsStore = create((set) => ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: JSON.stringify({ job_id: job_id }),
       });
@@ -73,7 +75,7 @@ const useSavedJobsStore = create((set) => ({
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          Authorization: `Bearer ${jwt}`,
         },
       });
 

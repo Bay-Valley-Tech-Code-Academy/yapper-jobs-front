@@ -15,12 +15,13 @@ const apiService = {
     });
 
     if (!response.ok) throw new Error("Sign in request failed");
-    //save jwt to localstorage
     const data = await response.json();
-    if (data.user.jwt) {
-      localStorage.setItem("jwt", data.user.jwt);
-    }
-    console.log("Data", data);
+    console.log("Data from apiService:", data)
+    //save jwt to localstorage
+    // if (data.user.jwt) {
+    //   localStorage.setItem("jwt", data.user.jwt);
+    // }
+    // console.log("Data", data);
     // Save user's information to localStorage
     if (data.user) {
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -58,28 +59,28 @@ const apiService = {
     return response.json();
   },
   //apply logout function from logout endpoint
-  logout: async () => {
-    // if theres no jwt or user in localStorage, return null
-    if (!localStorage.getItem("jwt") || !localStorage.getItem("user"))
-      return null;
-    try {
-      const response = await fetch(`${BASE_URL}/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        },
-      });
+  // logout: async () => {
+  //   // if theres no jwt or user in localStorage, return null
+  //   if (!localStorage.getItem("jwt") || !localStorage.getItem("user"))
+  //     return null;
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/logout`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+  //       },
+  //     });
 
-      if (!response.ok) throw new Error("Failed to log out");
+  //     if (!response.ok) throw new Error("Failed to log out");
 
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("user");
-      return response.json();
-    } catch (error) {
-      console.error("Failed to log out", error);
-    }
-  },
+  //     localStorage.removeItem("jwt");
+  //     localStorage.removeItem("user");
+  //     return response.json();
+  //   } catch (error) {
+  //     console.error("Failed to log out", error);
+  //   }
+  // },
 };
 
 export { apiService };
