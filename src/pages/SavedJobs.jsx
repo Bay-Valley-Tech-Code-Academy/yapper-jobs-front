@@ -1,30 +1,31 @@
-import React, { useState,useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Flex, Box, Heading, Button } from "@chakra-ui/react";
 import SavedJobCard from "../components/SavedJobCard";
 import AppliedJobCard from "../components/AppliedJobCard";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useMediaQuery } from "@chakra-ui/react";
 import customColorMode from "../../util/toggleColorMode";
-import { AuthContext } from "../contexts/AuthContext";
 import useApiStore from "../store/api-store";
 import useSavedJobsStore from "../store/saved-jobs-store"; // Import useSavedJobsStore
+import useUserStore from "../store/user-store";
 
 function SavedJobs() {
   const { jobs } = useApiStore();
   const { colors, colorMode, toggleColorMode } = customColorMode();
   const { savedJobs, fetchSavedJobs, removeJob } = useSavedJobsStore(); // Destructure fetchSavedJobs from useSavedJobsStore
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
-  const { user } = useContext(AuthContext);
+  const { user } = useUserStore();
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        await fetchSavedJobs(); // Call fetchSavedJobs to fetch saved jobs
+        if (user) {
+          await fetchSavedJobs();
+        } // Call fetchSavedJobs to fetch saved jobs
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchJobs();
   }, [fetchSavedJobs]);
 
@@ -46,7 +47,11 @@ function SavedJobs() {
       </Box>
     ) : (
       savedJobs.map((job) => (
-        <SavedJobCard key={job.job_id} {...job} handleRemoveJob={handleRemoveJob}/>
+        <SavedJobCard
+          key={job.job_id}
+          {...job}
+          handleRemoveJob={handleRemoveJob}
+        />
       ))
     );
   };
@@ -81,7 +86,12 @@ function SavedJobs() {
       </Flex>
       <Flex justifyContent="center">
         <Box mt={8} mb={16}>
-        <Heading size="2xl">{user && user.firstName ? `${user.firstName}'s Jobs` : 'Your Jobs'}</Heading>        </Box>
+          <Heading size="2xl">
+            {user && user.first_name
+              ? `${user.first_name}'s Jobs`
+              : "Your Jobs"}
+          </Heading>{" "}
+        </Box>
       </Flex>
       <Flex
         maxW="90%"

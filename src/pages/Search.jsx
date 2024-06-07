@@ -8,6 +8,7 @@ import useApiStore from "../store/api-store";
 import useSavedJobsStore from "../store/saved-jobs-store";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { useMediaQuery } from "@chakra-ui/react";
+import useUserStore from "../store/user-store";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
@@ -16,11 +17,16 @@ function Search() {
   const { fetchSavedJobsId, savedJobs, saveJob } = useSavedJobsStore();
   const { colors, colorMode, toggleColorMode } = customColorMode();
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
+  const {user} = useUserStore();
 
   useEffect(() => {
     fetchJobs();
-    fetchSavedJobsId();
-  }, []);
+    if(user){
+      fetchSavedJobsId();
+    }
+  }, [fetchJobs, fetchSavedJobsId]);
+
+  // console.log(user.first_name);
 
   const handleSaveJob = async (job_id) => {
     try {

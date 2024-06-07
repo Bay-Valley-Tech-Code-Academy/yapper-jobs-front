@@ -1,12 +1,11 @@
 import { create } from "zustand";
 
 const BASE_URL = "http://localhost:3000";
-const user = JSON.parse(localStorage.getItem("user"));
-const jwt = user?.jwt;
 const useSavedJobsStore = create((set) => ({
   savedJobs: [],
   fetchSavedJobsId: async () => {
     try {
+      const jwt = localStorage.getItem("jwt");
       const response = await fetch(`${BASE_URL}/saved-jobs`, {
         method: "GET",
         headers: {
@@ -27,6 +26,7 @@ const useSavedJobsStore = create((set) => ({
   },
   fetchSavedJobs: async () => {
     try {
+      const jwt = localStorage.getItem("jwt");
       const response = await fetch(`${BASE_URL}/saved-jobs`, {
         method: "GET",
         headers: {
@@ -45,6 +45,7 @@ const useSavedJobsStore = create((set) => ({
   },
   saveJob: async (job_id) => {
     try {
+      const jwt = localStorage.getItem("jwt");
       const response = await fetch(`${BASE_URL}/save-job`, {
         method: "POST",
         headers: {
@@ -71,6 +72,7 @@ const useSavedJobsStore = create((set) => ({
   },
   removeJob: async (jobId) => {
     try {
+      const jwt = localStorage.getItem("jwt");
       const response = await fetch(`${BASE_URL}/saved-jobs/${jobId}`, {
         method: "DELETE",
         headers: {

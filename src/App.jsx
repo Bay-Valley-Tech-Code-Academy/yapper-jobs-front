@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -15,12 +16,23 @@ import Applications from "./pages/Applications/Applications";
 import ResetPassword from "./pages/Reset-Password/ResetPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
-import { AuthProvider } from "./contexts/AuthContext";
+// import { AuthProvider } from "./contexts/AuthContext";
+import useUserStore from "./store/user-store";
 
 function App() {
+  const { fetchUser } = useUserStore(); // Destructure the fetchUser function from the user store
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    // Fetch user data when the component mounts (application initializes)
+    if(jwt){
+      console.log("fetching user")
+      fetchUser();
+    }
+  }, [fetchUser]); // Ensure useEffect runs only once
 
   return (
-    <AuthProvider>
+    // <AuthProvider>
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
@@ -40,11 +52,11 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/forget-password" element={<ForgetPassword/>} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
-    </AuthProvider>
+    // </AuthProvider>
   );
 }
 

@@ -1,6 +1,7 @@
 import { BASE_URL } from "./config";
 
 const apiService = {
+  user: null,
   login: async (email, pass, isEmployer) => {
     const endpoint = isEmployer
       ? `${BASE_URL}/login/employer`

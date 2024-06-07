@@ -12,12 +12,14 @@ import {
 } from "@chakra-ui/react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { AuthContext } from "../contexts/AuthContext";
+// import { AuthContext } from "../contexts/AuthContext";
 import useSavedJobsStore from "../store/saved-jobs-store";
+import useUserStore from "../store/user-store";
 
 function JobCard(props) {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
+  const {user} = useUserStore();
 
   const { savedJobs, saveJob, removeJob } = useSavedJobsStore();
 
@@ -30,8 +32,7 @@ function JobCard(props) {
   };
 
   const handleSaveJob = (job_id) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const jwt = user?.jwt;
+    const jwt = localStorage.getItem("jwt");
     if (!jwt) {
       console.error("No user logged in");
       return;
