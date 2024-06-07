@@ -29,8 +29,6 @@ function ProfileSeeker() {
     navigate('/saved-jobs');
   };
 
-  console.log("Profile Jobs", jobs)
-
   return (
     <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
     <Flex direction="column" p={5} bg="white">
