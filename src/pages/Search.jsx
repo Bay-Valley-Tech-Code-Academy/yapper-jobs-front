@@ -26,8 +26,6 @@ function Search() {
     }
   }, [fetchJobs, fetchSavedJobsId]);
 
-  // console.log(user.first_name);
-
   const handleSaveJob = async (job_id) => {
     try {
       await saveJob(job_id);

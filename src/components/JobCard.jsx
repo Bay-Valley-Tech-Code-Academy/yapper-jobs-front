@@ -12,13 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
-// import { AuthContext } from "../contexts/AuthContext";
 import useSavedJobsStore from "../store/saved-jobs-store";
 import useUserStore from "../store/user-store";
 
 function JobCard(props) {
   const navigate = useNavigate();
-  // const { user } = useContext(AuthContext);
   const {user} = useUserStore();
 
   const { savedJobs, saveJob, removeJob } = useSavedJobsStore();

@@ -14,9 +14,13 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
+import useUserStore from '../../store/user-store';
+import useSavedJobsStore from '../../store/saved-jobs-store';
 
 function ProfileSeeker() {
   const navigate = useNavigate();
+  const {user} = useUserStore();
+  const {savedJobs} = useSavedJobsStore();
 
   const goToResumeBuilder = () => {
     navigate('/resume-builder');
@@ -24,6 +28,8 @@ function ProfileSeeker() {
   const goToYourJobs = () => {
     navigate('/saved-jobs');
   };
+
+  console.log("Profile Jobs", jobs)
 
   return (
     <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
@@ -40,7 +46,7 @@ function ProfileSeeker() {
         </Box>
           {/* Job Seeker's Information */}
         <VStack align="start">
-          <Heading as="h1" size="lg">Gojo Satoru</Heading>
+          <Heading as="h1" size="lg">{user ? `${user.first_name} ${user.last_name}` : "Guest"}</Heading>
           <Flex align="center" mt={1}>
             <Text ml={1} spacing = {15}>Teacher @ Tokyo Jujutsu High</Text>
           </Flex>
@@ -140,7 +146,7 @@ function ProfileSeeker() {
       </Box>
       <Box bg="gray.100" width={800} height={350} borderRadius="md" overflowY="auto">
         <Text fontSize={'large'} ml={4} fontWeight={'bold'}>Saved Jobs</Text>
-        {jobs.map((job) => (
+        {savedJobs.map((job) => (
             <SavedJobCard key={job.id} {...job} />
           ))}
       </Box>

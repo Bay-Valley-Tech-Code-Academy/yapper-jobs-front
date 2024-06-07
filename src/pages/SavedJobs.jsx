@@ -39,6 +39,8 @@ function SavedJobs() {
     }
   };
 
+  console.log("Saved Jobs", jobs)
+
   // Function to render saved jobs
   const renderSavedJobs = () => {
     return savedJobs.length === 0 ? (
