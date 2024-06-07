@@ -11,15 +11,18 @@ import {
   DrawerBody,
   Link as ChakraLink,
   Image,
+  Button,
+  Tooltip,
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { apiService } from "../../services/apiRequests";
+import customColorMode from '../../../util/toggleColorMode';
 
 function NavBar() {
   const navigate = useNavigate();
-  const [isLargerThanMobile] = useMediaQuery("(min-width: 756px)"); // Width when the hamburger menu appears
+  const [isLargerThanMobile] = useMediaQuery("(min-width: 829px)"); // Width when the hamburger menu appears
   const [isOpen, setIsOpen] = useState(false);
+  const { colorMode, toggleColorMode, colors } = customColorMode();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -32,33 +35,42 @@ function NavBar() {
   };
 
   return (
-    <Box
-      bg="#A96CDE"
-      color="white"
-      p="4"
-      height="74px" // BG color, Text color, Padding, Navbar Height
-      width="100%"
-      overflowX="hidden"
-      position="relative"
-    >
+    <Box bg="#A96CDE" color="white" p="4" height="74px"
+      width="100%" overflowX="hidden" position="relative">
       <Flex justify="space-between" align="center" position="relative">
-        <Image
-          src="/yapperjoblogo.png"
-          alt="Yapper Jobs Logo"
-          height="35px"
-          onClick={() => navigate("/search")}
-          cursor="pointer"
-        />
+        <Flex align="center">
+          <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" 
+            onClick={() => navigate("/search")} 
+            cursor="pointer" 
+          />
+          <Tooltip
+            label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+            aria-label="A tooltip"
+            openDelay={500}
+            closeDelay={200}
+            ml={4}
+          >
+            <Button
+              onClick={toggleColorMode}
+              color={colors.buttonColor}
+              backgroundColor="#A96CDE"
+              border={`1px solid ${colors.buttonBorderColor}`}
+              _hover={{ 
+                backgroundColor: colors.buttonHoverBgColor 
+              }}
+              size="sm"
+              ml={4} // Distance away from Yapper Logo
+            >
+              {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            </Button>
+          </Tooltip>
+        </Flex>
         {isLargerThanMobile ? (
           <Flex flex="2" justify="flex-end">
             {/* For Seekers */}
             <Flex mr="4">
-              <ChakraLink
-                as={Link}
-                to="/saved-jobs" // Chakra Link
-                mr="4"
-                onClick={handleLinkClick}
-              >
+              <ChakraLink as={Link} to="/saved-jobs"
+                mr="4" onClick={handleLinkClick}>
                 Your Jobs
               </ChakraLink>
               <ChakraLink
@@ -130,21 +142,11 @@ function NavBar() {
             {/* Drawer BG Color */}
             <DrawerCloseButton />
             <DrawerBody>
-              <ChakraLink
-                as={Link}
-                to="/saved-jobs"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
-                color="#EDF6F9" // Color of text in hamburger menu
+              <ChakraLink as={Link} to="/saved-jobs" 
+                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
+                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+                color="#EDF6F9"
                 _hover={{
-                  // On hover change to these settings
                   textDecoration: "none",
                   color: "#0E1428",
                   borderBottom: "1px solid #0E1428",
