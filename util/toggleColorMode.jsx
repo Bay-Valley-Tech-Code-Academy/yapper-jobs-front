@@ -20,6 +20,7 @@ function CustomColorMode() {
       dividerColor: 'gray.200',
       alertBgColor: 'red.500', // Added alert background color for light mode
       alertTextColor: 'black.300', // Added alert text color for light mode
+      iconSupport: 'dark',
       icon: <MoonIcon /> // Icon for light mode
     },
     dark: {
@@ -37,6 +38,7 @@ function CustomColorMode() {
       dividerColor: 'gray.700',
       alertBgColor: 'red.900', // Added alert background color for dark mode
       alertTextColor: 'red.100', // Added alert text color for dark mode
+      iconSupport: 'light',
       icon: <SunIcon /> // Icon for dark mode
     },
   };

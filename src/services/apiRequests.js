@@ -1,6 +1,20 @@
 import { BASE_URL } from './config'
 
 const apiService = {
+  register: async (role, data) => {
+    const endpoint = role === "employer" ? `${BASE_URL}/register/employer` : `${BASE_URL}/register/seeker`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error('Registration failed');
+    return response.json();
+  },
+
     login: async (email, pass, isEmployer) => {
       const endpoint = isEmployer ? `${BASE_URL}/login/employer` : `${BASE_URL}/login/seeker`;
   
@@ -39,7 +53,7 @@ const apiService = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ password: newPassword, token: token }),
+        body: JSON.stringify({ newPassword: newPassword, token: token }),
       });
   
       if (!response.ok) throw new Error('Password reset request failed');

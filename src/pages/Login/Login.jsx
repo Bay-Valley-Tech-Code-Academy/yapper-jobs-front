@@ -16,7 +16,8 @@ import {
   InputGroup, 
   InputRightElement,
   FormControl,
-  useToast 
+  useToast, 
+  Tooltip
 } from '@chakra-ui/react';
 
 
@@ -99,16 +100,18 @@ function Login() {
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
-              <Button
-                mr={2}
-                onClick={toggleColorMode}
-                color={colors.buttonColor}
-                backgroundColor={colors.buttonBgColor}
-              >
-                {colors.icon}
-              </Button>
+            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
+                <Button
+                  mr={2}
+                  onClick={toggleColorMode}
+                  color={colors.buttonColor}
+                  backgroundColor={colors.buttonBgColor}
+                >
+                  {colors.icon}
+                </Button>
+              </Tooltip>
             </Flex>
-            <Heading mb={4} ml={4}>Welcome 🗣️</Heading>
+            <Text mb={4} ml={4} fontSize="3xl">Welcome {isEmployer ? "Employer" : "Seeker"}</Text>
             <Heading mb={4} ml={4}>Sign in to Yapper Jobs</Heading>
             <Button
               onClick={toggleUserType}

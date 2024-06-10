@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { apiService } from '../../services/apiRequests';
+import CustomColorMode from '/util/toggleColorMode';
 import {
   ChakraProvider,
   Box,
@@ -20,17 +21,16 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
-import customColorMode from '/util/toggleColorMode';
 
 const Register = () => {
-  const { colorMode, toggleColorMode, colors } = customColorMode();
+  const { colorMode, toggleColorMode, colors } = CustomColorMode();
   const [selectedRole, setSelectedRole] = useState("");
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [showMainFields, setShowMainFields] = useState(true);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [pass, setPass] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
   const [industry, setIndustry] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -45,7 +45,7 @@ const Register = () => {
   };
 
   const handleNext = () => {
-    if (!selectedRole || !firstName || !lastName || !email || !password || !verifyPassword) {
+    if (!selectedRole || !firstName || !lastName || !email || !pass || !verifyPassword) {
       toast({
         title: "Error",
         description: "Please fill out all required fields.",
@@ -70,49 +70,76 @@ const Register = () => {
     setPhoneNumber(numericValue);
   };
 
-  const handleSubmit = () => {
-    if (!firstName || !lastName || !email || !password || !verifyPassword) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    try {
+      if (!firstName || !lastName || !email || !pass || !verifyPassword) {
+        toast({
+          title: "Error",
+          description: "Please fill out all fields.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (selectedRole === "employer" && (!businessName || !businessWebsite || !phoneNumber || !industry)) {
+        toast({
+          title: "Error",
+          description: "Please fill out all additional fields for an employer.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (selectedRole === "job-seeker" && (!industry || !phoneNumber)) {
+        toast({
+          title: "Error",
+          description: "Please fill out all additional fields for a job seeker.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (phoneNumber.length !== 10) {
+        toast({
+          title: "Error",
+          description: "Phone number must be 10 characters long.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      const payload = {
+        firstName, 
+        lastName,
+        email, 
+        pass,
+        mobile: phoneNumber,
+        company: selectedRole === "employer" ? businessName : undefined,
+        website: selectedRole === "employer" ? businessWebsite : undefined,
+        industry,
+      };
+
+      apiService.register(selectedRole, payload);
+
+      console.log("Form submitted");
+      navigate("/");
+    } catch(err) {
       toast({
         title: "Error",
-        description: "Please fill out all fields.",
+        description: err.message,
         status: "error",
         duration: 5000,
         isClosable: true,
       });
-      return;
+      console.error('Error during registration:', err);
     }
-    if (selectedRole === "employer" && (!businessName || !businessWebsite || !phoneNumber || !industry)) {
-      toast({
-        title: "Error",
-        description: "Please fill out all additional fields for an employer.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (selectedRole === "job-seeker" && (!industry || !phoneNumber)) {
-      toast({
-        title: "Error",
-        description: "Please fill out all additional fields for a job seeker.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (phoneNumber.length !== 10) {
-      toast({
-        title: "Error",
-        description: "Phone number must be 10 characters long.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    console.log("Form submitted");
-    navigate("/");
   };
 
   const toastTheme = extendTheme({
@@ -151,7 +178,7 @@ const Register = () => {
             maxWidth="800px"
           >
             <Flex justifyContent="flex-end">
-              <Tooltip label={`Switch to ${colorMode === "light" ? "dark" : "light"} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
+              <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
                 <Button
                   onClick={toggleColorMode}
                   mr={2}
@@ -220,8 +247,8 @@ const Register = () => {
                 <InputGroup>
                   <Input
                     placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={pass}
+                    onChange={(e) => setPass(e.target.value)}
                     type={showPassword ? "text" : "password"}
                     _hover={{ bg: colors.bgHover }}
                   />
@@ -284,7 +311,7 @@ const Register = () => {
               </Flex>
               {selectedRole === "employer" && (
                 <>
-                  <Text fontWeight="bold" fontSize="lg" color={colors.textColor}>We see you're an employer,</Text>
+                  <Text fontWeight="bold" fontSize="lg" color={colors.textColor}>We see you&apos;re an employer,</Text>
                   <Text mb={4} color={colors.textColor}>Please fill out the additional information below to finish.</Text>
                   <FormControl mb={4} isRequired>
                     <FormLabel color={colors.textColor} fontWeight="bold">Business Name</FormLabel>
@@ -309,7 +336,7 @@ const Register = () => {
               )}
               {selectedRole === "job-seeker" && (
                 <>
-                  <Text mb={4} fontWeight="bold" fontSize="lg" color={colors.textColor}>We see you're a job seeker,</Text>
+                  <Text mb={4} fontWeight="bold" fontSize="lg" color={colors.textColor}>We see you&apos;re a job seeker,</Text>
                   <Text mb={4} color={colors.textColor}>Please fill out the additional information below to finish.</Text>
                 </>
               )}

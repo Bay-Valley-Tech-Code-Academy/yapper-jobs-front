@@ -15,39 +15,39 @@ import {
   InputRightElement,
   Link,
   Text,
-  useToast 
+  useToast,
+  Tooltip
 } from '@chakra-ui/react';
 
 function ResetPassword() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
-  const [token, setToken] = useState('');
+  const [resetToken, setResetToken] = useState('');
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
   const toast = useToast();
 
   useEffect(() => {
-    // Fetch the token from local storage
     const tokenFromLocalStorage = localStorage.getItem('resetToken');
     if (tokenFromLocalStorage) {
-      setToken(tokenFromLocalStorage);
+      setResetToken(tokenFromLocalStorage);
+      console.log(resetToken);
     } else {
-      // If no token is found in local storage, redirect to the forget password page
-      navigate('/forget-password');
+      console.log('Error, token not found');
     }
-  }, [navigate]);
+  }, [resetToken]);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
   
     const specialChar = new RegExp(`[!@#$%^&*()+=.-_]+`);
 
-    console.log(password);
-    console.log(specialChar.test(password));
+    console.log(newPassword);
+    console.log(specialChar.test(newPassword));
   
-    if (!password || !verifyPassword) {
+    if (!newPassword || !verifyPassword) {
       toast({
         title: 'Error',
         description: 'Please fill out the information',
@@ -58,7 +58,7 @@ function ResetPassword() {
       return;
     }
   
-    if (password.length < 12) {
+    if (newPassword.length < 12) {
       toast({
         title: 'Error',
         description: 'Password must be at least 12 characters long',
@@ -66,7 +66,7 @@ function ResetPassword() {
         duration: 5000,
         isClosable: true,
       });
-    } else if (password !== verifyPassword) {
+    } else if (newPassword !== verifyPassword) {
       toast({
         title: 'Error',
         description: 'Passwords do not match',
@@ -74,7 +74,7 @@ function ResetPassword() {
         duration: 5000,
         isClosable: true,
       });
-    } else if (!specialChar.test(password)) {
+    } else if (!specialChar.test(newPassword)) {
       toast({
         title: 'Error',
         description: 'Password must have at least one special character',
@@ -85,7 +85,7 @@ function ResetPassword() {
     } else {
       try {
         
-        await apiService.resetPassword(password, token);
+        await apiService.resetPassword(newPassword, resetToken);
   
         toast({
           title: 'Success',
@@ -130,6 +130,7 @@ function ResetPassword() {
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
+            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
               <Button 
                 onClick={toggleColorMode} 
                 mr={2} 
@@ -138,6 +139,7 @@ function ResetPassword() {
               >
                 {colors.icon}
               </Button>
+              </Tooltip>
             </Flex>
             <Heading pt={10} ml={4} textAlign="center">Reset Password</Heading>
             <Heading pt={10} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters and must include at least 1 special character.</Heading>
@@ -145,12 +147,12 @@ function ResetPassword() {
               <InputGroup>
                 <Input 
                   placeholder="password"
-                  value={password}
+                  value={newPassword}
                   type={showPassword ? 'text' : 'password'}
                   _hover={{bg: colors.bgHover}}
                   minWidth="20vw"
                   height="3rem"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <InputRightElement flex={1} m={1} width="5rem">
                   <Button 

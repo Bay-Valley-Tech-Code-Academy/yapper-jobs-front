@@ -14,6 +14,7 @@ import {
   Link,
   Text,
   useToast,
+  Tooltip
 } from "@chakra-ui/react";
 
 function ForgetPassword() {
@@ -41,6 +42,8 @@ function ForgetPassword() {
       const { resetToken } = await apiService.forgetPassword(email);
 
       localStorage.setItem('resetToken', resetToken);
+
+      console.log(resetToken);
       
       toast({
         title: "Success",
@@ -83,6 +86,7 @@ function ForgetPassword() {
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
+            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
               <Button
                 onClick={toggleColorMode}
                 mr={2}
@@ -91,6 +95,7 @@ function ForgetPassword() {
               >
                 {colors.icon}
               </Button>
+              </Tooltip>
             </Flex>
             <Heading pt={10} ml={4} textAlign="center">
               Forget Password?
