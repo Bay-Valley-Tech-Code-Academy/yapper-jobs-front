@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
-import { apiService } from '../../services/apiRequests';
+import { apiService } from '../services/apiRequests';
 import { 
   ChakraProvider, 
   Box, 
@@ -112,7 +112,7 @@ function Login() {
               </Tooltip>
             </Flex>
             <Text mb={4} ml={4} fontSize="3xl">Welcome {isEmployer ? "Employer" : "Seeker"}</Text>
-            <Heading mb={4} ml={4}>Sign in to Yapper Jobs</Heading>
+            <Heading mb={4} ml={4} fontSize="3xl">Sign in to Yapper Jobs</Heading>
             <Button
               onClick={toggleUserType}
               mt={4}
@@ -122,7 +122,7 @@ function Login() {
             >
               {isEmployer ? "Switch to Seeker" : "Switch to Employer"}
             </Button>
-            <Box flex={1} m={4} mt={10} position="relative">
+            <Box flex={1} m={4} mt={6} position="relative">
               <FormControl isRequired>
                 <Input
                   placeholder="email"
@@ -152,6 +152,9 @@ function Login() {
                     id="check"
                     type="checkbox"
                     onClick={togglePasswordVisibility}
+                    _hover={{ bg: colors.buttonHoverColor }}
+                    backgroundColor={colors.buttonBgColor}
+                    color={colors.buttonColor}
                     cursor="pointer"
                     size="md"
                     height="2rem"
@@ -161,12 +164,12 @@ function Login() {
                 </InputRightElement>
               </InputGroup>
             </Box>
-            <Text mt={6} textAlign="center">
+            <Text mt={5} textAlign="center">
               <Link color="teal.500" onClick={() => navigate('/forget-password')}>Forgot Password?</Link>
             </Text>
             <Box flex={1} ml={4} position="relative">
               <Button
-                mt={10}
+                mt={8}
                 minWidth="24.2vw"
                 onClick={handleSubmit}
                 backgroundColor={colors.buttonBgColor}

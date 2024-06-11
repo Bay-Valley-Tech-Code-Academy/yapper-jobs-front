@@ -11,7 +11,7 @@ import {
   VStack,
   Flex,
 } from "@chakra-ui/react";
-import useApiStore from "../../store/api-store";
+import useApiStore from "../store/api-store";
 import { useParams } from "react-router-dom";
 
 function Apply() {

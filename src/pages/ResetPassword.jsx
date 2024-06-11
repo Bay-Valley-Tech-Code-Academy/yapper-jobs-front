@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
+import { apiService } from '../services/apiRequests';
 import CustomColorMode from '/util/toggleColorMode';
-import { apiService } from '../../services/apiRequests';
 import { 
   ChakraProvider,
   Box,
@@ -16,7 +16,8 @@ import {
   Link,
   Text,
   useToast,
-  Tooltip
+  Tooltip,
+  Image
 } from '@chakra-ui/react';
 
 function ResetPassword() {
@@ -33,7 +34,6 @@ function ResetPassword() {
     const tokenFromLocalStorage = localStorage.getItem('resetToken');
     if (tokenFromLocalStorage) {
       setResetToken(tokenFromLocalStorage);
-      console.log(resetToken);
     } else {
       console.log('Error, token not found');
     }
@@ -44,67 +44,77 @@ function ResetPassword() {
   
     const specialChar = new RegExp(`[!@#$%^&*()+=.-_]+`);
 
-    console.log(newPassword);
-    console.log(specialChar.test(newPassword));
-  
-    if (!newPassword || !verifyPassword) {
-      toast({
-        title: 'Error',
-        description: 'Please fill out the information',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
+    let errorType = null;
+
+    if(!newPassword || !verifyPassword) {
+      errorType = 'EMPTY_FIELDS';
+    } else if (newPassword.length < 12) {
+      errorType = 'SHORT_PASSWORD';
+    } else if (newPassword !== verifyPassword) {
+      errorType = 'MISMATCH_PASSWORDS';
+    } else if (!specialChar.test(newPassword)) {
+      errorType = 'NO_SPECIAL_CHAR';
     }
   
-    if (newPassword.length < 12) {
-      toast({
-        title: 'Error',
-        description: 'Password must be at least 12 characters long',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    } else if (newPassword !== verifyPassword) {
-      toast({
-        title: 'Error',
-        description: 'Passwords do not match',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    } else if (!specialChar.test(newPassword)) {
-      toast({
-        title: 'Error',
-        description: 'Password must have at least one special character',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    } else {
-      try {
-        
-        await apiService.resetPassword(newPassword, resetToken);
-  
-        toast({
-          title: 'Success',
-          description: 'Password reset',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        });
-  
-      } catch (err) {
+    switch (errorType) {
+      case 'EMPTY_FIELDS':
         toast({
           title: 'Error',
-          description: 'Failed to reset password',
+          description: 'Please fill out the information',
           status: 'error',
           duration: 5000,
           isClosable: true,
         });
+        return;
+      case 'SHORT_PASSWORD':
+        toast({
+          title: 'Error',
+          description: 'Password must be at least 12 characters long',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      case 'MISMATCH_PASSWORDS':
+        toast({
+          title: 'Error',
+          description: 'Passwords do not match',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      case 'NO_SPECIAL_CHAR':
+        toast({
+          title: 'Error',
+          description: 'Password must have at least one special character',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      default:
+        try {
+          await apiService.resetPassword(newPassword, resetToken);
+  
+          toast({
+            title: 'Success',
+            description: 'Password reset',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+    
+        } catch (err) {
+          toast({
+            title: 'Error',
+            description: 'Failed to reset password',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
       }
-    }
   };
 
   return (
@@ -141,8 +151,11 @@ function ResetPassword() {
               </Button>
               </Tooltip>
             </Flex>
-            <Heading pt={10} ml={4} textAlign="center">Reset Password</Heading>
-            <Heading pt={10} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters and must include at least 1 special character.</Heading>
+            <Flex mb={4} alignItems="center" justifyContent="center">
+                <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" />
+            </Flex>
+            <Heading pt={5} ml={4} textAlign="center">Reset Password</Heading>
+            <Heading pt={5} ml={4} size="md" textAlign="center">Create a new password. Must be at least 12 characters and must include at least 1 special character.</Heading>
             <Box flex={1} m={4} pt={6} position="relative">
               <InputGroup>
                 <Input 
@@ -159,6 +172,9 @@ function ResetPassword() {
                     id="check"
                     type="checkbox"
                     onClick={togglePasswordVisibility}
+                    _hover={{ bg: colors.buttonHoverColor }}
+                    backgroundColor={colors.buttonBgColor}
+                    color={colors.buttonColor}
                     cursor="pointer"
                     size="md"
                     height="2rem"
@@ -183,6 +199,9 @@ function ResetPassword() {
                     id="check"
                     type="checkbox"
                     onClick={toggleVerifiedPasswordVisibility}
+                    _hover={{ bg: colors.buttonHoverColor }}
+                    backgroundColor={colors.buttonBgColor}
+                    color={colors.buttonColor}
                     cursor="pointer"
                     size="md"
                     height="2rem"

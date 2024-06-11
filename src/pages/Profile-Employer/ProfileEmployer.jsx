@@ -1,6 +1,5 @@
 {/*Imports for React and Chakra*/}
 import React from 'react'
-import "./ProfileEmployer.css"
 import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 

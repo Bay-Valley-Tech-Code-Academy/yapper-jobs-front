@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomColorMode from "/util/toggleColorMode";
-import { apiService } from "../../services/apiRequests";
-
+import { apiService } from "../services/apiRequests";
 import {
   ChakraProvider,
   Box,
@@ -14,7 +13,8 @@ import {
   Link,
   Text,
   useToast,
-  Tooltip
+  Tooltip,
+  Image
 } from "@chakra-ui/react";
 
 function ForgetPassword() {
@@ -96,6 +96,9 @@ function ForgetPassword() {
                 {colors.icon}
               </Button>
               </Tooltip>
+            </Flex>
+            <Flex mb={4} alignItems="center" justifyContent="center">
+                <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" />
             </Flex>
             <Heading pt={10} ml={4} textAlign="center">
               Forget Password?

@@ -1,5 +1,4 @@
 import React from 'react'
-import "./Applications.css"
 
 function Applications() {
   return (

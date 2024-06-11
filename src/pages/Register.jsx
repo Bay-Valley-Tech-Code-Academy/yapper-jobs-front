@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { apiService } from '../../services/apiRequests';
+import { apiService } from '../services/apiRequests';
 import CustomColorMode from '/util/toggleColorMode';
+import { usePasswordToggle } from '/util/passwordUtils';
 import {
   ChakraProvider,
   Box,
@@ -36,7 +37,8 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [businessWebsite, setBusinessWebsite] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const { showPassword, togglePasswordVisibility } = usePasswordToggle();
+  const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -254,12 +256,15 @@ const Register = () => {
                   />
                   <InputRightElement width="4.5rem">
                     <Button 
+                      id="check"
+                      type="checkbox"
                       h="1.75rem" 
                       size="sm" 
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={togglePasswordVisibility}
                       _hover={{ bg: colors.buttonHoverColor }}
                       backgroundColor={colors.buttonBgColor}
-                      color={colors.buttonColor}>
+                      color={colors.buttonColor}
+                    >
                       {showPassword ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>
@@ -272,18 +277,19 @@ const Register = () => {
                     placeholder="Verify Password"
                     value={verifyPassword}
                     onChange={(e) => setVerifyPassword(e.target.value)}
-                    type={showPassword ? "text" : "password"}
+                    type={showVerifiedPassword ? "text" : "password"}
                     _hover={{ bg: colors.bgHover }}
                   />
                   <InputRightElement width="4.5rem">
                     <Button 
                       h="1.75rem" 
                       size="sm" 
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={toggleVerifiedPasswordVisibility}
                       _hover={{ bg: colors.buttonHoverColor }}
                       backgroundColor={colors.buttonBgColor}
-                      color={colors.buttonColor}>
-                      {showPassword ? "Hide" : "Show"}
+                      color={colors.buttonColor}
+                    >
+                      {showVerifiedPassword ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
