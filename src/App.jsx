@@ -15,6 +15,7 @@ import Applications from "./pages/Applications/Applications";
 import ResetPassword from "./pages/Reset-Password/ResetPassword";
 import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
+import CreateResume from "./pages/Resume-Builder/CreateResume";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="resume-builder" element={<ResumeBuilder />} />
             <Route path="/applications" element={<Applications />} />
             <Route path="/post-job" element={<PostJob />} />
+            <Route path="/create-resume" element={<CreateResume />} />
           </Route>
           {/* Without Navbar */}
           <Route path="/register" element={<Register />} />
