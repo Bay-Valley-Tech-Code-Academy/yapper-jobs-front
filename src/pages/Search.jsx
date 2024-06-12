@@ -6,8 +6,6 @@ import JobCard from "../components/JobCard";
 import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
 import useApiStore from "../store/api-store";
 import useSavedJobsStore from "../store/saved-jobs-store";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
-import { useMediaQuery } from "@chakra-ui/react";
 import useUserStore from "../store/user-store";
 
 function Search() {
@@ -15,8 +13,7 @@ function Search() {
   const [maxJobCards, setMaxJobCards] = useState(10); // Shows up to 10 job cards initially
   const { jobs, fetchJobs } = useApiStore();
   const { fetchSavedJobsId, savedJobs, saveJob } = useSavedJobsStore();
-  const { colors, colorMode, toggleColorMode } = customColorMode();
-  const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
+  const { colors } = customColorMode();
   const {user} = useUserStore();
 
   useEffect(() => {
@@ -73,19 +70,6 @@ function Search() {
       height="100%"
     >
       <Flex justifyContent="flex-end" p={4}>
-        <Button
-          onClick={toggleColorMode}
-          color={colors.buttonColor}
-          backgroundColor={colors.buttonBgColor}
-        >
-          {isLargerThanSmall ? (
-            `Toggle ${colorMode === "light" ? "Dark" : "Light"} Mode`
-          ) : colorMode === "light" ? (
-            <MoonIcon />
-          ) : (
-            <SunIcon />
-          )}
-        </Button>
       </Flex>
       <Heading textAlign="center" m="4">
         Search Jobs

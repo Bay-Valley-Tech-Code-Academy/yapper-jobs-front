@@ -1,9 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Flex, Box, Heading, Button } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Flex, Box, Heading } from "@chakra-ui/react";
 import SavedJobCard from "../components/SavedJobCard";
 import AppliedJobCard from "../components/AppliedJobCard";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { useMediaQuery } from "@chakra-ui/react";
 import customColorMode from "../../util/toggleColorMode";
 import useApiStore from "../store/api-store";
 import useSavedJobsStore from "../store/saved-jobs-store"; // Import useSavedJobsStore
@@ -11,9 +9,8 @@ import useUserStore from "../store/user-store";
 
 function SavedJobs() {
   const { jobs } = useApiStore();
-  const { colors, colorMode, toggleColorMode } = customColorMode();
+  const { colors } = customColorMode();
   const { savedJobs, fetchSavedJobs, removeJob } = useSavedJobsStore(); // Destructure fetchSavedJobs from useSavedJobsStore
-  const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
   const { user } = useUserStore();
 
   useEffect(() => {
@@ -70,19 +67,6 @@ function SavedJobs() {
   return (
     <Box bg={colors.bgGradient} color={colors.textColor}>
       <Flex justifyContent="flex-end" p={4}>
-        <Button
-          onClick={toggleColorMode}
-          color={colors.buttonColor}
-          backgroundColor={colors.buttonBgColor}
-        >
-          {isLargerThanSmall ? (
-            `Toggle ${colorMode === "light" ? "Dark" : "Light"} Mode`
-          ) : colorMode === "light" ? (
-            <MoonIcon />
-          ) : (
-            <SunIcon />
-          )}
-        </Button>
       </Flex>
       <Flex justifyContent="center">
         <Box mt={8} mb={16}>
