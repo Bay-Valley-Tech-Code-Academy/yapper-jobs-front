@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Flex, Box, Heading } from "@chakra-ui/react";
 import SavedJobCard from "../components/SavedJobCard";
 import AppliedJobCard from "../components/AppliedJobCard";
@@ -18,13 +18,13 @@ function SavedJobs() {
       try {
         if (user) {
           await fetchSavedJobs();
-        } // Call fetchSavedJobs to fetch saved jobs
+        }
       } catch (error) {
         console.error(error);
       }
     };
     fetchJobs();
-  }, [fetchSavedJobs]);
+  }, [user, fetchSavedJobs, removeJob]);
 
   // Function to handle removing a job
   const handleRemoveJob = async (id) => {

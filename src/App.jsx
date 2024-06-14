@@ -18,17 +18,21 @@ import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
 import PostJob from "./pages/Post-Job/PostJob";
 // import { AuthProvider } from "./contexts/AuthContext";
 import useUserStore from "./store/user-store";
+// import useSavedJobsStore from "./store/saved-jobs-store";
 
 function App() {
   const { fetchUser } = useUserStore(); // Destructure the fetchUser function from the user store
+  // const {fetchSavedJobs} = useSavedJobsStore();
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     // Fetch user data when the component mounts (application initializes)
-    if(jwt){
-      console.log("fetching user")
-      fetchUser();
+    const fetchUserData = async () => {
+      if(jwt){
+        fetchUser();
+      }
     }
+    fetchUserData();
   }, [fetchUser]); // Ensure useEffect runs only once
 
   return (

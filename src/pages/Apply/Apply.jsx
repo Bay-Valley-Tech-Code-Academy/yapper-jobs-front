@@ -13,11 +13,13 @@ import {
 } from "@chakra-ui/react";
 import useApiStore from "../../store/api-store";
 import { useParams } from "react-router-dom";
+import useUserStore from "../../store/user-store";
 
 function Apply() {
   const { jobId } = useParams();
   const { jobs, fetchJobs } = useApiStore();
   const job = jobs.find((job) => job.job_id === parseInt(jobId));
+  const {user} = useUserStore();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,20 +29,96 @@ function Apply() {
   const [commute, setCommute] = useState("");
   const [authorizedToWork, setAuthorizedToWork] = useState("");
   const [isVeteran, setIsVeteran] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState(false);
 
   useEffect(() => {
     fetchJobs();
   }, []);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setFirstName("");
-    setLastName("");
-    setPhoneNumber("");
-    setCity("");
-    setState("");
-    setCommute("");
-    setAuthorizedToWork("");
-    setIsVeteran("");
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   setFirstName("");
+  //   setLastName("");
+  //   setPhoneNumber("");
+  //   setCity("");
+  //   setState("");
+  //   setCommute("");
+  //   setAuthorizedToWork("");
+  //   setIsVeteran("");
+  // };
+  
+
+  
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+    
+    // Step 1: Gather form data
+    const formData = {
+      jobId: jobId,
+      answers: {
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        city: city,
+        state: state,
+        commute: commute === "Yes", // Converts "Yes" to true, anything else to false
+        authorizedToWork: authorizedToWork === "Yes",
+        isVeteran: isVeteran === "Yes"
+      }
+    };
+
+    console.log(formData)
+
+    
+      // Step 2: Send data to backend
+      try {
+        const response = await fetch('YOUR_BACKEND_ENDPOINT', {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        console.log('Submission successful', data);
+        // Handle success response
+    
+        // Step 3: Reset form fields after successful submission
+        setFirstName("");
+        setLastName("");
+        setPhoneNumber("");
+        setCity("");
+        setState("");
+        setCommute("");
+        setAuthorizedToWork("");
+        setIsVeteran("");
+      } catch (error) {
+        console.error('Error during submission:', error);
+        // Handle error case
+      }
+    };
+
+  // console.log(jobId)
+
+  const handlePhoneNumberChange = (e) => {
+    const digitsOnly = e.target.value.replace(/\D/g, "");
+    if (digitsOnly.length <= 10) {
+      setPhoneNumber(digitsOnly);
+      // Check if the length is exactly 10 digits to hide/show the error message
+      setPhoneNumberError(digitsOnly.length !== 10);
+    }
+  };
+
+  const handleStateChange = (e) => {
+    const input = e.target.value;
+    // Limit the input to 2 characters
+    if (input.length <= 2) {
+      setState(input.toUpperCase()); // Optionally convert to uppercase
+    }
   };
 
   return (
@@ -147,12 +225,19 @@ function Apply() {
                   id="phoneNumber"
                   type="tel"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  // onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={handlePhoneNumberChange}
                   bg="rgb(95, 94, 94)"
                   border="1px solid #fff"
                   borderRadius="0.25em"
                   p="0.5em"
                 />
+                {/* Conditionally render the error message */}
+                {phoneNumberError && (
+                  <Text color="red.500">
+                    Phone number must be exactly 10 digits.
+                  </Text>
+                )}
               </FormControl>
               <FormControl isRequired className="form-group" maxW="30em">
                 <FormLabel htmlFor="city">City:</FormLabel>
@@ -171,7 +256,8 @@ function Apply() {
                 <Input
                   id="state"
                   value={state}
-                  onChange={(e) => setState(e.target.value)}
+                  // onChange={(e) => setState(e.target.value)}
+                  onChange={handleStateChange}
                   bg="rgb(95, 94, 94)"
                   border="1px solid #fff"
                   borderRadius="0.25em"

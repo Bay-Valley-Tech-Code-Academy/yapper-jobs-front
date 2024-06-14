@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Heading, Text, Flex, Box, Button } from "@chakra-ui/react";
 import Searchbar from "../components/Searchbar";
 import JobSummary from "../components/JobSummary";
 import JobCard from "../components/JobCard";
-import customColorMode from "../../util/toggleColorMode"; // Import custom color mode
+import customColorMode from "../../util/toggleColorMode";
 import useApiStore from "../store/api-store";
 import useSavedJobsStore from "../store/saved-jobs-store";
 import useUserStore from "../store/user-store";
 
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
-  const [maxJobCards, setMaxJobCards] = useState(10); // Shows up to 10 job cards initially
+  const [maxJobCards, setMaxJobCards] = useState(10);
   const { jobs, fetchJobs } = useApiStore();
-  const { fetchSavedJobsId, savedJobs, saveJob } = useSavedJobsStore();
+  const { fetchSavedJobsId, savedJobs, saveJob, removeJob } = useSavedJobsStore();
   const { colors } = customColorMode();
-  const {user} = useUserStore();
+  const { user } = useUserStore();
 
   useEffect(() => {
     fetchJobs();
-    if(user){
+    if (user) {
       fetchSavedJobsId();
     }
-  }, [fetchJobs, fetchSavedJobsId]);
+  }, [user, fetchJobs, fetchSavedJobsId]);
 
   const handleSaveJob = async (job_id) => {
     try {
-      await saveJob(job_id);
+      if (savedJobs.includes(job_id)) {
+        await removeJob(job_id);
+      } else {
+        await saveJob(job_id);
+      }
     } catch (error) {
       console.error("Failed to save job", error);
     }
@@ -38,6 +42,8 @@ function Search() {
         {...job}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
+        isSaved={savedJobs.includes(job.job_id)}
+        handleSaveJob={handleSaveJob}
       />
     ));
   };
@@ -53,12 +59,10 @@ function Search() {
     return null;
   };
 
-  // Add 5 more job cards on click
   const handleShowMore = () => {
     setMaxJobCards((prevMax) => prevMax + 5);
   };
 
-  // Gets the max cards depending on the value of the state variable
   const jobCards = jobs.slice(0, maxJobCards);
 
   return (
@@ -69,8 +73,7 @@ function Search() {
       flexDirection="column"
       height="100%"
     >
-      <Flex justifyContent="flex-end" p={4}>
-      </Flex>
+      <Flex justifyContent="flex-end" p={4}></Flex>
       <Heading textAlign="center" m="4">
         Search Jobs
       </Heading>
@@ -82,7 +85,7 @@ function Search() {
         px="4"
         mb="4"
       >
-        <Searchbar jobs={jobs}/>
+        <Searchbar jobs={jobs} />
       </Flex>
       <Flex width="80%" maxH="100vh" mx="auto" px="4">
         <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto">
@@ -96,8 +99,8 @@ function Search() {
         <Box width={{ base: "0%", sm: "60%" }}>
           <JobSummary
             selectedJob={selectedJob}
-            savedJobs={savedJobs}
             handleSaveJob={handleSaveJob}
+            isSaved={savedJobs.includes(selectedJob)} // Pass isSaved to JobSummary
           />
         </Box>
       </Flex>

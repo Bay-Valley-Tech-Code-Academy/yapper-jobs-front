@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
@@ -17,9 +17,8 @@ import useUserStore from "../store/user-store";
 
 function JobCard(props) {
   const navigate = useNavigate();
-  const {user} = useUserStore();
-
-  const { savedJobs, saveJob, removeJob } = useSavedJobsStore();
+  const { user } = useUserStore();
+  const { saveJob, removeJob } = useSavedJobsStore();
 
   const handleClick = (id) => {
     props.setSelectedJob(id);
@@ -35,10 +34,10 @@ function JobCard(props) {
       console.error("No user logged in");
       return;
     }
-    if (savedJobs.includes(job_id)) {
-      removeJob(job_id); // remove job if it is already saved
+    if (props.isSaved) {
+      removeJob(job_id);
     } else {
-      saveJob(job_id); // save job if it is not already saved
+      saveJob(job_id);
     }
   };
 
@@ -61,7 +60,6 @@ function JobCard(props) {
         </Text>
         <Stack direction="row" spacing="2" mt="2" mb="4">
           <Icon as={FaMapMarkerAlt} />
-          {/* <Text fontSize="sm">{props.city}, {props.state}</Text> */}
           <Text fontSize="sm">
             {props.city || props.state
               ? `${props.city}, ${props.state}`
@@ -86,13 +84,7 @@ function JobCard(props) {
           {user && (
             <IconButton
               aria-label="Save/Unsave"
-              icon={
-                savedJobs.includes(props.job_id) ? (
-                  <MdFavorite />
-                ) : (
-                  <MdFavoriteBorder />
-                )
-              }
+              icon={props.isSaved ? <MdFavorite /> : <MdFavoriteBorder />}
               colorScheme="purple"
               variant="ghost"
               size="sm"

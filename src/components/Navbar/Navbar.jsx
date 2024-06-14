@@ -17,12 +17,14 @@ import {
 import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
 import customColorMode from '../../../util/toggleColorMode';
+import useUserStore from "../../store/user-store";
 
 function NavBar() {
   const navigate = useNavigate();
   const [isLargerThanMobile] = useMediaQuery("(min-width: 829px)"); // Width when the hamburger menu appears
   const [isOpen, setIsOpen] = useState(false);
   const { colorMode, toggleColorMode, colors } = customColorMode();
+  const {user, logout} = useUserStore();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -33,6 +35,13 @@ function NavBar() {
       setIsOpen(false);
     }
   };
+
+  const handleLogoutClick = () => {
+    logout(); // Call the logout function from useUserStore
+    navigate("/"); // Navigate to the login page
+  };
+
+
 
   return (
     <Box bg="#A96CDE" color="white" p="4" height="74px"
@@ -117,9 +126,10 @@ function NavBar() {
               >
                 Profile
               </ChakraLink>
-              {/* <Box as="button" onClick={apiService.logout} mr="4">
+              {/* Logout button */}
+              <Box as="button" onClick={handleLogoutClick} mr="4">
                 <ChakraLink>Logout</ChakraLink>
-              </Box> */}
+              </Box>
             </Flex>
           </Flex>
         ) : (
@@ -196,10 +206,11 @@ function NavBar() {
               >
                 Profile
               </ChakraLink>
-              {/* <Box
+              {/* Logout */}
+              <Box
                 as="button"
                 onClick={() => {
-                  apiService.logout();
+                  handleLogoutClick();
                   setIsOpen(false);
                 }}
                 pb="2"
@@ -216,7 +227,7 @@ function NavBar() {
                 }}
               >
                 Logout
-              </Box> */}
+              </Box>
               <ChakraLink
                 as={Link}
                 to="/post-job"
@@ -280,10 +291,11 @@ function NavBar() {
               >
                 Profile
               </ChakraLink>
-              {/* <Box
+              {/* Logout */}
+              <Box
                 as="button"
                 onClick={() => {
-                  apiService.logout();
+                  handleLogoutClick();
                   setIsOpen(false);
                 }}
                 pb="2"
@@ -300,7 +312,7 @@ function NavBar() {
                 }}
               >
                 Logout
-              </Box> */}
+              </Box>
             </DrawerBody>
           </DrawerContent>
         </Drawer>

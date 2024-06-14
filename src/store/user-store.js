@@ -105,28 +105,27 @@ const useUserStore = create((set) => ({
     if (!response.ok) throw new Error("Password reset request failed");
     return response.json();
   },
-  // logout: async () => {
-  //   // if theres no jwt or user in localStorage, return null
-  //   if (!localStorage.getItem("jwt") || !localStorage.getItem("user"))
-  //     return null;
-  //   try {
-    // const jwt = localStorage.getItem("jwt");
-  //     const response = await fetch(`${BASE_URL}/logout`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${jwt}`,
-  //       },
-  //     });
+  logout: async () => {
+    // if theres no jwt or user in localStorage, return null
+    if (!localStorage.getItem("jwt"))
+      return null;
+    try {
+      const response = await fetch(`${BASE_URL}/logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
 
-  //     if (!response.ok) throw new Error("Failed to log out");
+      if (!response.ok) throw new Error("Failed to log out");
 
-  //     localStorage.removeItem("jwt");
-  //     return response.json();
-  //   } catch (error) {
-  //     console.error("Failed to log out", error);
-  //   }
-  // },
+      localStorage.removeItem("jwt");
+      return response.json();
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
+  },
 }));
 
 export default useUserStore;
