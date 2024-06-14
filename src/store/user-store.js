@@ -121,6 +121,7 @@ const useUserStore = create((set) => ({
       if (!response.ok) throw new Error("Failed to log out");
 
       localStorage.removeItem("jwt");
+      localStorage.removeItem("savedJobs");
       return response.json();
     } catch (error) {
       console.error("Failed to log out", error);

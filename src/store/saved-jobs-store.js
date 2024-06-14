@@ -38,8 +38,7 @@ const useSavedJobsStore = create((set) => ({
       if (!response.ok) throw new Error("Failed to get saved jobs");
 
       const data = await response.json();
-      //save data to localStorage
-      localStorage.setItem("savedJobs", JSON.stringify(data));
+
       set({ savedJobs: data });
     } catch (error) {
       console.error("Failed to fetch saved jobs", error);
