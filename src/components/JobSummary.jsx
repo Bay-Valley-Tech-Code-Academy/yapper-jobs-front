@@ -53,7 +53,7 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
         <Heading size="2xl">{job.title}</Heading>
         <Text fontSize="xl" color="gray.600">
           <Link href={job.website} isExternal>
-          {job.company}
+            {job.company}
           </Link>
         </Text>
         {job.industry && (
@@ -61,17 +61,25 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
             Industry: {job.industry}
           </Text>
         )}
+        {/* Create a Text component if job.salary_low and job.salary_high exists */}
+        {job.salary_low && job.salary_high && (
+          <Text fontWeight="bold" fontSize="lg">
+            Salary: ${job.salary_low} - ${job.salary_high}
+          </Text>
+        )}
         <Stack direction="row" justify="space-between" align="center" mb="1">
           <Text fontSize="sm">Posted {formatDate(job.created)}</Text>
         </Stack>
       </Stack>
       <Stack direction="row" spacing="4" align="center" mb="1">
-        <Stack direction="row" spacing="1">
-          <Icon as={FaMapMarkerAlt} />
-          <Text fontSize="sm">
-            {job.city}, {job.state}
-          </Text>
-        </Stack>
+        {job.city && job.state && (
+          <Stack direction="row" spacing="1">
+            <Icon as={FaMapMarkerAlt} />
+            <Text fontSize="sm">
+              {job.city}, {job.state}
+            </Text>
+          </Stack>
+        )}
         <Text fontSize="sm" fontWeight="bold">
           {job.employment_type}
         </Text>
