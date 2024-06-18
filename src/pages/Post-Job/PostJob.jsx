@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
   Box,
   Heading,
@@ -35,27 +35,36 @@ import {
   Alert,
   AlertIcon,
   useToast,
-} from '@chakra-ui/react';
-import { HamburgerIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
-import customColorMode from '../../../util/toggleColorMode';
+} from "@chakra-ui/react";
+import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
+import customColorMode from "../../../util/toggleColorMode";
 
 const sections = [
   {
-    id: 'basic-information',
-    label: 'Basic Information',
-    fields: ['job-position-title', 'company', 'state', 'city', 'zipcode', 'experience-level', 'job-type', 'work-location'],
+    id: "basic-information",
+    label: "Basic Information",
+    fields: [
+      "job-position-title",
+      "company",
+      "state",
+      "city",
+      "zipcode",
+      "experience-level",
+      "job-type",
+      "work-location",
+    ],
   },
   {
-    id: 'additional-details',
-    label: 'Additional Details',
-    fields: ['company-size', 'salary-min', 'salary-max', 'benefits', 'skills'],
-    optionalFields: ['qualifications'],
+    id: "additional-details",
+    label: "Additional Details",
+    fields: ["company-size", "salary-min", "salary-max", "benefits", "skills"],
+    optionalFields: ["qualifications"],
   },
   {
-    id: 'description',
-    label: 'Description',
-    fields: ['description'],
-    optionalFields: ['responsibilities'],
+    id: "description",
+    label: "Description",
+    fields: ["description"],
+    optionalFields: ["responsibilities"],
   },
 ];
 
@@ -68,30 +77,33 @@ const JobPosting = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
-    'job-position-title': '',
-    company: '',
-    state: '',
-    city: '',
-    zipcode: '',
-    'experience-level': '',
-    'job-type': '',
-    'work-location': '',
-    'salary-min': '',
-    'salary-max': '',
-    'company-size': '',
-    benefits: '',
-    skills: '',
-    qualifications: '',
-    responsibilities: '',
-    description: '',
+    "job-position-title": "",
+    company: "",
+    state: "",
+    city: "",
+    zipcode: "",
+    "experience-level": "",
+    "job-type": "",
+    "work-location": "",
+    "salary-min": "",
+    "salary-max": "",
+    "company-size": "",
+    // benefits: '',
+    benefits: [],
+    skills: "",
+    qualifications: "",
+    responsibilities: "",
+    description: "",
   });
-  const [formError, setFormError] = useState('');
+  const [formError, setFormError] = useState("");
+
+  // console.log(formData);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
 
     // Capitalize the first letter of the company name
-    if (id === 'company') {
+    if (id === "company") {
       const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
       setFormData({
         ...formData,
@@ -101,13 +113,13 @@ const JobPosting = () => {
     }
 
     // Validation for zipcode
-    if (id === 'zipcode') {
+    if (id === "zipcode") {
       if (!/^\d*$/.test(value)) {
-        setFormError('Zipcode cannot contain letters');
+        setFormError("Zipcode cannot contain letters");
         return;
       }
       if (value.length > 5) {
-        setFormError('Zipcode cannot be longer than 5 digits');
+        setFormError("Zipcode cannot be longer than 5 digits");
         return;
       }
     }
@@ -116,7 +128,7 @@ const JobPosting = () => {
       ...formData,
       [id]: value,
     });
-    setFormError(''); // Clear error message on input change
+    setFormError(""); // Clear error message on input change
   };
 
   const handleNextStep = () => {
@@ -128,7 +140,7 @@ const JobPosting = () => {
   const handlePrevStep = () => {
     const currentSection = sections[activeStep];
     const isSectionCompleted = currentSection.fields.every(
-      (field) => formData[field] && formData[field].trim() !== ''
+      (field) => formData[field] && formData[field].trim() !== ""
     );
 
     if (!isSectionCompleted) {
@@ -143,15 +155,75 @@ const JobPosting = () => {
     }
   };
 
+  // Handle benefits input separately to split comma-separated values
+  const handleBenefitsChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      benefits: value.split(",").map((benefit) => benefit.trim()), // Split comma-separated values and trim whitespace
+    }));
+  };
+
+  // const handleCompleteSection = () => {
+  //   const currentSection = sections[activeStep];
+  //   const requiredFields = currentSection.fields.filter(
+  //     (field) =>
+  //       !currentSection.optionalFields ||
+  //       !currentSection.optionalFields.includes(field)
+  //   );
+  //   const isSectionCompleted = requiredFields.every(
+  //     (field) => formData[field] && formData[field].trim() !== ""
+  //   );
+
+  //   if (!isSectionCompleted) {
+  //     setFormError(
+  //       "Please complete all required fields in the current section before proceeding."
+  //     );
+  //     toast({
+  //       title: "Error",
+  //       description:
+  //         "Please complete all required fields in the current section before proceeding.",
+  //       status: "error",
+  //       duration: 1000,
+  //       isClosable: true,
+  //     });
+  //     return;
+  //   }
+
+  //   setCompletedSections({
+  //     ...completedSections,
+  //     [activeStep]: true,
+  //   });
+
+  //   setFormError(""); // Clear error message on section complete
+
+  //   if (activeStep === sections.length - 1) {
+  //     // Mark the last step as completed
+  //     setCompletedSections({
+  //       ...completedSections,
+  //       [activeStep]: true,
+  //     });
+  //     toast({
+  //       title: "Success",
+  //       description: "Job posting created successfully!",
+  //       status: "success",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+  //   } else {
+  //     handleNextStep();
+  //   }
+  // };
+
   const handleCompleteSection = () => {
     const currentSection = sections[activeStep];
     const requiredFields = currentSection.fields.filter(
       (field) => !currentSection.optionalFields || !currentSection.optionalFields.includes(field)
     );
     const isSectionCompleted = requiredFields.every(
-      (field) => formData[field] && formData[field].trim() !== ''
+      (field) => formData[field] && (Array.isArray(formData[field]) ? formData[field].length > 0 : formData[field].trim() !== '')
     );
-
+  
     if (!isSectionCompleted) {
       setFormError('Please complete all required fields in the current section before proceeding.');
       toast({
@@ -163,16 +235,15 @@ const JobPosting = () => {
       });
       return;
     }
-
+  
     setCompletedSections({
       ...completedSections,
       [activeStep]: true,
     });
-
-    setFormError(''); // Clear error message on section complete
-
+  
+    setFormError('');
+  
     if (activeStep === sections.length - 1) {
-      // Mark the last step as completed
       setCompletedSections({
         ...completedSections,
         [activeStep]: true,
@@ -188,12 +259,13 @@ const JobPosting = () => {
       handleNextStep();
     }
   };
+  console.log(formData)  
 
   return (
     <Container maxW="container.md" p={4}>
       <Flex justifyContent="flex-end">
         <Tooltip
-          label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+          label={`Switch to ${colorMode === "light" ? "dark" : "light"} mode`}
           aria-label="A tooltip"
           openDelay={500}
           closeDelay={200}
@@ -204,9 +276,9 @@ const JobPosting = () => {
             color={colors.buttonColor}
             backgroundColor={colors.buttonBgColor}
             _hover={{ bg: colors.buttonHoverColor }}
-            size={['sm', 'md', 'lg']}
+            size={["sm", "md", "lg"]}
           >
-            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
           </Button>
         </Tooltip>
       </Flex>
@@ -215,8 +287,19 @@ const JobPosting = () => {
       </Heading>
       <HStack align="start" spacing={4}>
         {/* Stepper for navigation */}
-        <Box as="nav" display={{ base: 'none', md: 'block' }} width="200px" position="sticky" top="20px">
-          <Stepper index={activeStep} orientation="vertical" height="400px" gap="0">
+        <Box
+          as="nav"
+          display={{ base: "none", md: "block" }}
+          width="200px"
+          position="sticky"
+          top="20px"
+        >
+          <Stepper
+            index={activeStep}
+            orientation="vertical"
+            height="400px"
+            gap="0"
+          >
             {sections.map((section, index) => (
               <Step key={section.id}>
                 <StepIndicator>
@@ -228,8 +311,11 @@ const JobPosting = () => {
                 </StepIndicator>
                 <Box flexShrink="0">
                   <StepTitle>{section.label}</StepTitle>
-                  <Badge ml="2" colorScheme={completedSections[index] ? 'green' : 'red'}>
-                    {completedSections[index] ? 'Completed' : 'Incomplete'}
+                  <Badge
+                    ml="2"
+                    colorScheme={completedSections[index] ? "green" : "red"}
+                  >
+                    {completedSections[index] ? "Completed" : "Incomplete"}
                   </Badge>
                 </Box>
                 <StepSeparator />
@@ -239,14 +325,23 @@ const JobPosting = () => {
         </Box>
 
         {/* Drawer for mobile */}
-        <Box display={{ base: 'block', md: 'none' }} position="sticky" top="20px">
+        <Box
+          display={{ base: "block", md: "none" }}
+          position="sticky"
+          top="20px"
+        >
           <IconButton
             ref={btnRef}
             icon={<HamburgerIcon />}
             onClick={onOpen}
             aria-label="Open menu"
           />
-          <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+          <Drawer
+            isOpen={isOpen}
+            placement="left"
+            onClose={onClose}
+            finalFocusRef={btnRef}
+          >
             <DrawerOverlay />
             <DrawerContent>
               <DrawerCloseButton />
@@ -258,12 +353,21 @@ const JobPosting = () => {
                       <Button
                         variant="link"
                         onClick={() => setActiveStep(index)}
-                        textDecoration={activeStep === index ? 'line-through' : 'none'}
-                        fontWeight={activeStep === index ? 'bold' : 'normal'}
+                        textDecoration={
+                          activeStep === index ? "line-through" : "none"
+                        }
+                        fontWeight={activeStep === index ? "bold" : "normal"}
                       >
                         {section.label}
-                        <Badge ml="2" colorScheme={completedSections[index] ? 'green' : 'red'}>
-                          {completedSections[index] ? 'Completed' : 'Incomplete'}
+                        <Badge
+                          ml="2"
+                          colorScheme={
+                            completedSections[index] ? "green" : "red"
+                          }
+                        >
+                          {completedSections[index]
+                            ? "Completed"
+                            : "Incomplete"}
                         </Badge>
                       </Button>
                     </ListItem>
@@ -277,7 +381,11 @@ const JobPosting = () => {
         {/* Main form */}
         <VStack spacing={4} align="stretch" flex="1">
           {formError && (
-            <Alert status="error" bg={colors.alertBgColor} color={colors.alertTextColor}>
+            <Alert
+              status="error"
+              bg={colors.alertBgColor}
+              color={colors.alertTextColor}
+            >
               <AlertIcon />
               {formError}
             </Alert>
@@ -290,7 +398,7 @@ const JobPosting = () => {
                   id="job-position-title"
                   placeholder="Enter job position title"
                   height="50px"
-                  value={formData['job-position-title']}
+                  value={formData["job-position-title"]}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -342,7 +450,7 @@ const JobPosting = () => {
                   id="experience-level"
                   placeholder="Select experience level"
                   height="50px"
-                  value={formData['experience-level']}
+                  value={formData["experience-level"]}
                   onChange={handleInputChange}
                 >
                   <option value="Entry Level">Entry Level</option>
@@ -356,7 +464,7 @@ const JobPosting = () => {
                   id="job-type"
                   placeholder="Select job type"
                   height="50px"
-                  value={formData['job-type']}
+                  value={formData["job-type"]}
                   onChange={handleInputChange}
                 >
                   <option value="Part-time">Part-time</option>
@@ -372,7 +480,7 @@ const JobPosting = () => {
                   id="work-location"
                   placeholder="Select work location"
                   height="50px"
-                  value={formData['work-location']}
+                  value={formData["work-location"]}
                   onChange={handleInputChange}
                 >
                   <option value="Remote">Remote</option>
@@ -391,7 +499,7 @@ const JobPosting = () => {
                   id="company-size"
                   placeholder="Select company size"
                   height="50px"
-                  value={formData['company-size']}
+                  value={formData["company-size"]}
                   onChange={handleInputChange}
                 >
                   <option value="1-10 employees">1-10 employees</option>
@@ -406,14 +514,14 @@ const JobPosting = () => {
                     id="salary-min"
                     placeholder="Min"
                     height="50px"
-                    value={formData['salary-min']}
+                    value={formData["salary-min"]}
                     onChange={handleInputChange}
                   />
                   <Input
                     id="salary-max"
                     placeholder="Max"
                     height="50px"
-                    value={formData['salary-max']}
+                    value={formData["salary-max"]}
                     onChange={handleInputChange}
                   />
                 </HStack>
@@ -427,7 +535,7 @@ const JobPosting = () => {
                   onChange={handleInputChange}
                 />
               </FormControl>
-              <FormControl isRequired pb={4}>
+              {/* <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Benefits:</FormLabel>
                 <Textarea
                   id="benefits"
@@ -435,9 +543,22 @@ const JobPosting = () => {
                   value={formData.benefits}
                   onChange={handleInputChange}
                 />
+              </FormControl> */}
+              {/* New benefits to turn into an array */}
+              <FormControl isRequired pb={4}>
+                <FormLabel fontWeight="bold">Benefits:</FormLabel>
+                <Textarea
+                  id="benefits"
+                  placeholder="Enter benefits, separated by commas"
+                  value={formData.benefits.join(", ")} // Join array elements into a string
+                  onChange={handleBenefitsChange}
+                />
               </FormControl>
+
               <FormControl pb={4}>
-                <FormLabel fontWeight="bold">Qualifications (Optional):</FormLabel>
+                <FormLabel fontWeight="bold">
+                  Qualifications (Optional):
+                </FormLabel>
                 <Textarea
                   id="qualifications"
                   placeholder="List qualifications"
@@ -460,7 +581,9 @@ const JobPosting = () => {
                 />
               </FormControl>
               <FormControl pb={4}>
-                <FormLabel fontWeight="bold">Responsibilities (Optional):</FormLabel>
+                <FormLabel fontWeight="bold">
+                  Responsibilities (Optional):
+                </FormLabel>
                 <Textarea
                   id="responsibilities"
                   placeholder="List responsibilities"
@@ -478,7 +601,7 @@ const JobPosting = () => {
               color={colors.buttonColor}
               backgroundColor={colors.buttonBgColor}
               _hover={{ bg: colors.buttonHoverColor }}
-              size={['sm', 'md', 'lg']}
+              size={["sm", "md", "lg"]}
             >
               Previous
             </Button>
@@ -487,9 +610,9 @@ const JobPosting = () => {
               color={colors.buttonColor}
               backgroundColor={colors.buttonBgColor}
               _hover={{ bg: colors.buttonHoverColor }}
-              size={['sm', 'md', 'lg']}
+              size={["sm", "md", "lg"]}
             >
-              {activeStep === sections.length - 1 ? 'Submit' : 'Next'}
+              {activeStep === sections.length - 1 ? "Submit" : "Next"}
             </Button>
           </HStack>
         </VStack>

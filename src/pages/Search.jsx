@@ -36,9 +36,9 @@ function Search() {
   };
 
   const renderJobCards = () => {
-    return jobCards.map((job) => (
+    return jobCards.map((job, index) => (
       <JobCard
-        key={job.job_id}
+        key={index}
         {...job}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}

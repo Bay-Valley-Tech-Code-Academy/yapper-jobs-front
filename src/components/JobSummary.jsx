@@ -9,6 +9,7 @@ import {
   Icon,
   Divider,
   useMediaQuery,
+  Link,
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import useApiStore from "../store/api-store";
@@ -33,18 +34,38 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
     );
   }
 
+  //format timestamp column to date only
+  function formatDate(timestamp) {
+    const date = new Date(timestamp); // Create a Date object from the timestamp
+
+    // Extract the date components
+    const month = date.getMonth() + 1; // getMonth() returns 0-based index
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    // Format the date as MM/DD/YYYY
+    return `${month}/${day}/${year}`;
+  }
+
   return (
     <Box height="100%" ml="3%" overflowY="auto" paddingRight="2">
       <Stack direction="column" mb="2">
         <Heading size="2xl">{job.title}</Heading>
         <Text fontSize="xl" color="gray.600">
+          <Link href={job.website} isExternal>
           {job.company}
+          </Link>
         </Text>
-        <Stack direction="row" justify="space-between" align="center">
-          <Text fontSize="sm">1d ago</Text>
+        {job.industry && (
+          <Text mb={2} mt={2}>
+            Industry: {job.industry}
+          </Text>
+        )}
+        <Stack direction="row" justify="space-between" align="center" mb="1">
+          <Text fontSize="sm">Posted {formatDate(job.created)}</Text>
         </Stack>
       </Stack>
-      <Stack direction="row" spacing="4" align="center" mb="2">
+      <Stack direction="row" spacing="4" align="center" mb="1">
         <Stack direction="row" spacing="1">
           <Icon as={FaMapMarkerAlt} />
           <Text fontSize="sm">
@@ -75,34 +96,23 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
         </Button>
       </Stack>
       <Divider mt={4} />
-      <Text mb={4} mt={4}>
-        Industry: {job.industry}
-      </Text>
+
       <Heading mb={4}>About the company</Heading>
-      <Text ml={4}>
-        We're Proud to Offer a Comprehensive Benefits Package Including:
-      </Text>
-      <Box m="4">
-        <ul>
-          <li>401k retirement plan, with employer match</li>
-          <li>
-            Insurance options including: medical, dental, vision, life and STD
-            insurance
-          </li>
-          <li>
-            Paid Time Off/Vacation: Starting at 80 hours per year, and increases
-            based on tenure with the organization
-          </li>
-          <li>Floating Holiday: 40 hours per year</li>
-          <li>Paid Holidays: 7 days per year</li>
-          <li>
-            Paid Sick Leave: Astound allows a number of paid sick hours per
-            calendar year and varies based on state and/or local laws
-          </li>
-          <li>Tuition reimbursement program</li>
-          <li>Employee discount program</li>
-        </ul>
-        </Box>
+      {job.benefits && (
+        <>
+          <Text ml={4}>
+            We're Proud to Offer a Comprehensive Benefits Package Including:
+          </Text>
+          <Box m="4">
+            {/* Loop through benefits with ul*/}
+            <ul>
+              {job.benefits.map((benefit, index) => (
+                <li key={index}>{benefit}</li>
+              ))}
+            </ul>
+          </Box>
+        </>
+      )}
     </Box>
   );
 }

@@ -9,8 +9,6 @@ import {
   IconButton,
   Stack,
   Icon,
-  Divider,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md"; // Assuming you're using Material Icons for the save/unsave icon
 import { FaMapMarkerAlt } from "react-icons/fa";

@@ -43,9 +43,9 @@ function SavedJobs() {
         <Heading>No Saved jobs</Heading>
       </Box>
     ) : (
-      savedJobs.map((job) => (
+      savedJobs.map((job, index) => (
         <SavedJobCard
-          key={job.job_id}
+          key={index}
           {...job}
           handleRemoveJob={handleRemoveJob}
         />
