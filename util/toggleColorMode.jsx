@@ -1,7 +1,7 @@
 import { useColorMode } from '@chakra-ui/react';
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
-function customColorMode() {
+function CustomColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const colors = {
@@ -19,9 +19,10 @@ function customColorMode() {
       hyperlinkColor: '#3182CE',
       hyperlinkTextDecoration: 'underline',
       dividerColor: 'gray.200',
-      alertBgColor: 'red.500',
-      alertTextColor: 'black.300',
-      icon: <MoonIcon />
+      alertBgColor: 'red.500', // Added alert background color for light mode
+      alertTextColor: 'black.300', // Added alert text color for light mode
+      iconSupport: 'dark',
+      icon: <MoonIcon /> // Icon for light mode
     },
     dark: {
       bgGradient: '#0B1215',
@@ -37,9 +38,10 @@ function customColorMode() {
       hyperlinkColor: 'cyan',
       hyperlinkTextDecoration: 'underline',
       dividerColor: 'gray.700',
-      alertBgColor: 'red.900',
-      alertTextColor: 'red.100',
-      icon: <SunIcon />
+      alertBgColor: 'red.900', // Added alert background color for dark mode
+      alertTextColor: 'red.100', // Added alert text color for dark mode
+      iconSupport: 'light',
+      icon: <SunIcon /> // Icon for dark mode
     },
   };
 
@@ -48,4 +50,4 @@ function customColorMode() {
   return { colorMode, toggleColorMode, colors: currentColors };
 }
 
-export default customColorMode;
+export default CustomColorMode;

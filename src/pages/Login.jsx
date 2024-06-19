@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
-import { apiService } from '../../services/apiRequests';
+import { apiService } from '../services/apiRequests';
 import { 
   ChakraProvider, 
   Box, 
@@ -16,7 +16,8 @@ import {
   InputGroup, 
   InputRightElement,
   FormControl,
-  useToast 
+  useToast, 
+  Tooltip
 } from '@chakra-ui/react';
 
 
@@ -29,6 +30,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
+
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
   }
@@ -98,17 +100,19 @@ function Login() {
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
-              <Button
-                mr={2}
-                onClick={toggleColorMode}
-                color={colors.buttonColor}
-                backgroundColor={colors.buttonBgColor}
-              >
-                {colors.icon}
-              </Button>
+            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
+                <Button
+                  mr={2}
+                  onClick={toggleColorMode}
+                  color={colors.buttonColor}
+                  backgroundColor={colors.buttonBgColor}
+                >
+                  {colors.icon}
+                </Button>
+              </Tooltip>
             </Flex>
-            <Heading mb={4} ml={4}>Welcome 🗣️</Heading>
-            <Heading mb={4} ml={4}>Sign in to Yapper Jobs</Heading>
+            <Text mb={4} ml={4} fontSize="3xl">Welcome {isEmployer ? "Employer" : "Seeker"}</Text>
+            <Heading mb={4} ml={4} fontSize="3xl">Sign in to Yapper Jobs</Heading>
             <Button
               onClick={toggleUserType}
               mt={4}
@@ -118,7 +122,7 @@ function Login() {
             >
               {isEmployer ? "Switch to Seeker" : "Switch to Employer"}
             </Button>
-            <Box flex={1} m={4} mt={10} position="relative">
+            <Box flex={1} m={4} mt={6} position="relative">
               <FormControl isRequired>
                 <Input
                   placeholder="email"
@@ -148,6 +152,9 @@ function Login() {
                     id="check"
                     type="checkbox"
                     onClick={togglePasswordVisibility}
+                    _hover={{ bg: colors.buttonHoverColor }}
+                    backgroundColor={colors.buttonBgColor}
+                    color={colors.buttonColor}
                     cursor="pointer"
                     size="md"
                     height="2rem"
@@ -157,12 +164,12 @@ function Login() {
                 </InputRightElement>
               </InputGroup>
             </Box>
-            <Text mt={6} textAlign="center">
+            <Text mt={5} textAlign="center">
               <Link color="teal.500" onClick={() => navigate('/forget-password')}>Forgot Password?</Link>
             </Text>
             <Box flex={1} ml={4} position="relative">
               <Button
-                mt={10}
+                mt={8}
                 minWidth="24.2vw"
                 onClick={handleSubmit}
                 backgroundColor={colors.buttonBgColor}
@@ -175,7 +182,7 @@ function Login() {
               </Button>
             </Box>
             <Text mt={8} textAlign="center">
-              Don't have an account with us?
+              Don&apos;t have an account with us?
               <Link color="teal.500" onClick={() => navigate('/register')}>
                 &nbsp;Sign Up
               </Link>

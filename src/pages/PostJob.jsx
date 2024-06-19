@@ -37,7 +37,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { HamburgerIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
-import customColorMode from '../../../util/toggleColorMode';
+import customColorMode from '../../util/toggleColorMode';
 
 const sections = [
   {
