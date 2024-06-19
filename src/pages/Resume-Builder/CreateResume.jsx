@@ -1,7 +1,8 @@
-import { Box, Text, Heading, Flex, VStack, HStack, Switch, FormControl,FormLabel,List, ListItem, Center, ChakraProvider, Checkbox} from "@chakra-ui/react";
+import { Box, Text, Heading, Flex, VStack, HStack, Switch, FormControl,FormLabel,List, ListItem, Center, ChakraProvider, Checkbox, Button} from "@chakra-ui/react";
 import React, {useState} from "react";
 import { Reorder } from "framer-motion";
 import ResumeSection from "./ResumeSection";
+import { FocusLock } from "@chakra-ui/react";
 
 function CreateResume() {
     const [section,setSection] = useState([
@@ -27,6 +28,7 @@ function CreateResume() {
           background: "var(--chakra-colors-purple-400)",
         },
       };
+      
       return (
         <Flex>
           <VStack>
@@ -63,12 +65,17 @@ function CreateResume() {
                 <HStack>
                 <Switch></Switch>
                 </HStack>
-              </ListItem>
+              </ListItem>   
             ))}
             </Box>
           </List>
-          
       </VStack>
+      <HStack>
+            <Box height={500} width={300} bg={'grey'}>
+              
+            </Box>
+            <Button>Download Resume</Button>
+          </HStack>
       </Flex>
       );
 }
