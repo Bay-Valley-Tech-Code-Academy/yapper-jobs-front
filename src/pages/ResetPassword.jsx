@@ -24,20 +24,20 @@ function ResetPassword() {
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
-  const [resetToken, setResetToken] = useState('');
+  const [token, setToken] = useState('');
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
   const toast = useToast();
 
   useEffect(() => {
-    const tokenFromLocalStorage = localStorage.getItem('resetToken');
+    const tokenFromLocalStorage = localStorage.getItem('token');
     if (tokenFromLocalStorage) {
-      setResetToken(tokenFromLocalStorage);
+      setToken(tokenFromLocalStorage);
     } else {
       console.log('Error, token not found');
     }
-  }, [resetToken]);
+  }, []);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -93,9 +93,10 @@ function ResetPassword() {
           isClosable: true,
         });
         return;
+
       default:
         try {
-          await apiService.resetPassword(newPassword, resetToken);
+          await apiService.resetPassword(newPassword, token);
   
           toast({
             title: 'Success',
@@ -104,6 +105,9 @@ function ResetPassword() {
             duration: 5000,
             isClosable: true,
           });
+
+          localStorage.removeItem('token');
+          navigate('/');
     
         } catch (err) {
           toast({

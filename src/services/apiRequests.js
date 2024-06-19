@@ -53,7 +53,7 @@ const apiService = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ newPassword: newPassword, token: token }),
+        body: JSON.stringify({ token: token, newPassword: newPassword  }),
       });
   
       if (!response.ok) throw new Error('Password reset request failed');

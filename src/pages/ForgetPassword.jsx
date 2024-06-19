@@ -37,13 +37,11 @@ function ForgetPassword() {
       });
       return;
     }
-
+  
     try {
-      const { resetToken } = await apiService.forgetPassword(email);
+      const { token } = await apiService.forgetPassword(email);
 
-      localStorage.setItem('resetToken', resetToken);
-
-      console.log(resetToken);
+      localStorage.setItem('token', token);
       
       toast({
         title: "Success",
