@@ -1,20 +1,24 @@
-import { Box, Text, Heading, Flex, VStack, HStack, Switch, FormControl,FormLabel,List, ListItem, Center, ChakraProvider, Checkbox, Button} from "@chakra-ui/react";
+import { Box, Text, Heading, Flex, VStack, HStack, Switch, FormControl,FormLabel,List, ListItem, Highlight, Center, ChakraProvider, Checkbox, Button,  Editable, EditableInput, EditableTextarea, EditablePreview,} from "@chakra-ui/react";
 import React, {useState} from "react";
 import { Reorder } from "framer-motion";
-import ResumeSection from "./ResumeSection";
 import { FocusLock } from "@chakra-ui/react";
+
+import ResumeSection from "./ResumeSection";
+import PersonalInfo from "./ResumeBuilderSections/ApplicantInfo";
+import WorkExperience from "./ResumeBuilderSections/ApplicantExp";
+import Language from "./ResumeBuilderSections/ApplicantLang";
+import Certifications from "./ResumeBuilderSections/ApplicantCert";
+import Education from "./ResumeBuilderSections/ApplicantEducation";
+import AppSkill from "./ResumeBuilderSections/ApplicantSkill";
 
 function CreateResume() {
     const [section,setSection] = useState([
-        "Name",
-        "Personal Info",
-        "Professional Summary",
-        "Links",
         "Work Experience",
-        "Skills",
-        "Languages",
         "Education",
+        "Skills",
         "Certifications / Licenses",
+        "Links",
+        "Languages",
     ]);
     const variants = {
         notDragging: {
@@ -71,10 +75,25 @@ function CreateResume() {
           </List>
       </VStack>
       <HStack>
-            <Box height={500} width={300} bg={'grey'}>
-              
+            <Box height={800} width={600} bg={'#EDF2F7'} mt={50} ml={250} overflow={'scroll'}>
+              <PersonalInfo/>
+              <Text as={'header'} ml={5} mt={5} fontSize={25}>Work Experience</Text>
+              <WorkExperience/>
+              <Button ml={7}> + Add Work Experience</Button>
+              <Text as={'header'} ml={5} mt={5} fontSize={25}>Education</Text>
+              <Education/>
+              <Button ml={7}> + Add Education</Button>
+              <Text as={'header'} ml={5} mt={5} fontSize={25}>Certifications / Licenses </Text>
+              <Certifications/>
+              <Button ml={7}> + Add Certifications / Licenses</Button>
+              <Text as={'header'} ml={5} mt={5} fontSize={25}>Languages</Text>
+              <Language/>
+              <Button ml={7}> + Add Language </Button>
+              <Text as={'header'} ml={5} mt={5} fontSize={25}>Skills</Text>
+              <AppSkill/>
+              <Button ml={7}> + Add Skill </Button>
             </Box>
-            <Button>Download Resume</Button>
+            <Button ml={400} mb={750} colorScheme="purple">Download Resume</Button>
           </HStack>
       </Flex>
       );
