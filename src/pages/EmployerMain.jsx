@@ -1,5 +1,4 @@
 import React from 'react'
-import "./EmployerMain.css"
 
 function EmployerMain() {
   return (

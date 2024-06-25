@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomColorMode from "/util/toggleColorMode";
-import { apiService } from "../../services/apiRequests";
-
+import { apiService } from "../services/apiRequests";
 import {
   ChakraProvider,
   Box,
@@ -14,6 +13,8 @@ import {
   Link,
   Text,
   useToast,
+  Tooltip,
+  Image
 } from "@chakra-ui/react";
 
 function ForgetPassword() {
@@ -36,9 +37,12 @@ function ForgetPassword() {
       });
       return;
     }
-
+  
     try {
-      await apiService.forgetPassword(email);
+      const { token } = await apiService.forgetPassword(email);
+
+      localStorage.setItem('token', token);
+      
       toast({
         title: "Success",
         description: "Email sent",
@@ -80,6 +84,7 @@ function ForgetPassword() {
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
+            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
               <Button
                 onClick={toggleColorMode}
                 mr={2}
@@ -88,12 +93,16 @@ function ForgetPassword() {
               >
                 {colors.icon}
               </Button>
+              </Tooltip>
+            </Flex>
+            <Flex mb={4} alignItems="center" justifyContent="center">
+                <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" />
             </Flex>
             <Heading pt={10} ml={4} textAlign="center">
               Forget Password?
             </Heading>
             <Heading pt={10} ml={4} size="md" textAlign="center">
-              Type in your email below and we'll send you a reset password
+              Type in your email below and we&apos;ll send you a reset password
             </Heading>
             <Box flex={1} m={4} pt={10} position="relative">
               <Input

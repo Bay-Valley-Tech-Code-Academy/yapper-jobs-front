@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,9 +11,9 @@ import {
   VStack,
   Flex,
 } from "@chakra-ui/react";
-import useApiStore from "../../store/api-store";
+import useApiStore from "../store/api-store";
 import { useParams } from "react-router-dom";
-import useUserStore from "../../store/user-store";
+import useUserStore from "../store/user-store";
 
 function Apply() {
   const { jobId } = useParams();

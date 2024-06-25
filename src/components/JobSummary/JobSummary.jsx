@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -11,7 +10,7 @@ import {
   Divider,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { FaRegBookmark, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
+import { FaRegBookmark, FaMapMarkerAlt } from "react-icons/fa";
 import { jobs } from "../../jobs";
 
 function JobSummary({ selectedJob }) {

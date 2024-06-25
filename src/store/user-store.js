@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const BASE_URL = "http://localhost:3000";
 const useUserStore = create((set) => ({
-  user: null,
+  user: null, //state
   login: async (email, pass, isEmployer) => {
     const endpoint = isEmployer
       ? `${BASE_URL}/login/employer`

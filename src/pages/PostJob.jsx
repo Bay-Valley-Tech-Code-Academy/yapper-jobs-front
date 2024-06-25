@@ -37,33 +37,33 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
-import customColorMode from "../../../util/toggleColorMode";
+import customColorMode from "../../util/toggleColorMode";
 
 const sections = [
   {
     id: "basic-information",
     label: "Basic Information",
     fields: [
-      "job-position-title",
+      "title",
       "company",
       "state",
       "city",
       "zipcode",
-      "experience-level",
-      "job-type",
-      "work-location",
+      "experienceLevel",
+      "employmentType",
+      "isRemote",
     ],
   },
   {
     id: "additional-details",
     label: "Additional Details",
-    fields: ["company-size", "salary-min", "salary-max", "benefits", "skills"],
-    optionalFields: ["qualifications"],
+    fields: ["companySize", "salaryLow", "salaryHigh", "benefits", "skills"],
+    optionalFields: ["certifications"],
   },
   {
     id: "description",
     label: "Description",
-    fields: ["description"],
+    fields: ["jobDescription"],
     optionalFields: ["responsibilities"],
   },
 ];
@@ -77,27 +77,26 @@ const JobPosting = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
-    "job-position-title": "",
+    title: "",
     company: "",
     state: "",
     city: "",
     zipcode: "",
-    "experience-level": "",
-    "job-type": "",
-    "work-location": "",
-    "salary-min": "",
-    "salary-max": "",
-    "company-size": "",
-    // benefits: '',
+    "experienceLevel": "",
+    "employmentType": "",
+    isRemote: null,
+    "salaryLow": "",
+    "salaryHigh": "",
+    "companySize": "",
     benefits: [],
     skills: "",
-    qualifications: "",
+    certifications: "",
     responsibilities: "",
-    description: "",
+    jobDescription: "",
   });
   const [formError, setFormError] = useState("");
 
-  // console.log(formData);
+  console.log(formData);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -109,6 +108,7 @@ const JobPosting = () => {
         ...formData,
         [id]: capitalizedValue,
       });
+
       return;
     }
 
@@ -122,6 +122,24 @@ const JobPosting = () => {
         setFormError("Zipcode cannot be longer than 5 digits");
         return;
       }
+    }
+
+    // if (id ==="work-location"){
+    //   let updatedValue = value
+    //   updatedValue = updatedValue === "Remote" ? true : false;
+    //   setFormData({
+    //     ...formData,
+    //     [id]: updatedValue,
+    //   })
+    // }
+
+    // Handle the isRemote property
+    if (id === "work-location") {
+      setFormData({
+        ...formData,
+        isRemote: value === "Remote",
+      });
+      return;
     }
 
     setFormData({
@@ -164,6 +182,15 @@ const JobPosting = () => {
     }));
   };
 
+   // Handle certifications input separately to split comma-separated values
+   const handleCertificationsChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      certifications: value.split(",").map((certification) => certification.trim()), // Split comma-separated values and trim whitespace
+    }));
+  };
+
   // const handleCompleteSection = () => {
   //   const currentSection = sections[activeStep];
   //   const requiredFields = currentSection.fields.filter(
@@ -181,7 +208,7 @@ const JobPosting = () => {
   //     );
   //     toast({
   //       title: "Error",
-  //       description:
+  //       jobDescription:
   //         "Please complete all required fields in the current section before proceeding.",
   //       status: "error",
   //       duration: 1000,
@@ -205,7 +232,7 @@ const JobPosting = () => {
   //     });
   //     toast({
   //       title: "Success",
-  //       description: "Job posting created successfully!",
+  //       jobDescription: "Job posting created successfully!",
   //       status: "success",
   //       duration: 5000,
   //       isClosable: true,
@@ -218,18 +245,26 @@ const JobPosting = () => {
   const handleCompleteSection = () => {
     const currentSection = sections[activeStep];
     const requiredFields = currentSection.fields.filter(
-      (field) => !currentSection.optionalFields || !currentSection.optionalFields.includes(field)
+      (field) =>
+        !currentSection.optionalFields ||
+        !currentSection.optionalFields.includes(field)
     );
     const isSectionCompleted = requiredFields.every(
-      (field) => formData[field] && (Array.isArray(formData[field]) ? formData[field].length > 0 : formData[field].trim() !== '')
+      (field) => {
+        const value = formData[field];
+        return value && (Array.isArray(value) ? value.length > 0 : typeof value === 'string' ? value.trim() !== "" : true);
+      }
     );
   
     if (!isSectionCompleted) {
-      setFormError('Please complete all required fields in the current section before proceeding.');
+      setFormError(
+        "Please complete all required fields in the current section before proceeding."
+      );
       toast({
-        title: 'Error',
-        description: 'Please complete all required fields in the current section before proceeding.',
-        status: 'error',
+        title: "Error",
+        jobDescription:
+          "Please complete all required fields in the current section before proceeding.",
+        status: "error",
         duration: 1000,
         isClosable: true,
       });
@@ -241,17 +276,18 @@ const JobPosting = () => {
       [activeStep]: true,
     });
   
-    setFormError('');
+    setFormError(""); // Clear error message on section complete
   
     if (activeStep === sections.length - 1) {
+      // Mark the last step as completed
       setCompletedSections({
         ...completedSections,
         [activeStep]: true,
       });
       toast({
-        title: 'Success',
-        description: 'Job posting created successfully!',
-        status: 'success',
+        title: "Success",
+        jobDescription: "Job posting created successfully!",
+        status: "success",
         duration: 5000,
         isClosable: true,
       });
@@ -259,7 +295,7 @@ const JobPosting = () => {
       handleNextStep();
     }
   };
-  console.log(formData)  
+  
 
   return (
     <Container maxW="container.md" p={4}>
@@ -395,10 +431,10 @@ const JobPosting = () => {
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Job Title:</FormLabel>
                 <Input
-                  id="job-position-title"
+                  id="title"
                   placeholder="Enter job position title"
                   height="50px"
-                  value={formData["job-position-title"]}
+                  value={formData["title"]}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -447,10 +483,10 @@ const JobPosting = () => {
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Experience Level:</FormLabel>
                 <Select
-                  id="experience-level"
+                  id="experienceLevel"
                   placeholder="Select experience level"
                   height="50px"
-                  value={formData["experience-level"]}
+                  value={formData["experienceLevel"]}
                   onChange={handleInputChange}
                 >
                   <option value="Entry Level">Entry Level</option>
@@ -459,33 +495,31 @@ const JobPosting = () => {
                 </Select>
               </FormControl>
               <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Job Type:</FormLabel>
+                <FormLabel fontWeight="bold">Employment Type:</FormLabel>
                 <Select
-                  id="job-type"
-                  placeholder="Select job type"
+                  id="employmentType"
+                  placeholder="Select employment type"
                   height="50px"
-                  value={formData["job-type"]}
+                  value={formData["employmentType"]}
                   onChange={handleInputChange}
                 >
                   <option value="Part-time">Part-time</option>
                   <option value="Full-time">Full-time</option>
                   <option value="Contract">Contract</option>
-                  <option value="Temporary">Temporary</option>
                   <option value="Volunteer">Internship</option>
                 </Select>
               </FormControl>
               <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Work Location:</FormLabel>
+                <FormLabel fontWeight="bold">Is Remote</FormLabel>
                 <Select
                   id="work-location"
-                  placeholder="Select work location"
+                  placeholder="Is this position remote?"
                   height="50px"
-                  value={formData["work-location"]}
+                  value={formData["wisRemote"]}
                   onChange={handleInputChange}
                 >
-                  <option value="Remote">Remote</option>
-                  <option value="On-site">On-site</option>
-                  <option value="Hybrid">Hybrid</option>
+                  <option value="Remote">Yes</option>
+                  <option value="On-site">No</option>
                 </Select>
               </FormControl>
             </Box>
@@ -496,10 +530,10 @@ const JobPosting = () => {
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Company Size:</FormLabel>
                 <Select
-                  id="company-size"
+                  id="companySize"
                   placeholder="Select company size"
                   height="50px"
-                  value={formData["company-size"]}
+                  value={formData["companySize"]}
                   onChange={handleInputChange}
                 >
                   <option value="1-10 employees">1-10 employees</option>
@@ -511,17 +545,17 @@ const JobPosting = () => {
                 <FormLabel fontWeight="bold">Salary Range:</FormLabel>
                 <HStack spacing={4}>
                   <Input
-                    id="salary-min"
+                    id="salaryLow"
                     placeholder="Min"
                     height="50px"
-                    value={formData["salary-min"]}
+                    value={formData["salaryLow"]}
                     onChange={handleInputChange}
                   />
                   <Input
-                    id="salary-max"
+                    id="salaryHigh"
                     placeholder="Max"
                     height="50px"
-                    value={formData["salary-max"]}
+                    value={formData["salaryHigh"]}
                     onChange={handleInputChange}
                   />
                 </HStack>
@@ -557,13 +591,13 @@ const JobPosting = () => {
 
               <FormControl pb={4}>
                 <FormLabel fontWeight="bold">
-                  Qualifications (Optional):
+                  Certifications (Optional):
                 </FormLabel>
                 <Textarea
-                  id="qualifications"
-                  placeholder="List qualifications"
-                  value={formData.qualifications}
-                  onChange={handleInputChange}
+                  id="certifications"
+                  placeholder="List certifications"
+                  value={formData.certifications}
+                  onChange={handleCertificationsChange}
                 />
               </FormControl>
             </Box>
@@ -574,9 +608,9 @@ const JobPosting = () => {
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Job Description:</FormLabel>
                 <Textarea
-                  id="description"
+                  id="jobDescription"
                   placeholder="Enter job description"
-                  value={formData.description}
+                  value={formData.jobDescription}
                   onChange={handleInputChange}
                 />
               </FormControl>

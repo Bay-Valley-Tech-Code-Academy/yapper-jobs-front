@@ -3,22 +3,20 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Search from "./pages/Search";
-import Apply from "./pages/Apply/Apply";
-import EmployerMain from "./pages/Employer-Main/EmployerMain";
+import Apply from "./pages/Apply";
+import EmployerMain from "./pages/EmployerMain";
 import ProfileEmployer from "./pages/Profile-Employer/ProfileEmployer";
 import ProfileSeeker from "./pages/Profile-Seeker/ProfileSeeker";
-import Register from "./pages/Register/Register";
-import Login from "./pages/Login/Login";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 import Layout from "./Layout/Layout";
 import SavedJobs from "./pages/SavedJobs";
-import ResumeBuilder from "./pages/Resume-Builder/ResumeBuilder";
-import Applications from "./pages/Applications/Applications";
-import ResetPassword from "./pages/Reset-Password/ResetPassword";
-import ForgetPassword from "./pages/Forget-Password/ForgetPassword";
-import PostJob from "./pages/Post-Job/PostJob";
-// import { AuthProvider } from "./contexts/AuthContext";
+import ResumeBuilder from "./pages/ResumeBuilder";
+import Applications from "./pages/Applications";
+import ResetPassword from "./pages/ResetPassword";
+import ForgetPassword from "./pages/ForgetPassword";
+import PostJob from "./pages/PostJob";
 import useUserStore from "./store/user-store";
-// import useSavedJobsStore from "./store/saved-jobs-store";
 
 function App() {
   const { fetchUser } = useUserStore(); // Destructure the fetchUser function from the user store
