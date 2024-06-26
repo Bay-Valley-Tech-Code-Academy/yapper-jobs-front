@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
-import customColorMode from '../../../util/toggleColorMode';
+import customColorMode from "../../../util/toggleColorMode";
 import useUserStore from "../../store/user-store";
 
 function NavBar() {
@@ -24,7 +24,7 @@ function NavBar() {
   const [isLargerThanMobile] = useMediaQuery("(min-width: 829px)"); // Width when the hamburger menu appears
   const [isOpen, setIsOpen] = useState(false);
   const { colorMode, toggleColorMode, colors } = customColorMode();
-  const {user, logout} = useUserStore();
+  const { user, logout } = useUserStore();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -41,19 +41,27 @@ function NavBar() {
     navigate("/"); // Navigate to the login page
   };
 
-
-
   return (
-    <Box bg="#A96CDE" color="white" p="4" height="74px"
-      width="100%" overflowX="hidden" position="relative">
+    <Box
+      bg="#A96CDE"
+      color="white"
+      p="4"
+      height="74px"
+      width="100%"
+      overflowX="hidden"
+      position="relative"
+    >
       <Flex justify="space-between" align="center" position="relative">
         <Flex align="center">
-          <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" 
-            onClick={() => navigate("/search")} 
-            cursor="pointer" 
+          <Image
+            src={colors.logoSrc}
+            alt="Yapper Jobs Logo"
+            height="35px"
+            onClick={() => navigate("/search")}
+            cursor="pointer"
           />
           <Tooltip
-            label={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+            label={`Switch to ${colorMode === "light" ? "dark" : "light"} mode`}
             aria-label="A tooltip"
             openDelay={500}
             closeDelay={200}
@@ -64,73 +72,85 @@ function NavBar() {
               color={colors.buttonColor}
               backgroundColor="#A96CDE"
               border={`1px solid ${colors.buttonBorderColor}`}
-              _hover={{ 
-                backgroundColor: colors.buttonHoverBgColor 
+              _hover={{
+                backgroundColor: colors.buttonHoverBgColor,
               }}
               size="sm"
               ml={4} // Distance away from Yapper Logo
             >
-              {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+              {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
           </Tooltip>
         </Flex>
         {isLargerThanMobile ? (
           <Flex flex="2" justify="flex-end">
             {/* For Seekers */}
-            <Flex mr="4">
-              <ChakraLink as={Link} to="/saved-jobs"
-                mr="4" onClick={handleLinkClick}>
-                Your Jobs
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/resume-builder"
-                mr="4"
-                onClick={handleLinkClick}
-              >
-                Resume Builder
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/profile-seeker"
-                onClick={handleLinkClick}
-              >
-                Profile
-              </ChakraLink>
-              {/* <Box as="button" onClick={apiService.logout} mr="4">
+            {user && user.type === "seeker" && (
+              <Flex mr="4">
+                <ChakraLink
+                  as={Link}
+                  to="/saved-jobs"
+                  mr="4"
+                  onClick={handleLinkClick}
+                >
+                  Your Jobs
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/resume-builder"
+                  mr="4"
+                  onClick={handleLinkClick}
+                >
+                  Resume Builder
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/profile-seeker"
+                  onClick={handleLinkClick}
+                  mr="4"
+                >
+                  Profile
+                </ChakraLink>
+                {/* Logout button */}
+                  <ChakraLink>Logout</ChakraLink>
+                {/* <Box as="button" onClick={apiService.logout} mr="4">
                 <ChakraLink>Logout</ChakraLink>
               </Box> */}
-            </Flex>
+              </Flex>
+            )}
             {/* For Employers */}
-            <Flex>
-              <ChakraLink
-                as={Link}
-                to="/post-job"
-                mr="4"
-                onClick={handleLinkClick}
-              >
-                Post Job
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/applications"
-                mr="4"
-                onClick={handleLinkClick}
-              >
-                View Applications
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/profile-employer"
-                onClick={handleLinkClick}
-              >
-                Profile
-              </ChakraLink>
-              {/* Logout button */}
-              <Box as="button" onClick={handleLogoutClick} mr="4">
-                <ChakraLink>Logout</ChakraLink>
-              </Box>
-            </Flex>
+            {user && user.type != "seeker" && (
+              <Flex>
+                <ChakraLink
+                  as={Link}
+                  to="/post-job"
+                  mr="4"
+                  onClick={handleLinkClick}
+                >
+                  Post Job
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/applications"
+                  mr="4"
+                  onClick={handleLinkClick}
+                >
+                  View Applications
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/profile-employer"
+                  onClick={handleLinkClick}
+                  mr="4"
+                >
+                  Profile
+                </ChakraLink>
+                {/* Logout button */}
+                <Box as="button" onClick={handleLogoutClick} mr="4">
+                  <ChakraLink>Logout</ChakraLink>
+                </Box>
+              </Flex>
+            )}
           </Flex>
         ) : (
           <IconButton
@@ -152,9 +172,19 @@ function NavBar() {
             {/* Drawer BG Color */}
             <DrawerCloseButton />
             <DrawerBody>
-              <ChakraLink as={Link} to="/saved-jobs" 
-                onClick={() => { setIsOpen(false); handleLinkClick(); }} pb="2"
-                display="block" my="4" fontSize="xl" borderBottom="1px solid #EDF6F9"
+              
+              <ChakraLink
+                as={Link}
+                to="/saved-jobs"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLinkClick();
+                }}
+                pb="2"
+                display="block"
+                my="4"
+                fontSize="xl"
+                borderBottom="1px solid #EDF6F9"
                 color="#EDF6F9"
                 _hover={{
                   textDecoration: "none",

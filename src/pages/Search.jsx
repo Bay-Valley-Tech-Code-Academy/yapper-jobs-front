@@ -65,6 +65,8 @@ function Search() {
 
   const jobCards = jobs.slice(0, maxJobCards);
 
+  console.log(user ? user : "No")
+
   return (
     <Box
       bg={colors.bgGradient}

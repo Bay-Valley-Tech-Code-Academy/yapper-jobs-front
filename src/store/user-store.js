@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const BASE_URL = "http://localhost:3000";
-const useUserStore = create((set) => ({
+const useUserStore = create((set, get) => ({
   user: null, //state
   login: async (email, pass, isEmployer) => {
     const endpoint = isEmployer
@@ -28,37 +28,26 @@ const useUserStore = create((set) => ({
       if (data.jwt) {
         localStorage.setItem("jwt", data.jwt);
       }
+
+      console.log(isEmployer ? "employer" : "seeker")
   
-      // Make the GET request to fetch user data
-      const userResponse = await fetch(`${BASE_URL}/seeker`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${data.jwt}`, // Include JWT in headers
-        },
-      });
-  
-      if (!userResponse.ok) {
-        throw new Error("Failed to fetch user data");
+      // Call fetchUser to get user data and save it to the Zustand store
+      if(!isEmployer){
+        await get().fetchUser(data.jwt);
+      } else{
+        await get().fetchEmployer(data.jwt);
       }
   
-      const userData = await userResponse.json();
-  
-      // Save user data to the 'user' property in the Zustand store
-      if (userData) {
-        set({ user: userData });
-      }
-  
-      return { user: userData, jwt: data.jwt };
+      return { jwt: data.jwt };
     } catch (error) {
       console.error("Error during login:", error);
       throw error; // Rethrow the error to handle it in the calling code
     }
   },
-  
   fetchUser: async () => {
     try {
       const jwt = localStorage.getItem("jwt");
+      if (!jwt) throw new Error("No JWT token found");
       const response = await fetch(`${BASE_URL}/seeker`, {
         method: "GET",
         headers: {
@@ -72,7 +61,8 @@ const useUserStore = create((set) => ({
       }
 
       const userData = await response.json();
-      set({ user: userData });
+      //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
+      set({ user: { ...userData, "type": "seeker" } });
     } catch (error) {
       console.error("Failed to fetch user", error);
     }
