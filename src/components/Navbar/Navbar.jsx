@@ -178,6 +178,15 @@ function NavBar() {
             {" "}
             {/* Drawer BG Color */}
             <DrawerCloseButton />
+            {/* For Guests/No User */}
+            {!user && (
+              <DrawerBody mr="4">
+                <ChakraLink as={Link} to="/" my="4" onClick={handleLinkClick}>
+                  Log In / Sign Up
+                </ChakraLink>
+              </DrawerBody>
+            )}
+            {/* For Seekers */}
             {user && user.type === "seeker" && (
               <DrawerBody>
                 <ChakraLink
@@ -267,6 +276,7 @@ function NavBar() {
                 </Box>
               </DrawerBody>
             )}
+            {/* For Employers */}
             {user && user.type != "seeker" && (
               <DrawerBody>
                 <ChakraLink
