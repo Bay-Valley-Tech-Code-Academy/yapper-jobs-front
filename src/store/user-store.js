@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import { BASE_URL } from "./config";
 
-// const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:3000";
 const useUserStore = create((set) => ({
   user: null, //state
   login: async (email, pass, isEmployer) => {
@@ -15,6 +14,7 @@ const useUserStore = create((set) => ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // 'Authorization': `Bearer ${data.jwt()}`,
         },
         body: JSON.stringify({ email: email, pass: pass }),
       });
@@ -31,7 +31,7 @@ const useUserStore = create((set) => ({
       }
   
       // Make the GET request to fetch user data
-      const userResponse = await fetch(`${BASE_URL}/seeker`, {
+      const userResponse = await fetch(endpoint, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -57,26 +57,31 @@ const useUserStore = create((set) => ({
     }
   },
 
-  register: async (role, data) => {
-    const endpoint = role === "employer" 
-      ? `${BASE_URL}/register/employer` 
-      : `${BASE_URL}/register/seeker`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+  //   register: async (role, data) => {
+//     const endpoint = role === "employer" 
+//       ? `${BASE_URL}/register/employer` 
+//       : `${BASE_URL}/register/seeker`;
+//     const response = await fetch(endpoint, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(data),
+//     });
 
-    if (!response.ok) throw new Error('Registration failed');
-    return response.json();
-  },
+//     if (!response.ok) throw new Error('Registration failed');
+//     return response.json();
+//   },
   
-  fetchUser: async () => {
+  fetchUser: async (isEmployer) => {
+    const endpoint = isEmployer
+        ? `${BASE_URL}/employer`
+        : `${BASE_URL}/seeker`;
+
     try {
       const jwt = localStorage.getItem("jwt");
-      const response = await fetch(`${BASE_URL}/seeker`, {
+
+      const response = await fetch(endpoint, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -88,15 +93,17 @@ const useUserStore = create((set) => ({
         throw new Error("Failed to fetch user data");
       }
 
+      if()
+
       const userData = await response.json();
       set({ user: userData });
     } catch (error) {
       console.error("Failed to fetch user", error);
     }
   },
-  
+
   forgetPassword: async (email) => {
-    const response = await fetch(`${BASE_URL}/forget-password`, {
+    const response = await fetch(`${BASE_URL}/forgot-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,6 +118,7 @@ const useUserStore = create((set) => ({
 
     return response.json();
   },
+
   resetPassword: async (newPassword, token) => {
     const response = await fetch(`${BASE_URL}/reset-password`, {
       method: "PUT",
@@ -123,6 +131,7 @@ const useUserStore = create((set) => ({
     if (!response.ok) throw new Error("Password reset request failed");
     return response.json();
   },
+
   logout: async () => {
     // if theres no jwt or user in localStorage, return null
     if (!localStorage.getItem("jwt"))
@@ -148,3 +157,5 @@ const useUserStore = create((set) => ({
 }));
 
 export default useUserStore;
+
+//
