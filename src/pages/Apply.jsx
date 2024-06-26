@@ -46,8 +46,6 @@ function Apply() {
   //   setIsVeteran("");
   // };
   
-
-  
     const handleSubmit = async (event) => {
       event.preventDefault();
     
