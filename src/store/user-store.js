@@ -1,6 +1,7 @@
 import { create } from "zustand";
+import { BASE_URL } from "./config";
 
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
 const useUserStore = create((set) => ({
   user: null, //state
   login: async (email, pass, isEmployer) => {
@@ -55,6 +56,22 @@ const useUserStore = create((set) => ({
       throw error; // Rethrow the error to handle it in the calling code
     }
   },
+
+  register: async (role, data) => {
+    const endpoint = role === "employer" 
+      ? `${BASE_URL}/register/employer` 
+      : `${BASE_URL}/register/seeker`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error('Registration failed');
+    return response.json();
+  },
   
   fetchUser: async () => {
     try {
@@ -77,6 +94,7 @@ const useUserStore = create((set) => ({
       console.error("Failed to fetch user", error);
     }
   },
+  
   forgetPassword: async (email) => {
     const response = await fetch(`${BASE_URL}/forget-password`, {
       method: "POST",
@@ -93,13 +111,13 @@ const useUserStore = create((set) => ({
 
     return response.json();
   },
-  resetPassword: async (newPassword) => {
+  resetPassword: async (newPassword, token) => {
     const response = await fetch(`${BASE_URL}/reset-password`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ newPassword: newPassword }),
+      body: JSON.stringify({ token: token, newPassword: newPassword }),
     });
 
     if (!response.ok) throw new Error("Password reset request failed");

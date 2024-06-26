@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { apiService } from '../services/apiRequests';
+// import { apiService } from '../services/apiRequests';
+import useUserStore from '../store/user-store';
 import CustomColorMode from '/util/toggleColorMode';
 import { usePasswordToggle } from '/util/passwordUtils';
 import {
@@ -39,6 +40,7 @@ const Register = () => {
   const [businessWebsite, setBusinessWebsite] = useState("");
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
+  const { register } = useUserStore();
   const toast = useToast();
   const navigate = useNavigate();
 

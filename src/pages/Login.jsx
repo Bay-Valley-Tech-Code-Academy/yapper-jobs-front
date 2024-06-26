@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
 // import { apiService } from '../services/apiRequests';
+import useUserStore from '../store/user-store';
 import { 
   ChakraProvider, 
   Box, 
@@ -19,7 +20,6 @@ import {
   useToast, 
   Tooltip
 } from '@chakra-ui/react';
-import useUserStore from '../store/user-store';
 
 function Login() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
-  const { login} = useUserStore();
+  const { login } = useUserStore();
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);

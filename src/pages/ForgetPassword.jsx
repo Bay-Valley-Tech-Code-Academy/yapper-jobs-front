@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomColorMode from "/util/toggleColorMode";
-import { apiService } from "../services/apiRequests";
+// import { apiService } from "../services/apiRequests";
+import useUserStore from '../store/user-store';
 import {
   ChakraProvider,
   Box,
@@ -22,6 +23,7 @@ function ForgetPassword() {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const { toggleColorMode, colors } = CustomColorMode();
+  const { forgetPassword } = useUserStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ function ForgetPassword() {
     }
   
     try {
-      const { token } = await apiService.forgetPassword(email);
+      const { token } = await forgetPassword(email);
 
       localStorage.setItem('token', token);
       

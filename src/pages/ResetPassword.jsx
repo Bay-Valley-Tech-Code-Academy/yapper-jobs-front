@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
-import { apiService } from '../services/apiRequests';
+// import { apiService } from '../services/apiRequests';
+import useUserStore from '../store/user-store';
 import CustomColorMode from '/util/toggleColorMode';
 import { 
   ChakraProvider,
@@ -28,6 +29,7 @@ function ResetPassword() {
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
+  const { resetPassword } = useUserStore();
   const toast = useToast();
 
   useEffect(() => {
@@ -96,7 +98,7 @@ function ResetPassword() {
 
       default:
         try {
-          await apiService.resetPassword(newPassword, token);
+          await resetPassword(newPassword, token);
   
           toast({
             title: 'Success',
@@ -107,7 +109,6 @@ function ResetPassword() {
           });
 
           localStorage.removeItem('token');
-          navigate('/');
     
         } catch (err) {
           toast({
