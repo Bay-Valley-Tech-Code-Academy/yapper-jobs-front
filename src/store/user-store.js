@@ -24,12 +24,11 @@ const useUserStore = create((set, get) => ({
   
       const data = await response.json();
   
+      console.log(data)
       // Save JWT to localStorage if available
       if (data.jwt) {
         localStorage.setItem("jwt", data.jwt);
       }
-
-      console.log(isEmployer ? "employer" : "seeker")
   
       // Call fetchSeeker / Employer to get user data and save it to the Zustand store
       if(!isEmployer){
@@ -57,12 +56,36 @@ const useUserStore = create((set, get) => ({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error("Failed to fetch seeker data");
       }
 
       const userData = await response.json();
       //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
       set({ user: { ...userData, "type": "seeker" } });
+    } catch (error) {
+      console.error("Failed to fetch user", error);
+    }
+  },
+  fetchEmployer: async () => {
+    try {
+      console.log("Fetch Employer Running")
+      const jwt = localStorage.getItem("jwt");
+      if (!jwt) throw new Error("No JWT token found");
+      const response = await fetch(`${BASE_URL}/employer`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`, // Assuming the JWT is stored in localStorage
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch employer data");
+      }
+
+      const userData = await response.json();
+      //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
+      set({ user: { ...userData, "type": "employer" } });
     } catch (error) {
       console.error("Failed to fetch user", error);
     }

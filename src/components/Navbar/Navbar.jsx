@@ -41,6 +41,8 @@ function NavBar() {
     navigate("/"); // Navigate to the login page
   };
 
+  console.log(user)
+
   return (
     <Box
       bg="#A96CDE"
@@ -84,14 +86,6 @@ function NavBar() {
         </Flex>
         {isLargerThanMobile ? (
           <Flex flex="2" justify="flex-end">
-            {/* For Guests/No User */}
-            {!user && (
-              <Flex mr="4">
-                <ChakraLink as={Link} to="/" mr="4" onClick={handleLinkClick}>
-                  Log In / Sign Up
-                </ChakraLink>
-              </Flex>
-            )}
             {/* For Seekers */}
             {user && user.type === "seeker" && (
               <Flex mr="4">
@@ -156,6 +150,14 @@ function NavBar() {
                 <Box as="button" onClick={handleLogoutClick} mr="4">
                   <ChakraLink>Logout</ChakraLink>
                 </Box>
+              </Flex>
+            )}
+             {/* For Guests/No User */}
+             {!user && (
+              <Flex mr="4">
+                <ChakraLink as={Link} to="/" mr="4" onClick={handleLinkClick}>
+                  Log In / Sign Up
+                </ChakraLink>
               </Flex>
             )}
           </Flex>
