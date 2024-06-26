@@ -102,8 +102,6 @@ function Apply() {
       }
     };
 
-  // console.log(jobId)
-
   const handlePhoneNumberChange = (e) => {
     const digitsOnly = e.target.value.replace(/\D/g, "");
     if (digitsOnly.length <= 10) {
