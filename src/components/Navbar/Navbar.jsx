@@ -112,7 +112,7 @@ function NavBar() {
                   Profile
                 </ChakraLink>
                 {/* Logout button */}
-                  <ChakraLink>Logout</ChakraLink>
+                <ChakraLink>Logout</ChakraLink>
                 {/* <Box as="button" onClick={apiService.logout} mr="4">
                 <ChakraLink>Logout</ChakraLink>
               </Box> */}
@@ -171,179 +171,184 @@ function NavBar() {
             {" "}
             {/* Drawer BG Color */}
             <DrawerCloseButton />
-            <DrawerBody>
-              
-              <ChakraLink
-                as={Link}
-                to="/saved-jobs"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9"
-                color="#EDF6F9"
-                _hover={{
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Your Jobs
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/resume-builder"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9"
-                color="#EDF6F9"
-                _hover={{
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Resume Builder
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/profile-seeker"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9"
-                color="#EDF6F9"
-                _hover={{
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Profile
-              </ChakraLink>
-              {/* Logout */}
-              <Box
-                as="button"
-                onClick={() => {
-                  handleLogoutClick();
-                  setIsOpen(false);
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
-                color="#EDF6F9" // Color of text in hamburger menu
-                _hover={{
-                  // On hover change to these settings
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Logout
-              </Box>
-              <ChakraLink
-                as={Link}
-                to="/post-job"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9"
-                color="#EDF6F9"
-                _hover={{
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Post Job
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/applications"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9"
-                color="#EDF6F9"
-                _hover={{
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                View Applications
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/profile-employer"
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLinkClick();
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9"
-                color="#EDF6F9"
-                _hover={{
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Profile
-              </ChakraLink>
-              {/* Logout */}
-              <Box
-                as="button"
-                onClick={() => {
-                  handleLogoutClick();
-                  setIsOpen(false);
-                }}
-                pb="2"
-                display="block"
-                my="4"
-                fontSize="xl"
-                borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
-                color="#EDF6F9" // Color of text in hamburger menu
-                _hover={{
-                  // On hover change to these settings
-                  textDecoration: "none",
-                  color: "#0E1428",
-                  borderBottom: "1px solid #0E1428",
-                }}
-              >
-                Logout
-              </Box>
-            </DrawerBody>
+            {user && user.type === "seeker" && (
+              <DrawerBody>
+                <ChakraLink
+                  as={Link}
+                  to="/saved-jobs"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLinkClick();
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9"
+                  color="#EDF6F9"
+                  _hover={{
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Your Jobs
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/resume-builder"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLinkClick();
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9"
+                  color="#EDF6F9"
+                  _hover={{
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Resume Builder
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/profile-seeker"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLinkClick();
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9"
+                  color="#EDF6F9"
+                  _hover={{
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Profile
+                </ChakraLink>
+                {/* Logout */}
+                <Box
+                  as="button"
+                  onClick={() => {
+                    handleLogoutClick();
+                    setIsOpen(false);
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
+                  color="#EDF6F9" // Color of text in hamburger menu
+                  _hover={{
+                    // On hover change to these settings
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Logout
+                </Box>
+              </DrawerBody>
+            )}
+            {user && user.type != "seeker" && (
+              <DrawerBody>
+                <ChakraLink
+                  as={Link}
+                  to="/post-job"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLinkClick();
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9"
+                  color="#EDF6F9"
+                  _hover={{
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Post Job
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/applications"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLinkClick();
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9"
+                  color="#EDF6F9"
+                  _hover={{
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  View Applications
+                </ChakraLink>
+                <ChakraLink
+                  as={Link}
+                  to="/profile-employer"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLinkClick();
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9"
+                  color="#EDF6F9"
+                  _hover={{
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Profile
+                </ChakraLink>
+                {/* Logout */}
+                <Box
+                  as="button"
+                  onClick={() => {
+                    handleLogoutClick();
+                    setIsOpen(false);
+                  }}
+                  pb="2"
+                  display="block"
+                  my="4"
+                  fontSize="xl"
+                  borderBottom="1px solid #EDF6F9" // Color of border in hamburger menu
+                  color="#EDF6F9" // Color of text in hamburger menu
+                  _hover={{
+                    // On hover change to these settings
+                    textDecoration: "none",
+                    color: "#0E1428",
+                    borderBottom: "1px solid #0E1428",
+                  }}
+                >
+                  Logout
+                </Box>
+              </DrawerBody>
+            )}
           </DrawerContent>
         </Drawer>
       </Flex>

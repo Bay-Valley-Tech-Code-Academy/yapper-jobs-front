@@ -31,9 +31,9 @@ const useUserStore = create((set, get) => ({
 
       console.log(isEmployer ? "employer" : "seeker")
   
-      // Call fetchUser to get user data and save it to the Zustand store
+      // Call fetchSeeker / Employer to get user data and save it to the Zustand store
       if(!isEmployer){
-        await get().fetchUser(data.jwt);
+        await get().fetchSeeker(data.jwt);
       } else{
         await get().fetchEmployer(data.jwt);
       }
@@ -44,7 +44,7 @@ const useUserStore = create((set, get) => ({
       throw error; // Rethrow the error to handle it in the calling code
     }
   },
-  fetchUser: async () => {
+  fetchSeeker: async () => {
     try {
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");

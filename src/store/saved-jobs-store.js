@@ -94,10 +94,6 @@ const useSavedJobsStore = create((set) => ({
       console.error("Failed to remove job", error);
     }
   },
-  //   addJob: (jobId) => set((state) => ({ savedJobs: [...state.savedJobs, jobId] })),
-  //   removeJob: (jobId) => set((state) => ({
-  //     savedJobs: state.savedJobs.filter((id) => id !== jobId),
-  //   })),
 }));
 
 export default useSavedJobsStore;
