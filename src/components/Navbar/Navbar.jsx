@@ -65,6 +65,9 @@ function NavBar() {
               <ChakraLink as={Link} to="/profile-employer" onClick={handleLinkClick}>
                 Profile
               </ChakraLink>
+              <ChakraLink as={Link} to="/employer-main" onClick={handleLinkClick}>
+                Main
+              </ChakraLink>
             </Flex>
           </Flex>
         ) : (
