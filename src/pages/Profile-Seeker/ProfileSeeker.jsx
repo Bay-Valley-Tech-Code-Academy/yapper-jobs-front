@@ -224,9 +224,9 @@ function ProfileSeeker() {
           <Text fontSize={"large"} ml={4} fontWeight={"bold"}>
             Saved Jobs
           </Text>
-          {savedJobs && savedJobs.map((job) => (
+          {savedJobs && savedJobs.map((job, index) => (
             <SavedJobCard
-              key={job.id}
+              key={index}
               {...job}
               handleRemoveJob={handleRemoveJob}
             />

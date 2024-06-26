@@ -84,6 +84,14 @@ function NavBar() {
         </Flex>
         {isLargerThanMobile ? (
           <Flex flex="2" justify="flex-end">
+            {/* For Guests/No User */}
+            {!user && (
+              <Flex mr="4">
+                <ChakraLink as={Link} to="/" mr="4" onClick={handleLinkClick}>
+                  Log In / Sign Up
+                </ChakraLink>
+              </Flex>
+            )}
             {/* For Seekers */}
             {user && user.type === "seeker" && (
               <Flex mr="4">
@@ -112,10 +120,9 @@ function NavBar() {
                   Profile
                 </ChakraLink>
                 {/* Logout button */}
-                <ChakraLink>Logout</ChakraLink>
-                {/* <Box as="button" onClick={apiService.logout} mr="4">
-                <ChakraLink>Logout</ChakraLink>
-              </Box> */}
+                <Box as="button" onClick={handleLogoutClick} mr="4">
+                  <ChakraLink>Logout</ChakraLink>
+                </Box>
               </Flex>
             )}
             {/* For Employers */}
