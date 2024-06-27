@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { apiService } from '../services/apiRequests';
 import CustomColorMode from '/util/toggleColorMode';
 import { usePasswordToggle } from '/util/passwordUtils';
 import {

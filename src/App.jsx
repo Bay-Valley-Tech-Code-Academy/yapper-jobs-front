@@ -20,7 +20,6 @@ import useUserStore from "./store/user-store";
 
 function App() {
   const { fetchSeeker } = useUserStore(); // Destructure the fetchSeeker function from the user store
-  // const {fetchSavedJobs} = useSavedJobsStore();
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -34,7 +33,6 @@ function App() {
   }, [fetchSeeker]); // Ensure useEffect runs only once
 
   return (
-    // <AuthProvider>
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
@@ -58,7 +56,6 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
-    // </AuthProvider>
   );
 }
 
