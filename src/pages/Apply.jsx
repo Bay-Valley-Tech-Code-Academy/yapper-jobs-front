@@ -46,8 +46,6 @@ function Apply() {
   //   setIsVeteran("");
   // };
   
-
-  
     const handleSubmit = async (event) => {
       event.preventDefault();
     
@@ -101,8 +99,6 @@ function Apply() {
         // Handle error case
       }
     };
-
-  // console.log(jobId)
 
   const handlePhoneNumberChange = (e) => {
     const digitsOnly = e.target.value.replace(/\D/g, "");

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
@@ -30,6 +30,20 @@ function ProfileSeeker() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const { fetchSavedJobs, savedJobs, removeJob } = useSavedJobsStore();
+
+  useEffect(()=> {
+    // Fetch saved jobs when the component mounts using try catch block
+    const fetchJobs = async () => {
+      try {
+        if (user) {
+          await fetchSavedJobs();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchJobs();
+  }, [user, fetchSavedJobs])
 
   const goToResumeBuilder = () => {
     navigate("/resume-builder");
@@ -210,9 +224,9 @@ function ProfileSeeker() {
           <Text fontSize={"large"} ml={4} fontWeight={"bold"}>
             Saved Jobs
           </Text>
-          {savedJobs.map((job) => (
+          {savedJobs && savedJobs.map((job, index) => (
             <SavedJobCard
-              key={job.id}
+              key={index}
               {...job}
               handleRemoveJob={handleRemoveJob}
             />

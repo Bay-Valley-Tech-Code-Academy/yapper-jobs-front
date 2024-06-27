@@ -299,25 +299,6 @@ const JobPosting = () => {
 
   return (
     <Container maxW="container.md" p={4}>
-      <Flex justifyContent="flex-end">
-        <Tooltip
-          label={`Switch to ${colorMode === "light" ? "dark" : "light"} mode`}
-          aria-label="A tooltip"
-          openDelay={500}
-          closeDelay={200}
-        >
-          <Button
-            onClick={toggleColorMode}
-            mr={2}
-            color={colors.buttonColor}
-            backgroundColor={colors.buttonBgColor}
-            _hover={{ bg: colors.buttonHoverColor }}
-            size={["sm", "md", "lg"]}
-          >
-            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-          </Button>
-        </Tooltip>
-      </Flex>
       <Heading as="h1" mb={6}>
         Create Job Posting
       </Heading>

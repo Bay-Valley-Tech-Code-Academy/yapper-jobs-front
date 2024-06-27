@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { BASE_URL } from "./config";
 
 // const BASE_URL = "http://localhost:3000";
-const useUserStore = create((set) => ({
+const useUserStore = create((set, get) => ({
   user: null, //state
   login: async (email, pass, isEmployer) => {
     const endpoint = isEmployer
@@ -25,32 +25,20 @@ const useUserStore = create((set) => ({
   
       const data = await response.json();
   
+      console.log(data)
       // Save JWT to localStorage if available
       if (data.jwt) {
         localStorage.setItem("jwt", data.jwt);
       }
   
-      // Make the GET request to fetch user data
-      const userResponse = await fetch(`${BASE_URL}/seeker`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${data.jwt}`, // Include JWT in headers
-        },
-      });
-  
-      if (!userResponse.ok) {
-        throw new Error("Failed to fetch user data");
+      // Call fetchSeeker / Employer to get user data and save it to the Zustand store
+      if(!isEmployer){
+        await get().fetchSeeker(data.jwt);
+      } else{
+        await get().fetchEmployer(data.jwt);
       }
   
-      const userData = await userResponse.json();
-  
-      // Save user data to the 'user' property in the Zustand store
-      if (userData) {
-        set({ user: userData });
-      }
-  
-      return { user: userData, jwt: data.jwt };
+      return { jwt: data.jwt };
     } catch (error) {
       console.error("Error during login:", error);
       throw error; // Rethrow the error to handle it in the calling code
@@ -76,6 +64,7 @@ const useUserStore = create((set) => ({
   fetchUser: async () => {
     try {
       const jwt = localStorage.getItem("jwt");
+      if (!jwt) throw new Error("No JWT token found");
       const response = await fetch(`${BASE_URL}/seeker`, {
         method: "GET",
         headers: {
@@ -85,18 +74,44 @@ const useUserStore = create((set) => ({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error("Failed to fetch seeker data");
       }
 
       const userData = await response.json();
-      set({ user: userData });
+      //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
+      set({ user: { ...userData, "type": "seeker" } });
+    } catch (error) {
+      console.error("Failed to fetch user", error);
+    }
+  },
+  
+  fetchEmployer: async () => {
+    try {
+      console.log("Fetch Employer Running")
+      const jwt = localStorage.getItem("jwt");
+      if (!jwt) throw new Error("No JWT token found");
+      const response = await fetch(`${BASE_URL}/employer`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`, // Assuming the JWT is stored in localStorage
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch employer data");
+      }
+
+      const userData = await response.json();
+      //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
+      set({ user: { ...userData, "type": "employer" } });
     } catch (error) {
       console.error("Failed to fetch user", error);
     }
   },
   
   forgetPassword: async (email) => {
-    const response = await fetch(`${BASE_URL}/forget-password`, {
+    const response = await fetch(`${BASE_URL}/forgot-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,6 +126,7 @@ const useUserStore = create((set) => ({
 
     return response.json();
   },
+
   resetPassword: async (newPassword, token) => {
     const response = await fetch(`${BASE_URL}/reset-password`, {
       method: "PUT",
@@ -123,6 +139,7 @@ const useUserStore = create((set) => ({
     if (!response.ok) throw new Error("Password reset request failed");
     return response.json();
   },
+
   logout: async () => {
     // if theres no jwt or user in localStorage, return null
     if (!localStorage.getItem("jwt"))

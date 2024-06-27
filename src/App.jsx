@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -19,7 +19,7 @@ import PostJob from "./pages/PostJob";
 import useUserStore from "./store/user-store";
 
 function App() {
-  const { fetchUser } = useUserStore(); // Destructure the fetchUser function from the user store
+  const { fetchSeeker } = useUserStore(); // Destructure the fetchSeeker function from the user store
   // const {fetchSavedJobs} = useSavedJobsStore();
 
   useEffect(() => {
@@ -27,11 +27,11 @@ function App() {
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
       if(jwt){
-        fetchUser();
+        fetchSeeker();
       }
     }
     fetchUserData();
-  }, [fetchUser]); // Ensure useEffect runs only once
+  }, [fetchSeeker]); // Ensure useEffect runs only once
 
   return (
     // <AuthProvider>
