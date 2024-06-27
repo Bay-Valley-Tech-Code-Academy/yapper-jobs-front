@@ -57,7 +57,7 @@ function NavBar() {
             src={colors.logoSrc}
             alt="Yapper Jobs Logo"
             height="35px"
-            onClick={() => navigate("/search")}
+            onClick={() => user.type === 'seeker' ? navigate("/search") : navigate("/employer-main")}
             cursor="pointer"
           />
           <Tooltip
