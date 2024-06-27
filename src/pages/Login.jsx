@@ -39,7 +39,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!email || !pass) {
       toast({
         title: 'Error',
@@ -50,21 +50,34 @@ function Login() {
       });
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
+      const { loginSeeker, loginEmployer } = useUserStore.getState();
       const data = await Promise.all([
-        login(email, pass, isEmployer),
+        isEmployer ? loginEmployer(email, pass) : loginSeeker(email, pass),
         delay(1000),
       ]).then((values) => values[0]);
-
+  
+      if (!data || !data.role) {
+        throw new Error('Failed to retrieve user role');
+      }
+  
+      if (isEmployer && data.role !== 'employer') {
+        throw new Error('Role mismatch: Logged in as seeker but expected employer');
+      }
+  
+      if (!isEmployer && data.role !== 'seeker') {
+        throw new Error('Role mismatch: Logged in as employer but expected seeker');
+      }
+  
       navigate(data.role === 'employer' ? '/employer-main' : '/search');
       setIsEmployer(data.role === 'employer');
     } catch (err) {
       toast({
         title: 'Error',
-        description: 'Failed to login',
+        description: 'Failed to login: ' + err.message,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -74,6 +87,7 @@ function Login() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <ChakraProvider>

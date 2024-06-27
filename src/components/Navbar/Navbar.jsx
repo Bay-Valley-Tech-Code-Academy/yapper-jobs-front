@@ -118,7 +118,7 @@ function NavBar() {
               </Flex>
             )}
             {/* For Employers */}
-            {user && user.type != "employer" && (
+            {user && user.type === "employer" && (
               <Flex>
                 <ChakraLink
                   as={Link}

@@ -1,53 +1,88 @@
 import { create } from "zustand";
 
 const BASE_URL = "http://localhost:3000";
+
 const useUserStore = create((set, get) => ({
-  user: null, //state
-  login: async (email, pass, isEmployer) => {
-    const endpoint = isEmployer
-      ? `${BASE_URL}/login/employer`
-      : `${BASE_URL}/login/seeker`;
-  
+  user: null, // state
+
+  loginSeeker: async (email, pass) => {
+    const endpoint = `${BASE_URL}/login/seeker`;
+
     try {
-      // Make the POST request to login
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email, pass: pass }),
+        body: JSON.stringify({ email, pass }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Sign in request failed");
       }
-  
+
       const data = await response.json();
-  
-      console.log(data)
-      // Save JWT to localStorage if available
-      if (data.jwt) {
-        localStorage.setItem("jwt", data.jwt);
+      if (!data.jwt) {
+        throw new Error("Failed to log in as seeker");
       }
-  
-      // Call fetchSeeker / Employer to get user data and save it to the Zustand store
-      if(!isEmployer){
-        await get().fetchSeeker(data.jwt);
-      } else{
-        await get().fetchEmployer(data.jwt);
+
+      localStorage.setItem("jwt", data.jwt);
+
+      const userData = await get().fetchSeeker(data.jwt);
+      // console.log("user data", userData);
+      if (!userData) {
+        throw new Error("Failed to fetch seeker data");
       }
-  
-      return { jwt: data.jwt };
+
+      return { ...data, role: "seeker" };
     } catch (error) {
       console.error("Error during login:", error);
-      throw error; // Rethrow the error to handle it in the calling code
+      throw error;
+    }
+  },
+
+  // Employer login function
+  loginEmployer: async (email, pass) => {
+    const endpoint = `${BASE_URL}/login/employer`;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, pass }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Sign in request failed");
+      }
+
+      const data = await response.json();
+      if (!data.jwt) {
+        throw new Error("Failed to login as employer");
+      }
+
+      localStorage.setItem("jwt", data.jwt);
+
+      const userData = await get().fetchEmployer(data.jwt);
+      if (!userData) {
+        throw new Error("Failed to fetch employer data");
+      }
+
+      return { ...data, role: "employer" };
+    } catch (error) {
+      console.error("Error during login:", error);
+      throw error;
     }
   },
 
   fetchSeeker: async () => {
     try {
+      // console.log("Fetch seeker running");
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");
+
       const response = await fetch(`${BASE_URL}/seeker`, {
         method: "GET",
         headers: {
@@ -61,18 +96,22 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
-      set({ user: { ...userData, "type": "seeker" } });
+      // console.log("Fetched seeker data:", userData);
+      // set user data and a property of type: "seeker" to the 'user' property in the Zustand store
+      set({ user: { ...userData, type: "seeker" } });
+      return userData; // Return the fetched user data
     } catch (error) {
       console.error("Failed to fetch user", error);
+      return null; // Ensure to return null if fetching fails
     }
   },
 
   fetchEmployer: async () => {
     try {
-      console.log("Fetch Employer Running")
+      // console.log("Fetch Employer Running");
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");
+
       const response = await fetch(`${BASE_URL}/employer`, {
         method: "GET",
         headers: {
@@ -86,10 +125,13 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      //set user data and a property of type: "seeker" to the 'user' property in the Zustand store
-      set({ user: { ...userData, "type": "employer" } });
+      // console.log("Fetched employer data:", userData);
+      // set user data and a property of type: "employer" to the 'user' property in the Zustand store
+      set({ user: { ...userData, type: "employer" } });
+      return userData; // Return the fetched user data
     } catch (error) {
       console.error("Failed to fetch user", error);
+      return null; // Ensure to return null if fetching fails
     }
   },
 
@@ -124,9 +166,8 @@ const useUserStore = create((set, get) => ({
   },
 
   logout: async () => {
-    // if theres no jwt or user in localStorage, return null
-    if (!localStorage.getItem("jwt"))
-      return null;
+    // if there's no jwt or user in localStorage, return null
+    if (!localStorage.getItem("jwt")) return null;
     try {
       const response = await fetch(`${BASE_URL}/logout`, {
         method: "POST",
