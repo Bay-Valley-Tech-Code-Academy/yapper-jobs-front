@@ -28,6 +28,7 @@ function App() {
     const fetchUserData = async () => {
       if(jwt){
         fetchSeeker();
+        fetchSeeker();
       }
     }
     fetchUserData();

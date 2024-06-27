@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomColorMode from "/util/toggleColorMode";
-// import { apiService } from "../services/apiRequests";
 import useUserStore from '../store/user-store';
 import {
   ChakraProvider,
