@@ -74,7 +74,7 @@ const Register = () => {
     setPhoneNumber(numericValue);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     try {
@@ -119,19 +119,39 @@ const Register = () => {
         return;
       }
 
-      const payload = {
-        firstName, 
-        lastName,
-        email, 
-        pass,
-        mobile: phoneNumber,
-        company: selectedRole === "employer" ? businessName : undefined,
-        website: selectedRole === "employer" ? businessWebsite : undefined,
-        industry,
-      };
+      try {
+        const payload = {
+          firstName, 
+          lastName,
+          email, 
+          pass,
+          mobile: phoneNumber,
+          company: selectedRole === "employer" ? businessName : undefined,
+          website: selectedRole === "employer" ? businessWebsite : undefined,
+          industry,
+        };
 
-      apiService.register(selectedRole, payload);
+        console.log('Sending payload:', payload);
 
+        await register(selectedRole, payload);
+
+        toast({
+          title: 'Success',
+          description: 'Successfully registered',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+
+      } catch(err) {
+        toast({
+          title: 'Error',
+          description: 'Failed to register',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
       console.log("Form submitted");
       navigate("/");
     } catch(err) {

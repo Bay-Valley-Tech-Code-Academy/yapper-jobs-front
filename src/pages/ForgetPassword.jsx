@@ -26,6 +26,7 @@ function ForgetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const emailRegex = new RegExp(`[^@]+@[^@]+[^@]+$`);
 
     //checks if email has been filled out
     if (!email) {
@@ -37,6 +38,16 @@ function ForgetPassword() {
         isClosable: true,
       });
       return;
+    }
+
+    if(!emailRegex.test(email)) {
+      toast({
+        title: "Error",
+        description: "Must be valid email format",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
     }
   
     try {

@@ -1,9 +1,32 @@
 import { create } from "zustand";
+import { BASE_URL } from "./config"
 
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
 
 const useUserStore = create((set, get) => ({
   user: null, // state
+
+  register: async (role, data) => {
+    const endpoint = role === "employer" ? `${BASE_URL}/register/employer` : `${BASE_URL}/register/seeker`;
+    try {
+      console.log('Sending request to:', endpoint);
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed'); 
+      }
+      return response.json();
+    } catch(err) {
+      console.error("Error during registration:", err);
+      throw err;
+    }
+  },
 
   loginSeeker: async (email, pass) => {
     const endpoint = `${BASE_URL}/login/seeker`;
@@ -29,7 +52,6 @@ const useUserStore = create((set, get) => ({
       localStorage.setItem("jwt", data.jwt);
 
       const userData = await get().fetchSeeker(data.jwt);
-      // console.log("user data", userData);
       if (!userData) {
         throw new Error("Failed to fetch seeker data");
       }
@@ -79,7 +101,6 @@ const useUserStore = create((set, get) => ({
 
   fetchSeeker: async () => {
     try {
-      // console.log("Fetch seeker running");
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");
 
@@ -96,7 +117,6 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      // console.log("Fetched seeker data:", userData);
       // set user data and a property of type: "seeker" to the 'user' property in the Zustand store
       set({ user: { ...userData, type: "seeker" } });
       return userData; // Return the fetched user data
@@ -108,7 +128,6 @@ const useUserStore = create((set, get) => ({
 
   fetchEmployer: async () => {
     try {
-      // console.log("Fetch Employer Running");
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");
 
@@ -125,7 +144,6 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      // console.log("Fetched employer data:", userData);
       // set user data and a property of type: "employer" to the 'user' property in the Zustand store
       set({ user: { ...userData, type: "employer" } });
       return userData; // Return the fetched user data
