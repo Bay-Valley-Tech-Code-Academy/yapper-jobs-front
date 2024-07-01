@@ -41,8 +41,6 @@ function NavBar() {
     navigate("/"); // Navigate to the login page
   };
 
-  console.log(user)
-
   return (
     <Box
       bg="#A96CDE"

@@ -10,7 +10,15 @@ import {
   Th,
   Td,
   Button,
-  Select
+  Select,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import CustomColorMode from '../../util/toggleColorMode';
 
@@ -24,6 +32,8 @@ const initialApplications = [
 function Applications() {
   const { colors } = CustomColorMode();
   const [applications, setApplications] = useState(initialApplications);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedApplication, setSelectedApplication] = useState(null);
 
   // Function to handle status change
   const handleStatusChange = (id, newStatus) => {
@@ -32,6 +42,11 @@ function Applications() {
         app.id === id ? { ...app, status: newStatus } : app
       )
     );
+  };
+
+  const handleViewApplication = (app) => {
+    setSelectedApplication(app);
+    onOpen();
   };
 
   return (
@@ -54,7 +69,7 @@ function Applications() {
                   <Td>{app.jobTitle}</Td>
                   <Td>{app.applicantName}</Td>
                   <Td>
-                    <Button colorScheme="purple">View</Button>
+                    <Button colorScheme="purple" onClick={() => handleViewApplication(app)}>View</Button>
                   </Td>
                   <Td>
                     <Select
@@ -71,6 +86,28 @@ function Applications() {
           </Table>
         </Box>
       </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Application Details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {selectedApplication && (
+              <>
+                <p><strong>Job Title:</strong> {selectedApplication.jobTitle}</p>
+                <p><strong>Applicant Name:</strong> {selectedApplication.applicantName}</p>
+                <p><strong>Status:</strong> {selectedApplication.status}</p>
+                {/* Add other application details as necessary */}
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="purple" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

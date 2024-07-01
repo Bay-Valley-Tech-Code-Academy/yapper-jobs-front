@@ -19,18 +19,23 @@ import PostJob from "./pages/PostJob";
 import useUserStore from "./store/user-store";
 
 function App() {
-  const { fetchSeeker } = useUserStore(); // Destructure the fetchSeeker function from the user store
+  const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem('jwt');
+
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
-      if(jwt){
-        fetchSeeker();
+      if (jwt) {
+        const seekerData = await fetchSeeker();
+        if (!seekerData) {
+          await fetchEmployer();
+        }
       }
-    }
+    };
+
     fetchUserData();
-  }, [fetchSeeker]); // Ensure useEffect runs only once
+  }, [fetchSeeker, fetchEmployer]); // useEffect dependencies include fetchSeeker and fetchEmployer
 
   return (
     <ChakraProvider>

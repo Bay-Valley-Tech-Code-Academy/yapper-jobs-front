@@ -1,6 +1,5 @@
 import { create } from "zustand";
-
-const BASE_URL = "http://localhost:3000";
+import { BASE_URL } from "./config";
 
 const useUserStore = create((set, get) => ({
   user: null, // state
@@ -29,7 +28,6 @@ const useUserStore = create((set, get) => ({
       localStorage.setItem("jwt", data.jwt);
 
       const userData = await get().fetchSeeker(data.jwt);
-      console.log("user data", userData);
       if (!userData) {
         throw new Error("Failed to fetch seeker data");
       }
@@ -78,7 +76,6 @@ const useUserStore = create((set, get) => ({
   },
   fetchSeeker: async () => {
     try {
-      console.log("Fetch seeker running");
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");
 
@@ -95,7 +92,6 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      console.log("Fetched seeker data:", userData);
       // set user data and a property of type: "seeker" to the 'user' property in the Zustand store
       set({ user: { ...userData, type: "seeker" } });
       return userData; // Return the fetched user data
@@ -107,7 +103,6 @@ const useUserStore = create((set, get) => ({
 
   fetchEmployer: async () => {
     try {
-      console.log("Fetch Employer Running");
       const jwt = localStorage.getItem("jwt");
       if (!jwt) throw new Error("No JWT token found");
 
@@ -124,7 +119,6 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      console.log("Fetched employer data:", userData);
       // set user data and a property of type: "employer" to the 'user' property in the Zustand store
       set({ user: { ...userData, type: "employer" } });
       return userData; // Return the fetched user data

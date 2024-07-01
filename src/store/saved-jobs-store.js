@@ -1,6 +1,7 @@
 import { create } from "zustand";
+import { BASE_URL } from "./config";
 
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
 const useSavedJobsStore = create((set) => ({
   savedJobs: [],
   fetchSavedJobsId: async () => {

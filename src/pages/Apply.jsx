@@ -34,17 +34,6 @@ function Apply() {
   useEffect(() => {
     fetchJobs();
   }, []);
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   setFirstName("");
-  //   setLastName("");
-  //   setPhoneNumber("");
-  //   setCity("");
-  //   setState("");
-  //   setCommute("");
-  //   setAuthorizedToWork("");
-  //   setIsVeteran("");
-  // };
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -66,8 +55,7 @@ function Apply() {
 
     console.log(formData)
 
-    
-      // Step 2: Send data to backend
+    //WORK IN PROGRESS. TO SEND TO BACKEND
       try {
         const response = await fetch('YOUR_BACKEND_ENDPOINT', {
           method: 'POST', // or 'PUT'

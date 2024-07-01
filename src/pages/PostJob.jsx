@@ -10,7 +10,6 @@ import {
   HStack,
   VStack,
   Container,
-  Tooltip,
   Drawer,
   DrawerBody,
   DrawerHeader,
@@ -22,7 +21,6 @@ import {
   IconButton,
   List,
   ListItem,
-  Flex,
   Stepper,
   Step,
   StepIndicator,
@@ -36,7 +34,7 @@ import {
   AlertIcon,
   useToast,
 } from "@chakra-ui/react";
-import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import customColorMode from "../../util/toggleColorMode";
 
 const sections = [
@@ -96,8 +94,6 @@ const JobPosting = () => {
   });
   const [formError, setFormError] = useState("");
 
-  console.log(formData);
-
   const handleInputChange = (e) => {
     const { id, value } = e.target;
 
@@ -123,15 +119,6 @@ const JobPosting = () => {
         return;
       }
     }
-
-    // if (id ==="work-location"){
-    //   let updatedValue = value
-    //   updatedValue = updatedValue === "Remote" ? true : false;
-    //   setFormData({
-    //     ...formData,
-    //     [id]: updatedValue,
-    //   })
-    // }
 
     // Handle the isRemote property
     if (id === "work-location") {
@@ -191,79 +178,25 @@ const JobPosting = () => {
     }));
   };
 
-  // const handleCompleteSection = () => {
-  //   const currentSection = sections[activeStep];
-  //   const requiredFields = currentSection.fields.filter(
-  //     (field) =>
-  //       !currentSection.optionalFields ||
-  //       !currentSection.optionalFields.includes(field)
-  //   );
-  //   const isSectionCompleted = requiredFields.every(
-  //     (field) => formData[field] && formData[field].trim() !== ""
-  //   );
-
-  //   if (!isSectionCompleted) {
-  //     setFormError(
-  //       "Please complete all required fields in the current section before proceeding."
-  //     );
-  //     toast({
-  //       title: "Error",
-  //       jobDescription:
-  //         "Please complete all required fields in the current section before proceeding.",
-  //       status: "error",
-  //       duration: 1000,
-  //       isClosable: true,
-  //     });
-  //     return;
-  //   }
-
-  //   setCompletedSections({
-  //     ...completedSections,
-  //     [activeStep]: true,
-  //   });
-
-  //   setFormError(""); // Clear error message on section complete
-
-  //   if (activeStep === sections.length - 1) {
-  //     // Mark the last step as completed
-  //     setCompletedSections({
-  //       ...completedSections,
-  //       [activeStep]: true,
-  //     });
-  //     toast({
-  //       title: "Success",
-  //       jobDescription: "Job posting created successfully!",
-  //       status: "success",
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //   } else {
-  //     handleNextStep();
-  //   }
-  // };
-
   const handleCompleteSection = () => {
     const currentSection = sections[activeStep];
     const requiredFields = currentSection.fields.filter(
       (field) =>
-        !currentSection.optionalFields ||
-        !currentSection.optionalFields.includes(field)
-    );
-    const isSectionCompleted = requiredFields.every(
-      (field) => {
-        const value = formData[field];
-        return value && (Array.isArray(value) ? value.length > 0 : typeof value === 'string' ? value.trim() !== "" : true);
-      }
+        !currentSection.optionalFields || !currentSection.optionalFields.includes(field)
     );
   
+    const isSectionCompleted = requiredFields.every((field) => {
+      const value = formData[field];
+      return value !== undefined && value !== null && value !== "" && (Array.isArray(value) ? value.length > 0 : true);
+    });
+
+    console.log(formData);
+  
     if (!isSectionCompleted) {
-      setFormError(
-        "Please complete all required fields in the current section before proceeding."
-      );
+      setFormError("Please complete all required fields in the current section before proceeding.");
       toast({
         title: "Error",
-        jobDescription:
-          "Please complete all required fields in the current section before proceeding.",
+        description: "Please complete all required fields in the current section before proceeding.",
         status: "error",
         duration: 1000,
         isClosable: true,
@@ -280,13 +213,9 @@ const JobPosting = () => {
   
     if (activeStep === sections.length - 1) {
       // Mark the last step as completed
-      setCompletedSections({
-        ...completedSections,
-        [activeStep]: true,
-      });
       toast({
         title: "Success",
-        jobDescription: "Job posting created successfully!",
+        description: "Job posting created successfully!",
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -295,6 +224,7 @@ const JobPosting = () => {
       handleNextStep();
     }
   };
+  
   
 
   return (
