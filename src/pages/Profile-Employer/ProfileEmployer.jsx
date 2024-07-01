@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import UpdateEmployerInfo from './UpdateEmployerInfo';
 import ProfileSeekerImg from '../Profile-Seeker/ProfileSeekerImg';
 import TestPic from "/yapper-jobs-defualt-seeker-img.jpg"
+import useUserStore from '../../store/user-store';
 
 {/*Imports for Icons on Profile Summary*/}
 import { FaLocationPin } from 'react-icons/fa6';
@@ -15,8 +16,9 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { CgWebsite } from 'react-icons/cg';
 
-
 function ProfileEmployer() {
+  const {user} = useUserStore();
+  console.log(user)
   const navigate = useNavigate();
 
   const gotoJobPost = () => {
