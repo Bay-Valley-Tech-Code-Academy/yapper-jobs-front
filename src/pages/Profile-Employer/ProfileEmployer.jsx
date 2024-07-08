@@ -1,6 +1,6 @@
 {/*Imports for React and Chakra*/}
 import React from 'react'
-import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image } from '@chakra-ui/react';
+import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, useRadioGroup } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 {/*Imports for Other Page References*/}
@@ -27,6 +27,16 @@ function ProfileEmployer() {
   const gotoApplications = () => {
     navigate("/applications")
   }
+
+  //format employer mobile number
+  const formatPhoneNumber = (mobile) => {
+    const countryCode = mobile.slice(0, 1);
+    const areaCode = mobile.slice(1, 4);
+    const localNumberPart1 = mobile.slice(4, 7);
+    const localNumberPart2 = mobile.slice(7);
+
+    return `+${countryCode}-${areaCode}-${localNumberPart1}-${localNumberPart2}`;
+  }
   return (
     <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
     <Flex direction="column" p={5} bg="white">
@@ -42,7 +52,7 @@ function ProfileEmployer() {
         </Box>
           {/* Employers Information */}
         <VStack align="start">
-          <Heading as="h1" size="lg">Yapper Software</Heading>
+          <Heading as="h1" size="lg">{`${user.first_name} ${user.last_name}`}</Heading>
           <Flex align="center" mt={1}>
             <Text ml={1} spacing = {15}>Software Development</Text>
           </Flex>
@@ -67,7 +77,7 @@ function ProfileEmployer() {
               variant="ghost"
               size="sm"
             />
-            <Text ml={2}>yappercontact@gmail.com</Text>
+            <Text ml={2}>{user.email}</Text>
           </Flex>
           <Flex align="center" mt={1}>
             <IconButton
@@ -77,7 +87,7 @@ function ProfileEmployer() {
               variant="ghost"
               size="sm"
             />
-            <Text ml={2}>123-456-7890</Text>
+            <Text ml={2}>{formatPhoneNumber(user.mobile) ? formatPhoneNumber(user.mobile) : "No Mobile Number"}</Text>
           </Flex>
           <Flex align="center" mt={1}>
             <IconButton
