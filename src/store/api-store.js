@@ -1,10 +1,11 @@
 import { create } from "zustand";
+import { BASE_URL } from "./config";
 
 const useApiStore = create((set, get) => ({
   jobs: [],
   fetchJobs: async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/jobs"); // Replace '/api/jobs' with your actual API endpoint
+      const response = await fetch(`${BASE_URL}/api/jobs`); // Replace '/api/jobs' with your actual API endpoint
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");
       }

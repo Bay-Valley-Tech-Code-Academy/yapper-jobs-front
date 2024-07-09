@@ -22,7 +22,8 @@ function App() {
   const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem('jwt');
+
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
       if(jwt){
@@ -31,19 +32,10 @@ function App() {
           await fetchEmployer();
         }
       }
-    }
+    };
+
     fetchUserData();
   }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once
-
-  // useEffect(() => {
-  //   const jwt  = localStorage.getItem("jwt");
-  //   const fetchEmployerData = async () => {
-  //     if(jwt) {
-  //       fetchEmployer();
-  //     }
-  //   }
-  //   fetchEmployerData();
-  // }, [fetchEmployer]);
 
   return (
     <ChakraProvider>
