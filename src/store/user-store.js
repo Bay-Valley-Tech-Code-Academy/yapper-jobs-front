@@ -1,15 +1,12 @@
 import { create } from "zustand";
 import { BASE_URL } from "./config"
 
-// const BASE_URL = "http://localhost:3000";
-
 const useUserStore = create((set, get) => ({
-  user: null, // state
+  user: null,
 
   register: async (role, data) => {
     const endpoint = role === "employer" ? `${BASE_URL}/register/employer` : `${BASE_URL}/register/seeker`;
     try {
-      console.log('Sending request to:', endpoint);
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {

@@ -224,8 +224,6 @@ const JobPosting = () => {
       handleNextStep();
     }
   };
-  
-  
 
   return (
     <Container maxW="container.md" p={4}>
