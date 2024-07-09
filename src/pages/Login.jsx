@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
-import { apiService } from '../services/apiRequests';
 import { 
   ChakraProvider, 
   Box, 
@@ -19,7 +18,7 @@ import {
   useToast, 
   Tooltip
 } from '@chakra-ui/react';
-
+import useUserStore from '../store/user-store';
 
 function Login() {
   const navigate = useNavigate();
@@ -30,17 +29,17 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
+  // const { login } = useUserStore();
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
-  }
+  };
 
-  //loading before getting redirected to search/ main employer page
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!email || !pass) {
       toast({
         title: 'Error',
@@ -51,22 +50,34 @@ function Login() {
       });
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
+      const { loginSeeker, loginEmployer } = useUserStore.getState();
       const data = await Promise.all([
-        apiService.login(email, pass, isEmployer),
-        delay(1000)
-      ]).then(values => values[0]);
-
+        isEmployer ? loginEmployer(email, pass) : loginSeeker(email, pass),
+        delay(1000),
+      ]).then((values) => values[0]);
+  
+      if (!data || !data.role) {
+        throw new Error('Failed to retrieve user role');
+      }
+  
+      if (isEmployer && data.role !== 'employer') {
+        throw new Error('Role mismatch: Logged in as seeker but expected employer');
+      }
+  
+      if (!isEmployer && data.role !== 'seeker') {
+        throw new Error('Role mismatch: Logged in as employer but expected seeker');
+      }
+  
       navigate(data.role === 'employer' ? '/employer-main' : '/search');
       setIsEmployer(data.role === 'employer');
-
     } catch (err) {
       toast({
         title: 'Error',
-        description: 'Failed to login',
+        description: 'Failed to login: ' + err.message,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -76,6 +87,7 @@ function Login() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <ChakraProvider>
@@ -120,7 +132,7 @@ function Login() {
               backgroundColor={colors.buttonBgColor}
               color={colors.buttonColor}
             >
-              {isEmployer ? "Switch to Seeker" : "Switch to Employer"}
+              {isEmployer ? 'Switch to Seeker' : 'Switch to Employer'}
             </Button>
             <Box flex={1} m={4} mt={6} position="relative">
               <FormControl isRequired>
@@ -178,7 +190,7 @@ function Login() {
                 isLoading={isLoading}
                 loadingText="Signing In..."
               >
-                Sign In as {isEmployer ? "Employer" : "Seeker"}
+                Sign In as {isEmployer ? 'Employer' : 'Seeker'}
               </Button>
             </Box>
             <Text mt={8} textAlign="center">

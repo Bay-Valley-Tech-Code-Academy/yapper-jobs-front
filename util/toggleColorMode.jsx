@@ -12,7 +12,7 @@ function CustomColorMode() {
       buttonColor: '#FFFFFF',
       buttonBgColor: '#000000',
       buttonBorderColor: '#FFFFFF', // Added border color for light mode
-      bgHover: 'gray.300',
+      bgHover: 'gray.300', //input background 
       logoSrc: '/yapperjoblogo.png',
       buttonHoverColor: '#A96CDE',
       buttonHoverBgColor: '#333333',
@@ -31,7 +31,7 @@ function CustomColorMode() {
       buttonColor: '#000000',
       buttonBgColor: '#A96CDE',
       buttonBorderColor: '#000000', // Added border color for dark mode
-      bgHover: 'gray.800',
+      bgHover: 'gray.800', //input background
       logoSrc: '/yapperjoblogo-dark.png',
       buttonHoverColor: '#FFFFFF',
       buttonHoverBgColor: '#FFFFFF',

@@ -12,14 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import useJobStore from "../store/job-store";
+import useSavedJobsStore from "../store/saved-jobs-store";
+import useUserStore from "../store/user-store";
 
 function JobCard(props) {
   const navigate = useNavigate();
-
-  const { savedJobs } = useJobStore((state) => ({
-    savedJobs: state.savedJobs,
-  }));
+  const { user } = useUserStore();
+  const { saveJob, removeJob } = useSavedJobsStore();
 
   const handleClick = (id) => {
     props.setSelectedJob(id);
@@ -27,6 +26,19 @@ function JobCard(props) {
 
   const handleApplyClick = (id) => {
     navigate(`../apply/${id}`);
+  };
+
+  const handleSaveJob = (job_id) => {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      console.error("No user logged in");
+      return;
+    }
+    if (props.isSaved) {
+      removeJob(job_id);
+    } else {
+      saveJob(job_id);
+    }
   };
 
   return (
@@ -48,7 +60,6 @@ function JobCard(props) {
         </Text>
         <Stack direction="row" spacing="2" mt="2" mb="4">
           <Icon as={FaMapMarkerAlt} />
-          {/* <Text fontSize="sm">{props.city}, {props.state}</Text> */}
           <Text fontSize="sm">
             {props.city || props.state
               ? `${props.city}, ${props.state}`
@@ -70,20 +81,16 @@ function JobCard(props) {
           >
             Apply
           </Button>
-          <IconButton
-            aria-label="Save/Unsave"
-            icon={
-              savedJobs.includes(props.job_id) ? (
-                <MdFavorite />
-              ) : (
-                <MdFavoriteBorder />
-              )
-            }
-            colorScheme="purple"
-            variant="ghost"
-            size="sm"
-            onClick={() => props.handleSaveJob(props.job_id)}
-          />
+          {user && (
+            <IconButton
+              aria-label="Save/Unsave"
+              icon={props.isSaved ? <MdFavorite /> : <MdFavoriteBorder />}
+              colorScheme="purple"
+              variant="ghost"
+              size="sm"
+              onClick={() => handleSaveJob(props.job_id)}
+            />
+          )}
         </Stack>
       </Box>
     </Flex>

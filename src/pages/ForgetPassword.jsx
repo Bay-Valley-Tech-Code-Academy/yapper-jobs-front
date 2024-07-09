@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomColorMode from "/util/toggleColorMode";
-import { apiService } from "../services/apiRequests";
+import useUserStore from '../store/user-store';
 import {
   ChakraProvider,
   Box,
@@ -22,9 +22,11 @@ function ForgetPassword() {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const { toggleColorMode, colors } = CustomColorMode();
+  const { forgetPassword } = useUserStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const emailRegex = new RegExp(`[^@]+@[^@]+[^@]+$`);
 
     //checks if email has been filled out
     if (!email) {
@@ -37,9 +39,19 @@ function ForgetPassword() {
       });
       return;
     }
+
+    if(!emailRegex.test(email)) {
+      toast({
+        title: "Error",
+        description: "Must be valid email format",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   
     try {
-      const { token } = await apiService.forgetPassword(email);
+      const { token } = await forgetPassword(email);
 
       localStorage.setItem('token', token);
       
