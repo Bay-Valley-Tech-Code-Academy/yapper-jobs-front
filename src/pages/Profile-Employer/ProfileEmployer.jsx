@@ -1,7 +1,6 @@
-{/*Imports for React and Chakra*/}
-import React from 'react'
 import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, useRadioGroup } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 {/*Imports for Other Page References*/}
 import UpdateEmployerInfo from './UpdateEmployerInfo';
@@ -18,8 +17,15 @@ import { CgWebsite } from 'react-icons/cg';
 
 function ProfileEmployer() {
   const {user} = useUserStore();
-  console.log(user)
+  // console.log(user)
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false);
+    }
+  }, [user]);
 
   const gotoJobPost = () => {
     navigate("/post-job");
@@ -30,13 +36,22 @@ function ProfileEmployer() {
 
   //format employer mobile number
   const formatPhoneNumber = (mobile) => {
-    const countryCode = mobile.slice(0, 1);
-    const areaCode = mobile.slice(1, 4);
-    const localNumberPart1 = mobile.slice(4, 7);
-    const localNumberPart2 = mobile.slice(7);
+    const countryCode = mobile?.slice(0, 1);
+    const areaCode = mobile?.slice(1, 4);
+    const localNumberPart1 = mobile?.slice(4, 7);
+    const localNumberPart2 = mobile?.slice(7);
 
-    return `+${countryCode}-${areaCode}-${localNumberPart1}-${localNumberPart2}`;
+    return mobile ? `+${countryCode}-${areaCode}-${localNumberPart1}-${localNumberPart2}` : "No Mobile Number";
+  };
+
+  if (loading) {
+    return <Text>Loading...</Text>;
   }
+
+  if (!user) {
+    return <Text>Error loading user data.</Text>;
+  }
+  
   return (
     <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
     <Flex direction="column" p={5} bg="white">

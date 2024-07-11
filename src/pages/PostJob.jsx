@@ -645,22 +645,36 @@ const JobPosting = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
+    // title: "",
+    // // company: "",
+    // state: "",
+    // city: "",
+    // // zipcode: "",
+    // experienceLevel: "",
+    // employmentType: "",
+    // isRemote: null,
+    // salaryLow: "",
+    // salaryHigh: "",
+    // companySize: "",
+    // benefits: [],
+    // // skills: "",
+    // certifications: "",
+    // // responsibilities: "",
+    // jobDescription: "",
+    // questions: null,
     title: "",
-    // company: "",
-    state: "",
     city: "",
-    // zipcode: "",
-    "experienceLevel": "",
-    "employmentType": "",
+    state: "",
     isRemote: null,
-    "salaryLow": "",
-    "salaryHigh": "",
-    "companySize": "",
+    experienceLevel: "",
+    employmentType:"",
+    companySize: "",
+    salaryLow: "",
+    salaryHigh: "",
     benefits: [],
-    // skills: "",
-    certifications: "",
-    // responsibilities: "",
+    certifications: [],
     jobDescription: "",
+    expDate: null,
     questions: null,
   });
   const [formError, setFormError] = useState("");
@@ -759,6 +773,9 @@ const JobPosting = () => {
     // Prepare formData with the calculated expiry date
     const formDataWithExpiry = {
       ...formData,
+      benefits: JSON.stringify(formData.benefits),
+      certifications: JSON.stringify(formData.certifications),
+      questions: JSON.stringify(formData.questions),
       expDate: formattedExpiryDate,
     };
 

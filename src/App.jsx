@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -26,16 +26,16 @@ function App() {
 
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
-      if (jwt) {
+      if(jwt){
         const seekerData = await fetchSeeker();
-        if (!seekerData) {
+        if(!seekerData) {
           await fetchEmployer();
         }
       }
     };
 
     fetchUserData();
-  }, [fetchSeeker, fetchEmployer]); // useEffect dependencies include fetchSeeker and fetchEmployer
+  }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once
 
   return (
     <ChakraProvider>

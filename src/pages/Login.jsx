@@ -29,7 +29,6 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
-  const { login } = useUserStore();
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
