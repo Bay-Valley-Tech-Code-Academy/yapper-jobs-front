@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// import DeleteAccount from "./DeleteAccount";
 import {
   Button,
   Modal,
@@ -15,6 +16,7 @@ import {
   Text,
   Box
 } from "@chakra-ui/react";
+import DeleteAccount from "../Profile-Seeker/DeleteAccount";
 
 function UpdateEmployerInfo() {
     const [modal, setModal] = useState(false);
@@ -83,6 +85,7 @@ function UpdateEmployerInfo() {
                                 <FormLabel>Website</FormLabel>
                                 <Input type="text" name="phone" placeholder="Website URL" />
                             </FormControl>
+                            <DeleteAccount />
                         </form>
                         </Box>
                     </ModalBody>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import DeleteAccount from "./DeleteAccount";
+import DeleteAccount from "../../components/DeleteAccount";
 import {
   Button,
   Modal,
