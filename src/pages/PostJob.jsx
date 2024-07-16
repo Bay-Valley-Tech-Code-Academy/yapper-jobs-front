@@ -767,7 +767,6 @@ const JobPosting = () => {
     // Calculate expiry date 1 month from today
     const today = new Date();
     const expiryDate = new Date(today.setMonth(today.getMonth() + 1));
-  
     // Format expiry date as YYYY-MM-DD
     const formattedExpiryDate = `${expiryDate.getFullYear()}-${(expiryDate.getMonth() + 1).toString().padStart(2, '0')}-${expiryDate.getDate().toString().padStart(2, '0')}`;
     // Prepare formData with the calculated expiry date
@@ -778,12 +777,11 @@ const JobPosting = () => {
       questions: JSON.stringify(formData.questions),
       expDate: formattedExpiryDate,
     };
-
-    console.log(formDataWithExpiry)
+  
+    console.log('Form Data with Expiry:', formDataWithExpiry);
   
     try {
       const jwt = localStorage.getItem("jwt");
-
       const response = await fetch("/job/add", {
         method: "POST",
         headers: {
@@ -792,6 +790,8 @@ const JobPosting = () => {
         },
         body: JSON.stringify(formDataWithExpiry),
       });
+  
+      console.log('API Response:', response);
   
       if (!response.ok) {
         throw new Error("Failed to add job");
@@ -816,7 +816,7 @@ const JobPosting = () => {
         isClosable: true,
       });
     }
-  };
+  };  
   
 
   const handleCompleteSection = () => {

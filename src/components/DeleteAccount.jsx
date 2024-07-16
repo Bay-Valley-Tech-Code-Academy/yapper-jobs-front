@@ -16,7 +16,7 @@ import {
 const DeleteAccount = () => {
     const [modal, setModal] = useState(false);
     const navigate = useNavigate();
-    
+
     const toggleModal = () => {
         setModal(!modal);
     };
@@ -32,6 +32,7 @@ const DeleteAccount = () => {
     const handleDeleteAcc = async (e) => {
         e.preventDefault();
         console.log("Deleting Account");
+
         try {
             const response = await fetch('/delete-user', {
                 method: 'GET',
@@ -41,22 +42,28 @@ const DeleteAccount = () => {
                 }
             });
 
-            const result = await response.json();
-            if (response.ok) {
-                alert('Delete link sent to your email');
-                localStorage.removeItem("jwt");
-                localStorage.removeItem("savedJobs");
-                // navigate('/');
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Delete link sent to your email');
+                    localStorage.removeItem("jwt");
+                    localStorage.removeItem("savedJobs");
+                    navigate('/');
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
             } else {
-                alert(`Error: ${result.error}`);
+                const text = await response.text();
+                console.error('Unexpected response:', text);
+                alert('An unexpected error occurred. Please try again.');
             }
         } catch (error) {
             console.error('Error deleting account:', error);
             alert('An error occurred. Please try again.');
         }
-        // toggleModal();
     };
-    
+
     return (
         <ChakraProvider>
             <div className="modal-btn-outside">
@@ -69,10 +76,10 @@ const DeleteAccount = () => {
                     <ModalHeader>Delete Account?</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <form onClick={handleDeleteAcc}>
+                        <form onSubmit={handleDeleteAcc}>
                             <FormControl>
-                                <Text fontSize={20} mt={4} textAlign="left">Deleting your profile will remove all your personal data. This cannot be undone.</Text>
-                                <Button colorScheme='red' mt={4}>Delete</Button>
+                                <Text fontSize={20} mt={4} textAlign="left">Deleting your profile will remove all your personal data. We will send you an email to confirm your deletion.</Text>
+                                <Button colorScheme='red' mt={4} type="submit">Delete</Button>
                             </FormControl>
                         </form>
                     </ModalBody>
