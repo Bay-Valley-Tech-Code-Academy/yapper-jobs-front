@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
@@ -17,18 +17,20 @@ import { jobs } from "../../jobs";
 import SavedJobCard from "../../components/SavedJobCard";
 import AppliedJobCard from "../../components/AppliedJobCard";
 
+import CustomColorMode from '/util/toggleColorMode';
 import { FaLocationPin } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
-import { CgWebsite } from "react-icons/cg";
+// import { CgWebsite } from "react-icons/cg";
 import useUserStore from "../../store/user-store";
 import useSavedJobsStore from "../../store/saved-jobs-store";
 
 function ProfileSeeker() {
   const navigate = useNavigate();
   const { user } = useUserStore();
+  const { colors } = CustomColorMode();
   const { fetchSavedJobs, savedJobs, removeJob } = useSavedJobsStore();
 
   useEffect(()=> {
@@ -64,7 +66,12 @@ function ProfileSeeker() {
 
   return (
     <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
-      <Flex direction="column" p={5} bg="white">
+      <Flex 
+        direction="column" 
+        p={5}
+        bg={colors.pfSections}
+        borderRadius="md"
+      >
         {/* Profile Picture and Contact Information Side by Side */}
         <HStack align="start" spacing={10} mb={4}>
           <Box>
@@ -161,10 +168,11 @@ function ProfileSeeker() {
             width={800}
             maxHeight={450}
             border={"2px solid purple"}
+            borderRadius="md"
             mt={5}
             ml={5}
           >
-            <Text mt={2}>
+            <Text mt={1} p={3}>
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
               quae ab illo inventore veritatis et quasi architecto beatae vitae
@@ -199,7 +207,7 @@ function ProfileSeeker() {
           </Button>
         </Flex>
         <Box
-          bg="gray.100"
+          bg={colors.pfJobSection}
           width={800}
           height={400}
           borderRadius="md"
@@ -215,7 +223,7 @@ function ProfileSeeker() {
           </Box>
         </Box>
         <Box
-          bg="gray.100"
+          bg={colors.pfJobSection}
           width={800}
           height={350}
           borderRadius="md"

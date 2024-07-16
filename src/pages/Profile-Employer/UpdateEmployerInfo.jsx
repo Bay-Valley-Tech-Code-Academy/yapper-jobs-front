@@ -16,7 +16,7 @@ import {
   Text,
   Box
 } from "@chakra-ui/react";
-import DeleteAccount from "../Profile-Seeker/DeleteAccount";
+import DeleteAccount from "../../components/DeleteAccount"
 
 function UpdateEmployerInfo() {
     const [modal, setModal] = useState(false);

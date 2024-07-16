@@ -29,12 +29,31 @@ const DeleteAccount = () => {
         }
     }, [modal]);
 
-    const handleDeleteAcc = (e) => {
+    const handleDeleteAcc = async (e) => {
         e.preventDefault();
         console.log("Deleting Account");
-        localStorage.removeItem("jwt");
-        localStorage.removeItem("savedJobs");
-        navigate('/');
+        try {
+            const response = await fetch('/delete-user', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('Delete link sent to your email');
+                localStorage.removeItem("jwt");
+                localStorage.removeItem("savedJobs");
+                // navigate('/');
+            } else {
+                alert(`Error: ${result.error}`);
+            }
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert('An error occurred. Please try again.');
+        }
         // toggleModal();
     };
     

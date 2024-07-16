@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import useUserStore from '../store/user-store';
 import CustomColorMode from '/util/toggleColorMode';
 import { usePasswordToggle } from '/util/passwordUtils';
 import {
@@ -38,6 +39,7 @@ const Register = () => {
   const [businessWebsite, setBusinessWebsite] = useState("");
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { showPassword: showVerifiedPassword, togglePasswordVisibility: toggleVerifiedPasswordVisibility } = usePasswordToggle();
+  const { register } = useUserStore();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -71,7 +73,7 @@ const Register = () => {
     setPhoneNumber(numericValue);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     try {
@@ -116,19 +118,39 @@ const Register = () => {
         return;
       }
 
-      const payload = {
-        firstName, 
-        lastName,
-        email, 
-        pass,
-        mobile: phoneNumber,
-        company: selectedRole === "employer" ? businessName : undefined,
-        website: selectedRole === "employer" ? businessWebsite : undefined,
-        industry,
-      };
+      try {
+        const payload = {
+          firstName, 
+          lastName,
+          email, 
+          pass,
+          mobile: phoneNumber,
+          company: selectedRole === "employer" ? businessName : undefined,
+          website: selectedRole === "employer" ? businessWebsite : undefined,
+          industry,
+        };
 
-      apiService.register(selectedRole, payload);
+        console.log('Sending payload:', payload);
 
+        await register(selectedRole, payload);
+
+        toast({
+          title: 'Success',
+          description: 'Successfully registered',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+
+      } catch(err) {
+        toast({
+          title: 'Error',
+          description: 'Failed to register',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
       console.log("Form submitted");
       navigate("/");
     } catch(err) {

@@ -4,6 +4,27 @@ import { BASE_URL } from "./config";
 const useUserStore = create((set, get) => ({
   user: null, // state
 
+  register: async (role, data) => {
+    const endpoint = role === "employer" ? `${BASE_URL}/register/employer` : `${BASE_URL}/register/seeker`;
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed'); 
+      }
+      return response.json();
+    } catch(err) {
+      console.error("Error during registration:", err);
+      throw err;
+    }
+  },
+
   loginSeeker: async (email, pass) => {
     const endpoint = `${BASE_URL}/login/seeker`;
 
