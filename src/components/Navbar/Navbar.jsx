@@ -36,8 +36,8 @@ function NavBar() {
     }
   };
 
-  const handleLogoutClick = () => {
-    logout(); // Call the logout function from useUserStore
+  const handleLogoutClick = async () => {
+    await logout(); // Call the logout function from useUserStore
     navigate("/"); // Navigate to the login page
   };
 

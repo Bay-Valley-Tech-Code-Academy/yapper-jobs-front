@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordToggle } from '/util/passwordUtils';
 import CustomColorMode from '/util/toggleColorMode';
@@ -30,6 +30,26 @@ function Login() {
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
   // const { login } = useUserStore();
+  const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
+  
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+
+    // Fetch user data when the component mounts (application initializes)
+    const fetchUserData = async () => {
+      if(jwt){
+        const seekerData = await fetchSeeker();
+        if(!seekerData) {
+          await fetchEmployer();
+          navigate('/employer-main');
+        } else {
+          navigate('/search');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []); // Ensure useEffect runs only once
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);

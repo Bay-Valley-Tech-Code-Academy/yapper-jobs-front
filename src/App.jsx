@@ -20,22 +20,29 @@ import useUserStore from "./store/user-store";
 
 function App() {
   const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
-
+  
+  /* const navigate = useNavigate();
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
 
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
       if(jwt){
+        console.log(1)
         const seekerData = await fetchSeeker();
         if(!seekerData) {
+          console.log(2)
           await fetchEmployer();
+          //navigate('/employer-main');
+        } else {
+          console.log(3)
+          //navigate('/search');
         }
       }
     };
 
     fetchUserData();
-  }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once
+  }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once */
 
   return (
     <ChakraProvider>
