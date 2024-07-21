@@ -140,8 +140,8 @@ function ResetPassword() {
             bg={colors.boxColor}
             p={10}
             borderRadius="md"
-            width={["90vw", "70vw", "50vw"]} // Responsive widths
-            minWidth="300px" // Minimum width
+            width={["90vw", "70vw", "50vw"]} // Breakpoint for smaller screens
+            minWidth="300px"
             minHeight="65vh"
           >
             <Flex justifyContent="flex-end">
