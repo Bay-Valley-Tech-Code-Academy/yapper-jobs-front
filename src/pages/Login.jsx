@@ -29,7 +29,6 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
-  // const { login } = useUserStore();
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
@@ -87,7 +86,6 @@ function Login() {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <ChakraProvider>
@@ -103,16 +101,21 @@ function Login() {
         justifyContent="center"
         alignItems="center"
       >
-        <Flex direction="column" alignItems="center">
+        <Flex direction="column" alignItems="center" width="100%" px={4}>
           <Box
             bg={colors.boxColor}
             p={10}
             borderRadius="md"
-            width="30vw"
+            width={['90%', '60%', '50%', '50%']}
+            minWidth="300px"
             minHeight="65vh"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
           >
-            <Flex justifyContent="flex-end">
-            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
+            <Flex justifyContent="flex-end" width="100%">
+              <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="Switch color theme button" openDelay={500} closeDelay={200}>
                 <Button
                   mr={2}
                   onClick={toggleColorMode}
@@ -123,77 +126,70 @@ function Login() {
                 </Button>
               </Tooltip>
             </Flex>
-            <Text mb={4} ml={4} fontSize="3xl">Welcome {isEmployer ? "Employer" : "Seeker"}</Text>
-            <Heading mb={4} ml={4} fontSize="3xl">Sign in to Yapper Jobs</Heading>
+            <Text mb={2} fontSize="3xl">Welcome {isEmployer ? "Employer," : "Seeker,"}</Text>
+            <Heading mb={4} fontSize="lg" textAlign="center" textDecoration="underline">Sign in to Yapper Jobs</Heading>
             <Button
               onClick={toggleUserType}
               mt={4}
-              ml={4}
               backgroundColor={colors.buttonBgColor}
               color={colors.buttonColor}
             >
               {isEmployer ? 'Switch to Seeker' : 'Switch to Employer'}
             </Button>
-            <Box flex={1} m={4} mt={6} position="relative">
-              <FormControl isRequired>
-                <Input
-                  placeholder="email"
-                  value={email}
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  _hover={{ bg: colors.bgHover }}
-                  minWidth="20vw"
-                  height="3rem"
-                />
-              </FormControl>
-            </Box>
-            <Box flex={1} m={4} mt={5} position="relative">
-              <InputGroup>
-                <Input
-                  placeholder="password"
-                  value={pass}
-                  type={showPassword ? 'text' : 'password'}
-                  onChange={(e) => setPass(e.target.value)}
-                  _hover={{ bg: colors.bgHover }}
-                  isRequired
-                  minWidth="20vw"
-                  height="3rem"
-                />
-                <InputRightElement flex={1} m={1} width="5rem">
-                  <Button
-                    id="check"
-                    type="checkbox"
-                    onClick={togglePasswordVisibility}
-                    _hover={{ bg: colors.buttonHoverColor }}
-                    backgroundColor={colors.buttonBgColor}
-                    color={colors.buttonColor}
-                    cursor="pointer"
-                    size="md"
-                    height="2rem"
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </Box>
+            <FormControl isRequired mt={6} minWidth="300px" maxWidth="500px">
+              <Input
+                placeholder="Email"
+                value={email}
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                _hover={{ bg: colors.bgHover }}
+                height="3rem"
+              />
+            </FormControl>
+            <InputGroup mt={4} minWidth="300px" maxWidth="500px">
+              <Input
+                placeholder="Password"
+                value={pass}
+                type={showPassword ? 'text' : 'password'}
+                onChange={(e) => setPass(e.target.value)}
+                _hover={{ bg: colors.bgHover }}
+                height="3rem"
+                isRequired
+              />
+              <InputRightElement width="5rem">
+                <Button
+                  id="check"
+                  type="checkbox"
+                  onClick={togglePasswordVisibility}
+                  _hover={{ bg: colors.buttonHoverColor }}
+                  backgroundColor={colors.buttonBgColor}
+                  color={colors.buttonColor}
+                  cursor="pointer"
+                  size="md"
+                  height="2rem"
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
             <Text mt={5} textAlign="center">
               <Link color="teal.500" onClick={() => navigate('/forget-password')}>Forgot Password?</Link>
             </Text>
-            <Box flex={1} ml={4} position="relative">
-              <Button
-                mt={8}
-                minWidth="24.2vw"
-                onClick={handleSubmit}
-                backgroundColor={colors.buttonBgColor}
-                color={colors.buttonColor}
-                height="3rem"
-                isLoading={isLoading}
-                loadingText="Signing In..."
-              >
-                Sign In as {isEmployer ? 'Employer' : 'Seeker'}
-              </Button>
-            </Box>
-            <Text mt={8} textAlign="center">
+            <Button
+              mt={8}
+              minWidth="300px"
+              maxWidth="400px"
+              width="100%"
+              onClick={handleSubmit}
+              backgroundColor={colors.buttonBgColor}
+              color={colors.buttonColor}
+              height="3rem"
+              isLoading={isLoading}
+              loadingText="Signing In..."
+            >
+              Sign In as {isEmployer ? 'Employer' : 'Seeker'}
+            </Button>
+            <Text mt={8} textAlign="center" flexWrap="nowrap" width="200px">
               Don&apos;t have an account with us?
               <Link color="teal.500" onClick={() => navigate('/register')}>
                 &nbsp;Sign Up
