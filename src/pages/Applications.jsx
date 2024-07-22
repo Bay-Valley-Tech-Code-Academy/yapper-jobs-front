@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Heading,
@@ -112,4 +112,4 @@ function Applications() {
   );
 }
 
-export default Applications;
+export default Applications

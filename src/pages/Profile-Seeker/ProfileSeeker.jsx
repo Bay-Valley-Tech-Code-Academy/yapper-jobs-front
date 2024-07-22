@@ -47,6 +47,20 @@ function ProfileSeeker() {
     fetchJobs();
   }, [user, fetchSavedJobs])
 
+  useEffect(()=> {
+    // Fetch saved jobs when the component mounts using try catch block
+    const fetchJobs = async () => {
+      try {
+        if (user) {
+          await fetchSavedJobs();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchJobs();
+  }, [user, fetchSavedJobs])
+
   const goToResumeBuilder = () => {
     navigate("/resume-builder");
   };

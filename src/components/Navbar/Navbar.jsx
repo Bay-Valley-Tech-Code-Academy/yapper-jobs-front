@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Flex,
@@ -113,12 +113,12 @@ function NavBar() {
                 </ChakraLink>
                 {/* Logout button */}
                 <Box as="button" onClick={handleLogoutClick} mr="4">
-                  <ChakraLink>Logout</ChakraLink>
-                </Box>
+                <ChakraLink>Logout</ChakraLink>
+              </Box>
               </Flex>
             )}
             {/* For Employers */}
-            {user && user.type != "seeker" && (
+            {user && user.type === "employer" && (
               <Flex>
                 <ChakraLink
                   as={Link}
@@ -150,14 +150,6 @@ function NavBar() {
                 </Box>
               </Flex>
             )}
-             {/* For Guests/No User */}
-             {!user && (
-              <Flex mr="4">
-                <ChakraLink as={Link} to="/" mr="4" onClick={handleLinkClick}>
-                  Log In / Sign Up
-                </ChakraLink>
-              </Flex>
-            )}
           </Flex>
         ) : (
           <IconButton
@@ -178,15 +170,6 @@ function NavBar() {
             {" "}
             {/* Drawer BG Color */}
             <DrawerCloseButton />
-            {/* For Guests/No User */}
-            {!user && (
-              <DrawerBody mr="4">
-                <ChakraLink as={Link} to="/" my="4" onClick={handleLinkClick}>
-                  Log In / Sign Up
-                </ChakraLink>
-              </DrawerBody>
-            )}
-            {/* For Seekers */}
             {user && user.type === "seeker" && (
               <DrawerBody>
                 <ChakraLink
@@ -276,7 +259,6 @@ function NavBar() {
                 </Box>
               </DrawerBody>
             )}
-            {/* For Employers */}
             {user && user.type != "seeker" && (
               <DrawerBody>
                 <ChakraLink
