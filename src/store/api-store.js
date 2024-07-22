@@ -21,6 +21,25 @@ const useApiStore = create((set, get) => ({
     );
     set({ jobs: filteredJobs });
   },
+  postJob: async (job) => {
+    try {
+      const response = await fetch(`${BASE_URL}/job/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+        body: JSON.stringify(job),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to post job");
+      }
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Error posting job:", error);
+    }
+  }
 }));
 
 export default useApiStore;

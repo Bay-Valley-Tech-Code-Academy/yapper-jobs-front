@@ -36,6 +36,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import customColorMode from "../../util/toggleColorMode";
+import useApiStore from "../store/api-store";
 
 const sections = [
   {
@@ -43,10 +44,8 @@ const sections = [
     label: "Basic Information",
     fields: [
       "title",
-      "company",
       "state",
       "city",
-      "zipcode",
       "experienceLevel",
       "employmentType",
       "isRemote",
@@ -62,7 +61,6 @@ const sections = [
     id: "description",
     label: "Description",
     fields: ["jobDescription"],
-    optionalFields: ["responsibilities"],
   },
 ];
 
@@ -72,25 +70,24 @@ const JobPosting = () => {
   const [completedSections, setCompletedSections] = useState({});
   const { colorMode, toggleColorMode, colors } = customColorMode();
   const toast = useToast();
+  
+  const { postJob } = useApiStore();
 
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     title: "",
-    company: "",
-    state: "",
     city: "",
-    zipcode: "",
-    "experienceLevel": "",
-    "employmentType": "",
+    state: "",
     isRemote: null,
-    "salaryLow": "",
-    "salaryHigh": "",
-    "companySize": "",
-    benefits: [],
-    skills: "",
-    certifications: "",
-    responsibilities: "",
+    experienceLevel: "",
+    employmentType: "",
+    companySize: "",
+    salaryLow: "",
+    salaryHigh: "",
     jobDescription: "",
+    benefits: [],
+    skills: [],
+    certifications: [],
   });
   const [formError, setFormError] = useState("");
 
@@ -106,18 +103,6 @@ const JobPosting = () => {
       });
 
       return;
-    }
-
-    // Validation for zipcode
-    if (id === "zipcode") {
-      if (!/^\d*$/.test(value)) {
-        setFormError("Zipcode cannot contain letters");
-        return;
-      }
-      if (value.length > 5) {
-        setFormError("Zipcode cannot be longer than 5 digits");
-        return;
-      }
     }
 
     // Handle the isRemote property
@@ -165,7 +150,16 @@ const JobPosting = () => {
     const { value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      benefits: value.split(",").map((benefit) => benefit.trim()), // Split comma-separated values and trim whitespace
+      benefits: value.split(", "), // Split comma-separated values
+    }));
+  };
+
+  // Handle skills input separately to split comma-separated values
+  const handleSkillsChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      skills: value.split(", "), // Split comma-separated values
     }));
   };
 
@@ -174,11 +168,11 @@ const JobPosting = () => {
     const { value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      certifications: value.split(",").map((certification) => certification.trim()), // Split comma-separated values and trim whitespace
+      certifications: value.split(", "), // Split comma-separated values
     }));
   };
 
-  const handleCompleteSection = () => {
+  const handleCompleteSection = async () => {
     const currentSection = sections[activeStep];
     const requiredFields = currentSection.fields.filter(
       (field) =>
@@ -211,8 +205,10 @@ const JobPosting = () => {
   
     setFormError(""); // Clear error message on section complete
   
+
     if (activeStep === sections.length - 1) {
       // Mark the last step as completed
+      await postJob(formData)
       toast({
         title: "Success",
         description: "Job posting created successfully!",
@@ -347,16 +343,6 @@ const JobPosting = () => {
                   onChange={handleInputChange}
                 />
               </FormControl>
-              <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Company:</FormLabel>
-                <Input
-                  id="company"
-                  placeholder="Enter company name"
-                  height="50px"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
               <HStack spacing={4} pb={4}>
                 <FormControl isRequired>
                   <FormLabel fontWeight="bold">State:</FormLabel>
@@ -379,16 +365,6 @@ const JobPosting = () => {
                   />
                 </FormControl>
               </HStack>
-              <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Zipcode:</FormLabel>
-                <Input
-                  id="zipcode"
-                  placeholder="Enter zipcode"
-                  height="50px"
-                  value={formData.zipcode}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Experience Level:</FormLabel>
                 <Select
@@ -474,8 +450,8 @@ const JobPosting = () => {
                 <Textarea
                   id="skills"
                   placeholder="List required skills"
-                  value={formData.skills}
-                  onChange={handleInputChange}
+                  value={formData.skills.join(", ")}
+                  onChange={handleSkillsChange}
                 />
               </FormControl>
               {/* <FormControl isRequired pb={4}>
@@ -505,7 +481,7 @@ const JobPosting = () => {
                 <Textarea
                   id="certifications"
                   placeholder="List certifications"
-                  value={formData.certifications}
+                  value={formData.certifications.join(", ")}
                   onChange={handleCertificationsChange}
                 />
               </FormControl>
@@ -520,17 +496,6 @@ const JobPosting = () => {
                   id="jobDescription"
                   placeholder="Enter job description"
                   value={formData.jobDescription}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl pb={4}>
-                <FormLabel fontWeight="bold">
-                  Responsibilities (Optional):
-                </FormLabel>
-                <Textarea
-                  id="responsibilities"
-                  placeholder="List responsibilities"
-                  value={formData.responsibilities}
                   onChange={handleInputChange}
                 />
               </FormControl>
