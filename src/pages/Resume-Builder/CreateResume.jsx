@@ -46,11 +46,11 @@ function CreateResume() {
       const [ApplicantSkills, setApplicantSkills] = useState([{skill: "", years: ""}]);
 
       // Function to handle changes to the applicant's information
-      const handleApplicantInfoChange = (index, event) => {
+      const handleExperienceChange = (index, event) => {
         const {name, value} = event.target;
-        let list = [...applicantInfo];
-        newApplicantInfo[index][name] = value;
-        setApplicantInfo(list);
+        let newExperience = [...applicantExperience];
+        newExperience[index] = {...newExperience[index], [name]: value};
+        setApplicantExperience(newExperience);
       };
 
       //Add a new job experience
@@ -70,31 +70,6 @@ function CreateResume() {
         setApplicantSkills([...ApplicantSkills, {skill: "", years: ""}]);
       };
 
-      //Delete a job experience
-      const deleteJobExperience = (index) => {
-        let list = [...applicantExperience];
-        list.splice(index, 1);
-        setApplicantExperience(list);
-      };
-      //Delete an education
-      const deleteEducation = (index) => {
-        let list = [...applicantEducation];
-        list.splice(index, 1);
-        setApplicantEducation(list);
-      };
-      //Delete a certification
-      const deleteCertification = (index) => {
-        let list = [...applicantCertifications];
-        list.splice(index, 1);
-        setApplicantCertifications(list);
-      };
-      //Delete a skill
-      const deleteSkill = (index) => {
-        let list = [...ApplicantSkills];
-        list.splice(index, 1);
-        setApplicantSkills(list);
-      };
-
       //Generate resume
       const DownloadResume = () => {
         // Create a new jsPDF instance
@@ -109,9 +84,21 @@ function CreateResume() {
         doc.text(applicantEmail, 50, 90);
         doc.text(applicantPhone, 50, 110);
         
+        //Creates the sections of the resume
+
+        //Work Experience section
         doc.setFontSize(20);
         doc.text("Work Experience", 50, 130);
-        
+        doc.line(40, 135, 550, 135);
+
+        applicantExperience.forEach((experience) => {
+        doc.text(experience.jobTitle, 50, 150);
+        doc.text(experience.company, 50, 170);
+        doc.text(experience.location, 50, 190);
+        doc.text(experience.startDate + " - " + experience.endDate, 50, 210);
+        doc.text(experience.description, 50, 230);
+        });    
+
         doc.setFontSize(20);
         doc.text("Education", 50, 150);
 
@@ -208,24 +195,63 @@ function CreateResume() {
               </Box>
               <Text as={'header'} ml={5} mt={5} fontSize={25}>Work Experience</Text>
               <Box>
-                <Editable defaultValue='Position' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Company Name' mt={1} mb={0} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Location' mt={1} mb={0} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Job Description' mt={1} mb={0} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
+                {applicantExperience.map((experience, index) => (
+                  <Box key={index}>
+                    <Input
+                      placeholder="Job Title"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={experience.jobTitle}
+                      onChange={(event) => handleExperienceChange(index, event)}
+                    />
+                    <Input
+                      placeholder="Company"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={experience.company}
+                      onChange={(event) => handleExperienceChange(index, event)} 
+                      />
+                    <Input
+                      placeholder="Location"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={experience.location}
+                      onChange={(event) => handleExperienceChange(index, event)}
+                    />
+                    <HStack>
+                      <Input
+                        placeholder="Start Date (MM/YYYY)"
+                        mt={1}
+                        ml={5}
+                        fontSize={15}
+                        value={experience.startDate}
+                        onChange={(event) => handleExperienceChange(index, event)}
+                      />
+                      <Text fontSize={15}> - </Text>
+                      <Input
+                        placeholder="End Date (MM/YYYY)"
+                        mt={1}
+                        ml={5}
+                        fontSize={15}
+                        value={experience.endDate}
+                        onChange={(event) => handleExperienceChange(index, event)}
+                      />
+                    </HStack>
+                    <Input
+                      placeholder="Description"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={experience.description}
+                      onChange={(e) => handleExperienceChange(index, e)} 
+                    />
+                  </Box>
+                ))}
               </Box>
-              <Button ml={7}>+ Add Work Experience</Button>
+              <Button ml={7} onClick={addJobExperience}>+ Add Work Experience</Button>
               <Text as={'header'} ml={5} mt={5} fontSize={25}>Education</Text>
               <Box>
                 <Editable defaultValue='School' mt={1} ml={5} fontSize={15}>
