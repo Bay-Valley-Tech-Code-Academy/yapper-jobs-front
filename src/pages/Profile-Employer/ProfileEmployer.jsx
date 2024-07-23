@@ -18,7 +18,7 @@ import { CgWebsite } from 'react-icons/cg';
 import CustomColorMode from '/util/toggleColorMode';
 
 function ProfileEmployer() {
-  const {user} = useUserStore();
+  const { user } = useUserStore();
   const { colors } = CustomColorMode();
   // console.log(user)
   const navigate = useNavigate();
