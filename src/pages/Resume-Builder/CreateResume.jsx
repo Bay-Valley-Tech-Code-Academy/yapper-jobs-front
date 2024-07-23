@@ -6,12 +6,6 @@ import jsPDF from "jspdf";
 
 
 import ResumeSection from "./ResumeSection";
-import PersonalInfo from "./ResumeBuilderSections/ApplicantInfo";
-import WorkExperience from "./ResumeBuilderSections/ApplicantExp";
-import Language from "./ResumeBuilderSections/ApplicantLang";
-import Certifications from "./ResumeBuilderSections/ApplicantCert";
-import Education from "./ResumeBuilderSections/ApplicantEducation";
-import AppSkill from "./ResumeBuilderSections/ApplicantSkill";
 
 function CreateResume() {
     const [section,setSection] = useState([
@@ -44,6 +38,7 @@ function CreateResume() {
       const [applicantEducation, setApplicantEducation] = useState([{degree: "", school: "", startDate: "", endDate: ""}]);
       const [applicantCertifications, setApplicantCertifications] = useState([{certification: "", organization: "",}]);
       const [ApplicantSkills, setApplicantSkills] = useState([{skill: "", years: ""}]);
+      const [applicantLanguages, setApplicantLanguages] = useState([{language: "", proficiency: ""}]);
 
       // Function to handle changes to the applicant's information
       const handleExperienceChange = (index, event) => {
@@ -68,6 +63,10 @@ function CreateResume() {
       //Add a new skill
       const addSkill = () => {
         setApplicantSkills([...ApplicantSkills, {skill: "", years: ""}]);
+      };
+
+      const addLanguage = () => {
+        setApplicantLanguages([...applicantLanguages, {language: "", proficiency: ""}]);
       };
 
       //Generate resume
@@ -254,61 +253,123 @@ function CreateResume() {
               <Button ml={7} onClick={addJobExperience}>+ Add Work Experience</Button>
               <Text as={'header'} ml={5} mt={5} fontSize={25}>Education</Text>
               <Box>
-                <Editable defaultValue='School' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Degree' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Field of Study' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Location' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Attendance' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
+                {applicantEducation.map((education, index) => (
+                  <Box key={index}>
+                    <Input
+                      placeholder="Degree"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={education.degree}
+                      onChange={(event) => handleExperienceChange(index, event)}
+                    />
+                    <Input
+                      placeholder="School"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={education.school}
+                      onChange={(event) => handleExperienceChange(index, event)}
+                    />
+                    <HStack>
+                      <Input
+                        placeholder="Start Date (MM/YYYY)"
+                        mt={1}
+                        ml={5}
+                        fontSize={15}
+                        value={education.startDate}
+                        onChange={(event) => handleExperienceChange(index, event)}
+                      />
+                      <Text fontSize={15}> - </Text>
+                      <Input
+                        placeholder="End Date (MM/YYYY)"
+                        mt={1}
+                        ml={5}
+                        fontSize={15}
+                        value={education.endDate}
+                        onChange={(event) => handleExperienceChange(index, event)}
+                      />
+                    </HStack>
+                  </Box>
+                ))}
               </Box>
-              <Button ml={7}>+ Add Education</Button>
+              <Button ml={7} onClick={addEducation}>+ Add Education</Button>
               <Text as={'header'} ml={5} mt={5} fontSize={25}>Certifications / Licenses</Text>
               <Box>
-                <Editable defaultValue='Certification' mt={1} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <HStack>
-                  <Editable defaultValue='Start Date (MM/YYYY)' mt={1} ml={5} fontSize={15}>
-                    <EditablePreview />
-                    <EditableInput />
-                  </Editable>
-                  <Text fontSize={15}> - </Text>
-                  <Editable defaultValue='End Date (MM/YYYY)' mt={1} ml={5} fontSize={15}>
-                    <EditablePreview />
-                    <EditableInput />
-                  </Editable>
-                </HStack>
+                {applicantCertifications.map((certification, index) => (
+                  <Box key={index}>
+                    <Input
+                      placeholder="Certification"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={certification.certification}
+                      onChange={(event) => handleExperienceChange(index, event)}
+                    />
+                    <Input
+                      placeholder="Organization"
+                      mt={1}
+                      ml={5}
+                      fontSize={15}
+                      value={certification.organization}
+                      onChange={(event) => handleExperienceChange(index, event)}
+                    />
+                  </Box>
+                ))}
               </Box>
-              <Button ml={7}>+ Add Certifications / Licenses</Button>
+              <Button ml={7} onClick={addCertification}>+ Add Certifications / Licenses</Button>
               <Text as={'header'} ml={5} mt={5} fontSize={25}>Skills</Text>
-              <HStack>
-                <Editable defaultValue='Skill' mt={1} mb={0} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Editable defaultValue='Years of Experience' mt={1} mb={0} ml={5} fontSize={15}>
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
+              <Box>
+                {ApplicantSkills.map((ApplicantSkills, index) => (
+                  <Box key={index}>
+                    <HStack>
+                <Input
+                  placeholder="Skill"
+                  mt={1}
+                  ml={5}
+                  fontSize={15}
+                  value={ApplicantSkills.skill}
+                  onChange={(event) => handleExperienceChange(index, event)}
+                />
+                <Input
+                  placeholder="Years"
+                  mt={1}
+                  ml={5}
+                  fontSize={15}
+                  value={ApplicantSkills.years}
+                  onChange={(event) => handleExperienceChange(index, event)}
+                />
               </HStack>
-              <Button ml={7}>+ Add Skill</Button>
+                    </Box>
+                ))}
+              </Box>
+              <Button ml={7} onClick={addSkill}>+ Add Skill</Button>
               <Text as={'header'} ml={5} mt={5} fontSize={25}>Languages</Text>
-              <Button ml={7}>+ Add Language</Button>
+              <Box>
+                {applicantLanguages.map((language, index) => (
+                  <Box key={index}>
+                    <HStack>
+                      <Input
+                        placeholder="Language"
+                        mt={1}
+                        ml={5}
+                        fontSize={15}
+                        value={language.language}
+                        onChange={(event) => handleExperienceChange(index, event)}
+                      />
+                      <Input
+                        placeholder="Proficiency"
+                        mt={1}
+                        ml={5}
+                        fontSize={15}
+                        value={language.proficiency}
+                        onChange={(event) => handleExperienceChange(index, event)}
+                      />
+                    </HStack>
+                  </Box>
+                ))}
+              </Box>
+              <Button ml={7} onClick={addLanguage}>+ Add Language</Button>
             </Box>
             <Button ml={400} mb={750} colorScheme="purple" onClick={DownloadResume}>Download Resume</Button>
           </HStack>
