@@ -24,6 +24,7 @@ function CustomColorMode() {
       iconSupport: 'dark',
       pfSections: '#FFFFFF',
       pfJobSection: 'gray.100',
+      employerDash: 'purple.100',
       icon: <MoonIcon /> // Icon for light mode
     },
     dark: {
@@ -45,6 +46,7 @@ function CustomColorMode() {
       iconSupport: 'light',
       pfSections: '#2d2d2d',
       pfJobSection: '#2d2d2d',
+      employerDash: '#2d2d2d',
       icon: <SunIcon /> // Icon for dark mode
     },
   };

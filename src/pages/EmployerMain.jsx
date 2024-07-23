@@ -1,13 +1,31 @@
-import React from 'react';
-import "./EmployerMain.css";
-import { Flex, Text, Button, VStack, Box, HStack, Image, Select, Grid, GridItem, Stat, StatLabel, StatNumber, StatHelpText, Tooltip, IconButton, Badge } from '@chakra-ui/react';
+import { 
+  ChakraProvider, 
+  Flex, 
+  Text, 
+  Button, 
+  VStack, 
+  Box, 
+  HStack, 
+  Image, 
+  Select, 
+  Grid, 
+  GridItem, 
+  Stat, 
+  StatLabel, 
+  StatNumber, 
+  StatHelpText, 
+  Tooltip, 
+  IconButton, 
+  Badge 
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-
+import CustomColorMode from '/util/toggleColorMode';
 import TestPic from "/yapper-jobs-defualt-seeker-img.jpg";
 
 function EmployerMain() {
   const navigate = useNavigate();
+  const { colors } = CustomColorMode();
 
   const gotoJobPost = () => {
     navigate("/post-job");
@@ -18,24 +36,25 @@ function EmployerMain() {
   }
 
   return (
-    <Flex direction="column" p={5} mx="auto" bg="white">
+    <ChakraProvider>
+      <Flex direction="column" p={5} mx="auto" color={colors.textColor}>
       {/* Analytics */}
       <Grid templateColumns="repeat(3, 1fr)" gap={6} mb={10}>
-        <GridItem w="100%" h="100px" bg="purple.100" borderRadius="md" p={4}>
-          <Stat>
-            <StatLabel>Total Applications</StatLabel>
+        <GridItem w="100%" h="100px" bg={colors.employerDash} borderRadius="md" p={4}>
+          <Stat color={colors.textColor}>
+            <StatLabel color={colors.textColor}>Total Applications</StatLabel>
             <StatNumber>100</StatNumber>
             <StatHelpText>Last 30 days</StatHelpText>
           </Stat>
         </GridItem>
-        <GridItem w="100%" h="100px" bg="purple.100" borderRadius="md" p={4}>
+        <GridItem w="100%" h="100px" bg={colors.employerDash} borderRadius="md" p={4}>
           <Stat>
             <StatLabel>Total Jobs Posted</StatLabel>
             <StatNumber>10</StatNumber>
             <StatHelpText>Last 30 days</StatHelpText>
           </Stat>
         </GridItem>
-        <GridItem w="100%" h="100px" bg="purple.100" borderRadius="md" p={4}>
+        <GridItem w="100%" h="100px" bg={colors.employerDash} borderRadius="md" p={4}>
           <Stat>
             <StatLabel>Total Interviews</StatLabel>
             <StatNumber>45</StatNumber>
@@ -47,13 +66,13 @@ function EmployerMain() {
       {/* Recent Activity */}
       <VStack align="start" mb={10} width={800}>
         <Text fontSize={40}>Recent Activity</Text>
-        <Box bg="gray.100" width={800} borderRadius="md" p={5}>
+        <Box bg={colors.pfJobSection} width={800} borderRadius="md" p={5}>
           <Text fontSize='large' fontWeight='bold'>Activities</Text>
           <Box mt={5}>
             <Text>New application from Gojo Satoru for Front-End Developer - 14 hrs ago</Text>
           </Box>
           <Box mt={5}>
-            <Text>Eren Yeager's application for Janitor status changed to Denied - 12 hrs ago</Text>
+            <Text>Eren Yeager&apos;s application for Janitor status changed to Denied - 12 hrs ago</Text>
           </Box>
           <Box mt={5}>
             <Text>Interview scheduled for Naruto Uzumaki - October 28, 2024</Text>
@@ -67,7 +86,7 @@ function EmployerMain() {
           <Text fontSize={40}>Job Postings</Text>
           <Button variant="link" colorScheme='purple' onClick={gotoJobPost}>Post New Job</Button>
         </Flex>
-        <Box bg="gray.100" width={800} borderRadius="md" overflowY="auto">
+        <Box bg={colors.pfJobSection} width={800} borderRadius="md" overflowY="auto">
           <Box mt={5} mx={5} p={4} border="1px solid #ccc" borderRadius="md">
             <VStack align="start" spacing={2}>
               <Flex justify="space-between" w="100%">
@@ -148,7 +167,7 @@ function EmployerMain() {
           <Text fontSize={40}>Applications</Text>
           <Button variant="link" colorScheme='purple' onClick={gotoApplications}>View All</Button>
         </Flex>
-        <Box bg="gray.100" width={800} borderRadius="md" overflowY="auto">
+        <Box bg={colors.pfJobSection} width={800} borderRadius="md" overflowY="auto">
           <Text fontSize='large' ml={4} fontWeight='bold'>Incoming</Text>
           <Box mt={5} mx={5} p={4} border="1px solid #ccc" borderRadius="md">
             <HStack>
@@ -271,7 +290,7 @@ function EmployerMain() {
       {/* Interviews */}
       <VStack align="start" mt={10}>
         <Text fontSize={40}>Interviews</Text>
-        <Box bg="gray.100" width={800} borderRadius="md" overflowY="auto">
+        <Box bg={colors.pfJobSection} width={800} borderRadius="md" overflowY="auto">
           <Text fontSize='large' ml={4} fontWeight='bold'>Upcoming</Text>
           <Box mt={5} mx={5} p={4} border="1px solid #ccc" borderRadius="md">
             <HStack>
@@ -341,6 +360,7 @@ function EmployerMain() {
         </Box>
       </VStack>
     </Flex>
+    </ChakraProvider>
   );
 }
 
