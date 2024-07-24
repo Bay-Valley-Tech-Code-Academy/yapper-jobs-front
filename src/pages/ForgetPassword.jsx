@@ -28,7 +28,7 @@ function ForgetPassword() {
     e.preventDefault();
     const emailRegex = new RegExp(`[^@]+@[^@]+[^@]+$`);
 
-    //checks if email has been filled out
+    // Checks if email has been filled out
     if (!email) {
       toast({
         title: "Error",
@@ -40,14 +40,15 @@ function ForgetPassword() {
       return;
     }
 
-    if(!emailRegex.test(email)) {
+    if (!emailRegex.test(email)) {
       toast({
         title: "Error",
         description: "Must be valid email format",
         status: "error",
         duration: 5000,
         isClosable: true,
-      })
+      });
+      return;
     }
   
     try {
@@ -92,43 +93,48 @@ function ForgetPassword() {
             bg={colors.boxColor}
             p={10}
             borderRadius="md"
-            width="30vw"
-            minHeight="65vh"
+            width={["90%", "80%", "90%"]}
+            minWidth="300px"
+            maxWidth="500px"
+            minHeight="60vh"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
           >
-            <Flex justifyContent="flex-end">
-            <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="A tooltip" openDelay={500} closeDelay={200}>
-              <Button
-                onClick={toggleColorMode}
-                mr={2}
-                color={colors.buttonColor}
-                backgroundColor={colors.buttonBgColor}
-              >
-                {colors.icon}
-              </Button>
+            <Flex justifyContent="flex-end" width="100%">
+              <Tooltip label={`Switch to ${colors.iconSupport} mode`} aria-label="Switch color theme button" openDelay={500} closeDelay={200}>
+                <Button
+                  onClick={toggleColorMode}
+                  mr={2}
+                  color={colors.buttonColor}
+                  backgroundColor={colors.buttonBgColor}
+                >
+                  {colors.icon}
+                </Button>
               </Tooltip>
             </Flex>
             <Flex mb={4} alignItems="center" justifyContent="center">
-                <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" />
+              <Image src={colors.logoSrc} alt="Yapper Jobs Logo" height="35px" />
             </Flex>
-            <Heading pt={10} ml={4} textAlign="center">
-              Forget Password?
+            <Heading pt={10} textAlign="center">
+              Forgot Password?
             </Heading>
-            <Heading pt={10} ml={4} size="md" textAlign="center">
-              Type in your email below and we&apos;ll send you a reset password
+            <Heading pt={4} size="md" textAlign="center">
+              Type in your email below and we&apos;ll send you a reset password link.
             </Heading>
-            <Box flex={1} m={4} pt={10} position="relative">
+            <Box mt={6} width="100%">
               <Input
-                placeholder="email"
+                placeholder="Email"
                 value={email}
                 type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 _hover={{ bg: colors.bgHover }}
-                minWidth="20vw"
+                width="100%"
                 height="3rem"
               />
               <Button
-                mt={10}
-                minWidth="24.2vw"
+                mt={6}
+                width="100%"
                 onClick={handleSubmit}
                 backgroundColor={colors.buttonBgColor}
                 color={colors.buttonColor}
@@ -137,7 +143,7 @@ function ForgetPassword() {
                 Send Email
               </Button>
             </Box>
-            <Text mt={10} display="flex" justifyContent="center">
+            <Text mt={6}>
               <Link color="teal.500" onClick={() => navigate("/")}>
                 Go back to Login
               </Link>
