@@ -134,7 +134,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
+  Divider
 } from "@chakra-ui/react";
 import CustomColorMode from '../../util/toggleColorMode';
 
@@ -209,9 +210,14 @@ function Applications() {
                     <Select
                       value={app.status}
                       onChange={(e) => handleStatusChange(app.id, e.target.value)}
+                      style={{ 
+                        color: app.status === 'Declined' ? 'gray' : 'inherit', 
+                        fontStyle: app.status === 'Declined' ? 'italic' : 'normal' }}
                     >
-                      <option value="Accepted">Accepted</option>
+                      <option value="Submitted">Submitted</option> {/* This was left out */}
+                      <option value="Viewed">Viewed</option> {/* This was left out */}
                       <option value="Declined">Declined</option>
+                      <option value="Accepted">Accepted</option>
                     </Select>
                   </Td>
                 </Tr>
@@ -223,14 +229,15 @@ function Applications() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Application Details</ModalHeader>
+          <ModalHeader textAlign="center">Application Details</ModalHeader>
+          <Divider width="90%" mx="auto" mb="20px" />
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody ml="10px">
             {selectedApplication && (
               <>
-                <p><strong>Job Title:</strong> {selectedApplication.title}</p>
-                <p><strong>Applicant Name:</strong> {selectedApplication.first_name} {selectedApplication.last_name}</p>
-                <p><strong>Status:</strong> {selectedApplication.status}</p>
+                <p><strong>Job Title:</strong> {selectedApplication.jobTitle}</p>
+                <p><strong>Applicant Name:</strong> {selectedApplication.applicantName}</p>
+                <p><strong>Status:</strong> <span style={{ color: selectedApplication.status === 'Declined' ? 'gray' : 'inherit', fontStyle: selectedApplication.status === 'Declined' ? 'italic' : 'normal' }}>{selectedApplication.status}</span></p>
                 {/* Add other application details as necessary */}
               </>
             )}
