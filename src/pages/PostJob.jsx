@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Box,
   Heading,
@@ -43,10 +43,8 @@ const sections = [
     label: "Basic Information",
     fields: [
       "title",
-      "company",
       "state",
       "city",
-      "zipcode",
       "experienceLevel",
       "employmentType",
       "isRemote",
@@ -55,14 +53,14 @@ const sections = [
   {
     id: "additional-details",
     label: "Additional Details",
-    fields: ["companySize", "salaryLow", "salaryHigh", "benefits", "skills"],
+    fields: ["companySize", "salaryLow", "salaryHigh", "benefits"
+    ],
     optionalFields: ["certifications"],
   },
   {
     id: "description",
     label: "Description",
     fields: ["jobDescription"],
-    optionalFields: ["responsibilities"],
   },
 ];
 
@@ -76,49 +74,47 @@ const JobPosting = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     title: "",
-    company: "",
-    state: "",
     city: "",
-    zipcode: "",
-    "experienceLevel": "",
-    "employmentType": "",
+    state: "",
     isRemote: null,
-    "salaryLow": "",
-    "salaryHigh": "",
-    "companySize": "",
+    experienceLevel: "",
+    employmentType:"",
+    companySize: "",
+    salaryLow: "",
+    salaryHigh: "",
     benefits: [],
-    skills: "",
-    certifications: "",
-    responsibilities: "",
+    certifications: [],
     jobDescription: "",
+    expDate: null,
+    questions: null,
   });
   const [formError, setFormError] = useState("");
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
 
-    // Capitalize the first letter of the company name
-    if (id === "company") {
-      const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-      setFormData({
-        ...formData,
-        [id]: capitalizedValue,
-      });
+    // // Capitalize the first letter of the company name
+    // if (id === "company") {
+    //   const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
+    //   setFormData({
+    //     ...formData,
+    //     [id]: capitalizedValue,
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
     // Validation for zipcode
-    if (id === "zipcode") {
-      if (!/^\d*$/.test(value)) {
-        setFormError("Zipcode cannot contain letters");
-        return;
-      }
-      if (value.length > 5) {
-        setFormError("Zipcode cannot be longer than 5 digits");
-        return;
-      }
-    }
+    // if (id === "zipcode") {
+    //   if (!/^\d*$/.test(value)) {
+    //     setFormError("Zipcode cannot contain letters");
+    //     return;
+    //   }
+    //   if (value.length > 5) {
+    //     setFormError("Zipcode cannot be longer than 5 digits");
+    //     return;
+    //   }
+    // }
 
     // Handle the isRemote property
     if (id === "work-location") {
@@ -178,41 +174,42 @@ const JobPosting = () => {
     }));
   };
 
-  const handleCompleteSection = () => {
-    const currentSection = sections[activeStep];
-    const requiredFields = currentSection.fields.filter(
-      (field) =>
-        !currentSection.optionalFields || !currentSection.optionalFields.includes(field)
-    );
+  const handleSubmit = async () => {
+    // Calculate expiry date 1 month from today
+    const today = new Date();
+    const expiryDate = new Date(today.setMonth(today.getMonth() + 1));
+    // Format expiry date as YYYY-MM-DD
+    const formattedExpiryDate = `${expiryDate.getFullYear()}-${(expiryDate.getMonth() + 1).toString().padStart(2, '0')}-${expiryDate.getDate().toString().padStart(2, '0')}`;
+    // Prepare formData with the calculated expiry date
+    const formDataWithExpiry = {
+      ...formData,
+      benefits: JSON.stringify(formData.benefits),
+      certifications: JSON.stringify(formData.certifications),
+      questions: JSON.stringify(formData.questions),
+      expDate: formattedExpiryDate,
+    };
   
-    const isSectionCompleted = requiredFields.every((field) => {
-      const value = formData[field];
-      return value !== undefined && value !== null && value !== "" && (Array.isArray(value) ? value.length > 0 : true);
-    });
-
-    console.log(formData);
+    console.log('Form Data with Expiry:', formDataWithExpiry);
   
-    if (!isSectionCompleted) {
-      setFormError("Please complete all required fields in the current section before proceeding.");
-      toast({
-        title: "Error",
-        description: "Please complete all required fields in the current section before proceeding.",
-        status: "error",
-        duration: 1000,
-        isClosable: true,
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const response = await fetch("/job/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${jwt}`
+        },
+        body: JSON.stringify(formDataWithExpiry),
       });
-      return;
-    }
   
-    setCompletedSections({
-      ...completedSections,
-      [activeStep]: true,
-    });
+      console.log('API Response:', response);
   
-    setFormError(""); // Clear error message on section complete
+      if (!response.ok) {
+        throw new Error("Failed to add job");
+      }
   
-    if (activeStep === sections.length - 1) {
-      // Mark the last step as completed
+      const data = await response.json();
+      console.log("Job added successfully:", data);
       toast({
         title: "Success",
         description: "Job posting created successfully!",
@@ -220,11 +217,67 @@ const JobPosting = () => {
         duration: 5000,
         isClosable: true,
       });
+    } catch (error) {
+      console.error("Error adding job:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create job posting",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };  
+  
+
+  const handleCompleteSection = () => {
+    const currentSection = sections[activeStep];
+    const requiredFields = currentSection.fields.filter(
+      (field) =>
+        !currentSection.optionalFields ||
+        !currentSection.optionalFields.includes(field)
+    );
+
+    const isSectionCompleted = requiredFields.every((field) => {
+      const value = formData[field];
+      return (
+        value !== undefined &&
+        value !== null &&
+        value !== "" &&
+        (Array.isArray(value) ? value.length > 0 : true)
+      );
+    });
+
+    if (!isSectionCompleted) {
+      setFormError(
+        "Please complete all required fields in the current section before proceeding."
+      );
+      toast({
+        title: "Error",
+        description:
+          "Please complete all required fields in the current section before proceeding.",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setCompletedSections({
+      ...completedSections,
+      [activeStep]: true,
+    });
+
+    setFormError(""); // Clear error message on section complete
+
+    if (activeStep === sections.length - 1) {
+      // Mark the last step as completed
+      handleSubmit(); // Call handleSubmit to send data to backend
     } else {
       handleNextStep();
     }
   };
-
+  
   return (
     <Container maxW="container.md" p={4}>
       <Heading as="h1" mb={6}>
@@ -347,7 +400,7 @@ const JobPosting = () => {
                   onChange={handleInputChange}
                 />
               </FormControl>
-              <FormControl isRequired pb={4}>
+              {/* <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Company:</FormLabel>
                 <Input
                   id="company"
@@ -356,7 +409,7 @@ const JobPosting = () => {
                   value={formData.company}
                   onChange={handleInputChange}
                 />
-              </FormControl>
+              </FormControl> */}
               <HStack spacing={4} pb={4}>
                 <FormControl isRequired>
                   <FormLabel fontWeight="bold">State:</FormLabel>
@@ -379,7 +432,7 @@ const JobPosting = () => {
                   />
                 </FormControl>
               </HStack>
-              <FormControl isRequired pb={4}>
+              {/* <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Zipcode:</FormLabel>
                 <Input
                   id="zipcode"
@@ -388,7 +441,7 @@ const JobPosting = () => {
                   value={formData.zipcode}
                   onChange={handleInputChange}
                 />
-              </FormControl>
+              </FormControl> */}
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Experience Level:</FormLabel>
                 <Select
@@ -469,21 +522,12 @@ const JobPosting = () => {
                   />
                 </HStack>
               </FormControl>
-              <FormControl isRequired pb={4}>
+              {/* <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Skills:</FormLabel>
                 <Textarea
                   id="skills"
                   placeholder="List required skills"
                   value={formData.skills}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              {/* <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Benefits:</FormLabel>
-                <Textarea
-                  id="benefits"
-                  placeholder="List benefits"
-                  value={formData.benefits}
                   onChange={handleInputChange}
                 />
               </FormControl> */}
@@ -523,7 +567,7 @@ const JobPosting = () => {
                   onChange={handleInputChange}
                 />
               </FormControl>
-              <FormControl pb={4}>
+              {/* <FormControl pb={4}>
                 <FormLabel fontWeight="bold">
                   Responsibilities (Optional):
                 </FormLabel>
@@ -533,7 +577,7 @@ const JobPosting = () => {
                   value={formData.responsibilities}
                   onChange={handleInputChange}
                 />
-              </FormControl>
+              </FormControl> */}
             </Box>
           )}
 

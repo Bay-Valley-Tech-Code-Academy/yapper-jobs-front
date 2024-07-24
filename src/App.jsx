@@ -16,6 +16,7 @@ import Applications from "./pages/Applications";
 import ResetPassword from "./pages/ResetPassword";
 import ForgetPassword from "./pages/ForgetPassword";
 import PostJob from "./pages/PostJob";
+import DeleteConfirmation from "./pages/DeleteConfirmation";
 import useUserStore from "./store/user-store";
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/delete-confirmation" element={<DeleteConfirmation />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
