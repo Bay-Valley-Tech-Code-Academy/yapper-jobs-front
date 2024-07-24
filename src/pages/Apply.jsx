@@ -31,7 +31,7 @@ function Apply() {
 
   // Initialize formData based on job's questions
   useEffect(() => {
-    if (job) {
+    if (job && job.questions) {
       const initialFormData = job.questions.reduce((acc, question) => {
         acc[question] = "";
         return acc;
@@ -175,7 +175,7 @@ function Apply() {
           </Heading>
           <form onSubmit={handleSubmit}>
             <VStack spacing="0.75em" align="stretch">
-              {job.questions.map((question) => (
+              {job.questions && job.questions.map((question) => (
                 <FormControl
                   key={question}
                   isRequired
