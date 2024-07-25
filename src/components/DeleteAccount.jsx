@@ -47,9 +47,9 @@ const DeleteAccount = () => {
                 const result = await response.json();
                 if (response.ok) {
                     alert('Delete link sent to your email');
-                    localStorage.removeItem("jwt");
+                    //localStorage.removeItem("jwt");
                     localStorage.removeItem("savedJobs");
-                    navigate('/');
+                    //navigate('/');
                 } else {
                     alert(`Error: ${result.error}`);
                 }
