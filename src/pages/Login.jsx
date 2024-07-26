@@ -29,6 +29,26 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
+  const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
+  
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+
+    // Fetch user data when the component mounts (application initializes)
+    const fetchUserData = async () => {
+      if(jwt){
+        const seekerData = await fetchSeeker();
+        if(!seekerData) {
+          await fetchEmployer();
+          navigate('/employer-main');
+        } else {
+          navigate('/search');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []); // Ensure useEffect runs only once
 
   const toggleUserType = () => {
     setIsEmployer(!isEmployer);
