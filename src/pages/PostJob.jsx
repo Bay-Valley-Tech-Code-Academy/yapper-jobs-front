@@ -53,9 +53,8 @@ const sections = [
   {
     id: "additional-details",
     label: "Additional Details",
-    fields: ["companySize", "salaryLow", "salaryHigh", "benefits"
-    ],
-    optionalFields: ["certifications"],
+    fields: ["companySize", "salaryLow", "salaryHigh", "benefits"],
+    optionalFields: ["certifications", "questions"],
   },
   {
     id: "description",
@@ -86,7 +85,7 @@ const JobPosting = () => {
     certifications: [],
     jobDescription: "",
     expDate: null,
-    questions: null,
+    questions: [],
   });
   const [formError, setFormError] = useState("");
 
@@ -161,7 +160,7 @@ const JobPosting = () => {
     const { value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      benefits: value.split(",").map((benefit) => benefit.trim()), // Split comma-separated values and trim whitespace
+      benefits: value.split(","), // Split comma-separated values and trim whitespace
     }));
   };
 
@@ -170,11 +169,26 @@ const JobPosting = () => {
     const { value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      certifications: value.split(",").map((certification) => certification.trim()), // Split comma-separated values and trim whitespace
+      certifications: value.split(", "), // Split comma-separated values and trim whitespace
+    }));
+  };
+
+  // Handle questions input
+  const handleQuestionsChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      questions: value.split("? "), // Split questions
     }));
   };
 
   const handleSubmit = async () => {
+    // format questions
+    const que = formData.questions.map((el) => {
+      const str = el.trim();
+      if(str.indexOf('?') === -1) return str + "?";
+      return str;
+    });
     // Calculate expiry date 1 month from today
     const today = new Date();
     const expiryDate = new Date(today.setMonth(today.getMonth() + 1));
@@ -185,7 +199,7 @@ const JobPosting = () => {
       ...formData,
       benefits: JSON.stringify(formData.benefits),
       certifications: JSON.stringify(formData.certifications),
-      questions: JSON.stringify(formData.questions),
+      questions: JSON.stringify(que),
       expDate: formattedExpiryDate,
     };
   
@@ -193,7 +207,7 @@ const JobPosting = () => {
   
     try {
       const jwt = localStorage.getItem("jwt");
-      const response = await fetch("/job/add", {
+      const response = await fetch("http://localhost:3000/job/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -413,13 +427,66 @@ const JobPosting = () => {
               <HStack spacing={4} pb={4}>
                 <FormControl isRequired>
                   <FormLabel fontWeight="bold">State:</FormLabel>
-                  <Input
-                    id="state"
-                    placeholder="Enter state"
-                    height="50px"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                  />
+                  <Select
+                  id="state"
+                  placeholder="Select State"
+                  height="50px"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                >
+
+                  <option value="AL">AL</option>
+                  <option value="AK">AK</option>
+                  <option value="AR">AR</option>
+                  <option value="AZ">AZ</option>
+                  <option value="CA">CA</option>
+                  <option value="CO">CO</option>
+                  <option value="CT">CT</option>
+                  <option value="DC">DC</option>
+                  <option value="DE">DE</option>
+                  <option value="FL">FL</option>
+                  <option value="GA">GA</option>
+                  <option value="HI">HI</option>
+                  <option value="IA">IA</option>
+                  <option value="ID">ID</option>
+                  <option value="IL">IL</option>
+                  <option value="IN">IN</option>
+                  <option value="KS">KS</option>
+                  <option value="KY">KY</option>
+                  <option value="LA">LA</option>
+                  <option value="MA">MA</option>
+                  <option value="MD">MD</option>
+                  <option value="ME">ME</option>
+                  <option value="MI">MI</option>
+                  <option value="MN">MN</option>
+                  <option value="MO">MO</option>
+                  <option value="MS">MS</option>
+                  <option value="MT">MT</option>
+                  <option value="NC">NC</option>
+                  <option value="ND">ND</option>
+                  <option value="NE">NE</option>
+                  <option value="NH">NH</option>
+                  <option value="NJ">NJ</option>
+                  <option value="NM">NM</option>
+                  <option value="NV">NV</option>
+                  <option value="NY">NY</option>
+                  <option value="OH">OH</option>
+                  <option value="OK">OK</option>
+                  <option value="OR">OR</option>
+                  <option value="PA">PA</option>
+                  <option value="PR">PR</option>
+                  <option value="RI">RI</option>
+                  <option value="SC">SC</option>
+                  <option value="SD">SD</option>
+                  <option value="TN">TX</option>
+                  <option value="TX">TX</option>
+                  <option value="UT">UT</option>
+                  <option value="VA">VA</option>
+                  <option value="WA">WA</option>
+                  <option value="WI">WI</option>
+                  <option value="WV">WV</option>
+                  <option value="WY">WY</option>
+                </Select>
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel fontWeight="bold">City:</FormLabel>
@@ -497,10 +564,12 @@ const JobPosting = () => {
                   height="50px"
                   value={formData["companySize"]}
                   onChange={handleInputChange}
-                >
-                  <option value="1-10 employees">1-10 employees</option>
-                  <option value="11-50 employees">11-50 employees</option>
-                  <option value="51-200 employees">51-200 employees</option>
+                > (startup, small business, large corporation
+                  <option value="Startup">Startup</option>
+                  <option value="Small Business">Small Business</option>
+                  <option value="Small Corporation">Small Corporation</option>
+                  <option value="Medium Corporation">Medium Corporation</option>
+                  <option value="Large Corporation">Large Corporation</option>
                 </Select>
               </FormControl>
               <FormControl isRequired pb={4}>
@@ -549,8 +618,20 @@ const JobPosting = () => {
                 <Textarea
                   id="certifications"
                   placeholder="List certifications"
-                  value={formData.certifications}
+                  value={formData.certifications.join(", ")}
                   onChange={handleCertificationsChange}
+                />
+              </FormControl>
+
+              <FormControl pb={4}>
+                <FormLabel fontWeight="bold">
+                  Questions (Optional):
+                </FormLabel>
+                <Textarea
+                  id="questions"
+                  placeholder="List applicant questions"
+                  value={formData.questions.join("? ")}
+                  onChange={handleQuestionsChange}
                 />
               </FormControl>
             </Box>

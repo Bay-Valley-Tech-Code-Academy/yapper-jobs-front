@@ -36,7 +36,7 @@ function App() {
     };
 
     fetchUserData();
-  }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once
+  }, []); // Ensure useEffect runs only once
 
   return (
     <ChakraProvider>
