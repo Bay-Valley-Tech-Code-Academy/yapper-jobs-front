@@ -29,7 +29,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { showPassword, togglePasswordVisibility } = usePasswordToggle();
   const { toggleColorMode, colors } = CustomColorMode();
-  const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
+  const { fetchUser } = useUserStore();
   
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
@@ -37,9 +37,8 @@ function Login() {
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
       if(jwt){
-        const seekerData = await fetchSeeker();
-        if(!seekerData) {
-          await fetchEmployer();
+        const userData = await fetchUser();
+        if(userData.type == "employer") {
           navigate('/employer-main');
         } else {
           navigate('/search');

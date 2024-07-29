@@ -23,11 +23,44 @@ function ProfileEmployer() {
   // console.log(user)
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState({
+    industry: "None",
+    website: "None",
+    mobile: "None",
+  });
 
   useEffect(() => {
-    if (user) {
-      setLoading(false);
+    async function getProf() {
+      try {
+        const response = await fetch('http://localhost:3000/profile', {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+              'Content-Type': 'application/json'
+          }
+        });
+        const result = await response.json();
+        console.log(result)
+        if (response.ok) {
+            setProfile({
+              industry: result.industry,
+              website: result.website,
+              mobile: result.mobile,
+            });
+            setLoading(false);
+        } else {
+            alert(`Error: ${result.error}`);
+        }
+      } catch (error) {
+        alert(`Error: ${error}`);
+        console.error(error);
+      }
     }
+
+    getProf();
+  }, []);
+
+  useEffect(() => {
   }, [user]);
 
   const gotoJobPost = () => {
@@ -51,9 +84,9 @@ function ProfileEmployer() {
     return <Text>Loading...</Text>;
   }
 
-  if (!user) {
+  /* if (!user) {
     return <Text>Error loading user data.</Text>;
-  }
+  } */
   
   return (
     <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
@@ -77,11 +110,11 @@ function ProfileEmployer() {
         <VStack align="start">
           <Heading as="h1" size="lg">{`${user.first_name} ${user.last_name}`}</Heading>
           <Flex align="center" mt={1}>
-            <Text ml={1} spacing = {15}>Software Development</Text>
+            <Text ml={1} spacing = {15}>{profile.industry}</Text>
           </Flex>
-          <Flex align="center" mt={1}>
-            <Text ml={1} spacing = {15}>Less than 12 employees</Text>
-          </Flex>
+          {/* <Flex align="center" mt={1}>
+            <Text ml={1} spacing = {15}>{profile.company_size}</Text>
+          </Flex> */}
           <Flex align="center" mt={1}>
             <IconButton
               aria-label="Location"
@@ -110,7 +143,7 @@ function ProfileEmployer() {
               variant="ghost"
               size="sm"
             />
-            <Text ml={2}>{formatPhoneNumber(user.mobile) ? formatPhoneNumber(user.mobile) : "No Mobile Number"}</Text>
+            <Text ml={2}>{formatPhoneNumber(profile.mobile) ? formatPhoneNumber(profile.mobile) : "No Mobile Number"}</Text>
           </Flex>
           <Flex align="center" mt={1}>
             <IconButton
@@ -130,7 +163,7 @@ function ProfileEmployer() {
               variant="ghost"
               size="sm"
             />
-            <Text ml={2}>Website URL</Text>
+            <Text ml={2}>{profile.website}</Text>
           </Flex>
         </VStack>
       </HStack>

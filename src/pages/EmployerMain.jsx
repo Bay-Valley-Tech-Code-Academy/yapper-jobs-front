@@ -33,7 +33,7 @@ function EmployerMain() {
   useEffect(() => {
     fetchJobs();
     if (user) {
-      fetchSavedJobsId();
+      //fetchSavedJobsId();
       fetchApplications();
       fetchInterviews();
     }

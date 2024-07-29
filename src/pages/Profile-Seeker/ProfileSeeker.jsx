@@ -32,6 +32,32 @@ function ProfileSeeker() {
   const { user } = useUserStore();
   const { colors } = CustomColorMode();
   const { fetchSavedJobs, savedJobs, removeJob } = useSavedJobsStore();
+  const [profile, setProfile] = useState({
+    summary: "",
+  });
+
+  useEffect(async () => {
+    try {
+      const response = await fetch('/profile', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            'Content-Type': 'application/json'
+        }
+      });
+      const result = await response.json();
+      if (response.ok) {
+          setProfile({
+            summary: result.user.summary,
+          });
+          setLoading(false);
+      } else {
+          alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   useEffect(()=> {
     // Fetch saved jobs when the component mounts using try catch block
@@ -124,7 +150,7 @@ function ProfileSeeker() {
                 variant="ghost"
                 size="sm"
               />
-              <Text ml={2}>hollowpuprle@anime.com</Text>
+              <Text ml={2}>{user.email}</Text>
             </Flex>
             <Flex align="center" mt={1}>
               <IconButton
@@ -187,20 +213,7 @@ function ProfileSeeker() {
             ml={5}
           >
             <Text mt={1} p={3}>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-              aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-              eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
-              est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci
-              velit, sed quia non numquam eius modi tempora incidunt ut labore
-              et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
-              veniam, quis nostrum exercitationem ullam corporis suscipit
-              laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
-              vel eum iure reprehenderit qui in ea voluptate velit esse quam
-              nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo
-              voluptas nulla pariatur
+              {profile.summary}
             </Text>
           </Box>
         </Box>

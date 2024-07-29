@@ -20,26 +20,26 @@ import DeleteConfirmation from "./pages/DeleteConfirmation";
 import useUserStore from "./store/user-store";
 
 function App() {
-  const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
-
+  
+  const { fetchUser } = useUserStore();
+  
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
 
     // Fetch user data when the component mounts (application initializes)
     const fetchUserData = async () => {
       if(jwt){
-        const seekerData = await fetchSeeker();
-        if(!seekerData) {
-          await fetchEmployer();
-        }
+        const userData = await fetchUser();
       }
     };
 
     fetchUserData();
   }, []); // Ensure useEffect runs only once
 
+
   return (
     <ChakraProvider>
+
       <BrowserRouter>
         <Routes>
           {/* Routes with Navbar */}

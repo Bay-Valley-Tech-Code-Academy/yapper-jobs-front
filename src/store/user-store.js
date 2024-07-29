@@ -96,6 +96,39 @@ const useUserStore = create((set, get) => ({
     }
   },
 
+  fetchUser: async () => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      if (!jwt) throw new Error("No JWT token found");
+
+      const response = await fetch(`${BASE_URL}/user`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`, // Assuming the JWT is stored in localStorage
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const userData = await response.json();
+      console.log(userData)
+      set({ user: {
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        email: userData.email,
+        type: userData.type,
+        company: !userData.company ? null : userData.company
+      } });
+      return userData; // Return the fetched user data
+    } catch (error) {
+      console.error("Failed to fetch user", error);
+      return null; // Ensure to return null if fetching fails
+    }
+  },
+
   fetchSeeker: async () => {
     try {
       const jwt = localStorage.getItem("jwt");
