@@ -1,8 +1,8 @@
 {/*Imports for React and Chakra*/}
-import React { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, useRadioGroup, useBreakpointValue, Divider } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import customColorMode from "../../../util/toggleColorMode";
+import CustomColorMode from "../../../util/toggleColorMode";
 
 {/*Imports for Other Page References*/}
 import UpdateEmployerInfo from './UpdateEmployerInfo';
@@ -17,12 +17,11 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { CgWebsite } from 'react-icons/cg';
 
-import CustomColorMode from '/util/toggleColorMode';
 
 function ProfileEmployer() {
   const { user } = useUserStore();
   const navigate = useNavigate();
-  const { colorMode, toggleColorMode, colors } = customColorMode();
+  const { colorMode, toggleColorMode, colors } = CustomColorMode();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

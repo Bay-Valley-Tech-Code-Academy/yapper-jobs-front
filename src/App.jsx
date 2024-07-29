@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Layout from "./Layout/Layout";
 import SavedJobs from "./pages/SavedJobs";
 import ResumeBuilder from "./pages/ResumeBuilder";
+import CreateResume from "./pages/CreateResume";
 import Applications from "./pages/Applications";
 import ResetPassword from "./pages/ResetPassword";
 import ForgetPassword from "./pages/ForgetPassword";
@@ -22,7 +23,7 @@ import useUserStore from "./store/user-store";
 function App() {
   const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
 
- /*  useEffect(() => {
+  useEffect(() => {
     const jwt = localStorage.getItem('jwt');
 
     // Fetch user data when the component mounts (application initializes)
@@ -51,6 +52,7 @@ function App() {
             <Route path="profile-seeker" element={<ProfileSeeker />} />
             <Route path="saved-jobs" element={<SavedJobs />} />
             <Route path="resume-builder" element={<ResumeBuilder />} />
+            <Route path="create-resume" element={<CreateResume />} />
             <Route path="/applications" element={<Applications />} />
             <Route path="/post-job" element={<PostJob />} />
           </Route>

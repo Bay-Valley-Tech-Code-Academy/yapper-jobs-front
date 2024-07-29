@@ -37,11 +37,10 @@ const MAX_CHAR_LIMIT = 500;
 function ProfileSeeker() {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  const { colors } = CustomColorMode();
   const { fetchSavedJobs, savedJobs, removeJob } = useSavedJobsStore();
   const [summary, setSummary] = useState("");
   const [charCount, setCharCount] = useState(0);
-  const { colorMode, toggleColorMode, colors } = customColorMode();
+  const { colorMode, toggleColorMode, colors } = CustomColorMode();
 
   // Handle changes to the summary text area
   const handleSummaryChange = (event) => {
