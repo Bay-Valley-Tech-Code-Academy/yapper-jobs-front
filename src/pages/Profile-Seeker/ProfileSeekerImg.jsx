@@ -1,16 +1,18 @@
-import React, { useState, useRef } from "react";
-import { Box, Circle, Image, Input } from "@chakra-ui/react";
+import { useState, useRef } from "react";
+import { Box, Image, Input } from "@chakra-ui/react";
 import TestPic from "./yapper-jobs-defualt-seeker-img.jpg";
+import useUserStore from "../../store/user-store";
 
 function ProfileSeekerImg() {
     const inputRef = useRef(null);
     const [image, setImage] = useState("");
+    const { user, updateUser } = useUserStore();
 
     const handleImgClick = () => {
         inputRef.current.click();
     };
 
-    const imgSelect = (event) => {
+    const imgSelect = async (event) => {
         const file = event.target.files[0];
         if (file) {
             if (file.type.startsWith('image/')) {

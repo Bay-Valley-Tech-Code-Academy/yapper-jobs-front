@@ -1,6 +1,6 @@
 {/*Imports for React and Chakra*/}
-import React from 'react';
-import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, useBreakpointValue, Divider } from '@chakra-ui/react';
+import React { useEffect, useState } from 'react';
+import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, useRadioGroup, useBreakpointValue, Divider } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import customColorMode from "../../../util/toggleColorMode";
 
@@ -17,11 +17,19 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { CgWebsite } from 'react-icons/cg';
 
+import CustomColorMode from '/util/toggleColorMode';
+
 function ProfileEmployer() {
   const { user } = useUserStore();
-  console.log(user);
   const navigate = useNavigate();
   const { colorMode, toggleColorMode, colors } = customColorMode();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false);
+    }
+  }, [user]);
 
   const gotoJobPost = () => {
     navigate("/post-job");

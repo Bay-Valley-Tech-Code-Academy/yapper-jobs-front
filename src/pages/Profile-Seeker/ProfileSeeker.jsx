@@ -22,12 +22,13 @@ import { jobs } from "../../jobs";
 import SavedJobCard from "../../components/SavedJobCard";
 import AppliedJobCard from "../../components/AppliedJobCard";
 
+import CustomColorMode from '/util/toggleColorMode';
 import { FaLocationPin } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
-import { CgWebsite } from "react-icons/cg";
+// import { CgWebsite } from "react-icons/cg";
 import useUserStore from "../../store/user-store";
 import useSavedJobsStore from "../../store/saved-jobs-store";
 
@@ -36,6 +37,7 @@ const MAX_CHAR_LIMIT = 500;
 function ProfileSeeker() {
   const navigate = useNavigate();
   const { user } = useUserStore();
+  const { colors } = CustomColorMode();
   const { fetchSavedJobs, savedJobs, removeJob } = useSavedJobsStore();
   const [summary, setSummary] = useState("");
   const [charCount, setCharCount] = useState(0);

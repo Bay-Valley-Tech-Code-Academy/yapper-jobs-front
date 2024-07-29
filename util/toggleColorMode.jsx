@@ -12,7 +12,7 @@ function CustomColorMode() {
       buttonColor: '#FFFFFF',
       buttonBgColor: '#000000',
       buttonBorderColor: '#FFFFFF', // Added border color for light mode
-      bgHover: 'gray.300', //input background 
+      bgHover: 'gray.300',
       logoSrc: '/yapperjoblogo.png',
       buttonHoverColor: '#A96CDE',
       buttonHoverBgColor: '#333333',
@@ -22,6 +22,9 @@ function CustomColorMode() {
       alertBgColor: 'red.500', // Added alert background color for light mode
       alertTextColor: 'black.300', // Added alert text color for light mode
       iconSupport: 'dark',
+      pfSections: '#FFFFFF',
+      pfJobSection: 'gray.100',
+      employerDash: 'purple.100',
       icon: <MoonIcon /> // Icon for light mode
     },
     dark: {
@@ -31,7 +34,7 @@ function CustomColorMode() {
       buttonColor: '#000000',
       buttonBgColor: '#A96CDE',
       buttonBorderColor: '#000000', // Added border color for dark mode
-      bgHover: 'gray.800', //input background
+      bgHover: 'gray.800',
       logoSrc: '/yapperjoblogo-dark.png',
       buttonHoverColor: '#FFFFFF',
       buttonHoverBgColor: '#FFFFFF',
@@ -41,6 +44,9 @@ function CustomColorMode() {
       alertBgColor: 'red.900', // Added alert background color for dark mode
       alertTextColor: 'red.100', // Added alert text color for dark mode
       iconSupport: 'light',
+      pfSections: '#2d2d2d',
+      pfJobSection: '#2d2d2d',
+      employerDash: '#2d2d2d',
       icon: <SunIcon /> // Icon for dark mode
     },
   };

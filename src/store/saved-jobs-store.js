@@ -4,6 +4,9 @@ import { BASE_URL } from "./config";
 // const BASE_URL = "http://localhost:3000";
 const useSavedJobsStore = create((set) => ({
   savedJobs: [],
+  applications: [],
+  interviews: [],
+
   fetchSavedJobsId: async () => {
     try {
       const jwt = localStorage.getItem("jwt");
@@ -93,6 +96,65 @@ const useSavedJobsStore = create((set) => ({
       return response.json();
     } catch (error) {
       console.error("Failed to remove job", error);
+    }
+  },
+  fetchApplications: async () => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const response = await fetch(`${BASE_URL}/applications`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch applications");
+
+      const data = await response.json();
+      set({ applications: data });
+    } catch (error) {
+      console.error("Failed to fetch applications", error);
+    }
+  },
+  
+  fetchInterviews: async () => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const response = await fetch(`${BASE_URL}/interviews`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch interviews");
+
+      const data = await response.json();
+      set({ interviews: data });
+    } catch (error) {
+      console.error("Failed to fetch interviews", error);
+    }
+  },
+
+  fetchAnalytics: async () => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const response = await fetch(`${BASE_URL}/analytics`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch analytics");
+
+      const data = await response.json();
+      set({ analytics: data });
+    } catch (error) {
+      console.error("Failed to fetch analytics", error);
     }
   },
 }));

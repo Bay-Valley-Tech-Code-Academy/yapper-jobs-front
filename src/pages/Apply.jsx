@@ -18,90 +18,86 @@ import useUserStore from "../store/user-store";
 function Apply() {
   const { jobId } = useParams();
   const { jobs, fetchJobs } = useApiStore();
-  const job = jobs.find((job) => job.job_id === parseInt(jobId));
-  const {user} = useUserStore();
+  const { user } = useUserStore();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [commute, setCommute] = useState("");
-  const [authorizedToWork, setAuthorizedToWork] = useState("");
-  const [isVeteran, setIsVeteran] = useState("");
+  const [formData, setFormData] = useState({});
   const [phoneNumberError, setPhoneNumberError] = useState(false);
 
   useEffect(() => {
     fetchJobs();
   }, []);
-  
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-    
-    // Step 1: Gather form data
-    const formData = {
-      jobId: jobId,
-      answers: {
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        city: city,
-        state: state,
-        commute: commute === "Yes", // Converts "Yes" to true, anything else to false
-        authorizedToWork: authorizedToWork === "Yes",
-        isVeteran: isVeteran === "Yes"
+
+  const job = jobs.find((job) => job.job_id === parseInt(jobId));
+
+  // Initialize formData based on job's questions
+  useEffect(() => {
+    if (job && job.questions) {
+      const initialFormData = job.questions.reduce((acc, question) => {
+        acc[question] = "";
+        return acc;
+      }, {});
+      setFormData(initialFormData);
+    }
+  }, [job]);
+
+  const handleChange = (e, question) => {
+    const value = e.target.value;
+    if (question === "Phone Number") {
+      const digitsOnly = value.replace(/\D/g, "");
+      if (digitsOnly.length <= 10) {
+        setFormData((prev) => ({ ...prev, [question]: digitsOnly }));
+        setPhoneNumberError(digitsOnly.length !== 10);
       }
-    };
-
-    console.log(formData)
-
-    //WORK IN PROGRESS. TO SEND TO BACKEND
-      try {
-        const response = await fetch('YOUR_BACKEND_ENDPOINT', {
-          method: 'POST', // or 'PUT'
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-    
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-    
-        const data = await response.json();
-        console.log('Submission successful', data);
-        // Handle success response
-    
-        // Step 3: Reset form fields after successful submission
-        setFirstName("");
-        setLastName("");
-        setPhoneNumber("");
-        setCity("");
-        setState("");
-        setCommute("");
-        setAuthorizedToWork("");
-        setIsVeteran("");
-      } catch (error) {
-        console.error('Error during submission:', error);
-        // Handle error case
+    } else if (question === "State") {
+      if (value.length <= 2) {
+        setFormData((prev) => ({ ...prev, [question]: value.toUpperCase() }));
       }
-    };
-
-  const handlePhoneNumberChange = (e) => {
-    const digitsOnly = e.target.value.replace(/\D/g, "");
-    if (digitsOnly.length <= 10) {
-      setPhoneNumber(digitsOnly);
-      // Check if the length is exactly 10 digits to hide/show the error message
-      setPhoneNumberError(digitsOnly.length !== 10);
+    } else {
+      setFormData((prev) => ({ ...prev, [question]: value }));
     }
   };
 
-  const handleStateChange = (e) => {
-    const input = e.target.value;
-    // Limit the input to 2 characters
-    if (input.length <= 2) {
-      setState(input.toUpperCase()); // Optionally convert to uppercase
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formattedData = {
+      jobId: jobId,
+      answers: {
+        ...formData,
+        commute: formData["Will you be able to make the commute?"] === "Yes",
+        authorizedToWork:
+          formData["Are you authorized to work in the United States?"] ===
+          "Yes",
+        isVeteran: formData["Are you a veteran?"] === "Yes",
+      },
+    };
+
+    try {
+      const jwt = localStorage.getItem("jwt");
+      console.log(formattedData);
+      const response = await fetch(`/job/apply/${jobId}/submit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(formattedData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Submission successful", data);
+      setFormData(
+        job.questions.reduce((acc, question) => {
+          acc[question] = "";
+          return acc;
+        }, {})
+      );
+    } catch (error) {
+      console.error("Error during submission:", error);
     }
   };
 
@@ -179,129 +175,48 @@ function Apply() {
           </Heading>
           <form onSubmit={handleSubmit}>
             <VStack spacing="0.75em" align="stretch">
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="firstName">First Name:</FormLabel>
-                <Input
-                  id="firstName"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                />
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="lastName">Last Name:</FormLabel>
-                <Input
-                  id="lastName"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                />
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="phoneNumber">Phone Number:</FormLabel>
-                <Input
-                  id="phoneNumber"
-                  type="tel"
-                  value={phoneNumber}
-                  // onChange={(e) => setPhoneNumber(e.target.value)}
-                  onChange={handlePhoneNumberChange}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                />
-                {/* Conditionally render the error message */}
-                {phoneNumberError && (
-                  <Text color="red.500">
-                    Phone number must be exactly 10 digits.
-                  </Text>
-                )}
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="city">City:</FormLabel>
-                <Input
-                  id="city"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                />
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="state">State:</FormLabel>
-                <Input
-                  id="state"
-                  value={state}
-                  // onChange={(e) => setState(e.target.value)}
-                  onChange={handleStateChange}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                />
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="commute">
-                  Will you be able to make the commute? (Yes/No):
-                </FormLabel>
-                <Select
-                  id="commute"
-                  value={commute}
-                  onChange={(e) => setCommute(e.target.value)}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
+              {job.questions && job.questions.map((question) => (
+                <FormControl
+                  key={question}
+                  isRequired
+                  className="form-group"
+                  maxW="30em"
                 >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </Select>
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="authorizedToWork">
-                  Are you authorized to work in the United States? (Yes/No):
-                </FormLabel>
-                <Select
-                  id="authorizedToWork"
-                  value={authorizedToWork}
-                  onChange={(e) => setAuthorizedToWork(e.target.value)}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </Select>
-              </FormControl>
-              <FormControl isRequired className="form-group" maxW="30em">
-                <FormLabel htmlFor="isVeteran">
-                  Are you a veteran? (Yes/No):
-                </FormLabel>
-                <Select
-                  id="isVeteran"
-                  value={isVeteran}
-                  onChange={(e) => setIsVeteran(e.target.value)}
-                  bg="rgb(95, 94, 94)"
-                  border="1px solid #fff"
-                  borderRadius="0.25em"
-                  p="0.5em"
-                >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </Select>
-              </FormControl>
+                  <FormLabel htmlFor={question}>{question}:</FormLabel>
+                  {["Will you be able to make the commute?", "Are you authorized to work in the United States?", "Are you a veteran?"].includes(
+                    question
+                  ) ? (
+                    <Select
+                      id={question}
+                      value={formData[question]}
+                      onChange={(e) => handleChange(e, question)}
+                      bg="rgb(95, 94, 94)"
+                      border="1px solid #fff"
+                      borderRadius="0.25em"
+                      p="0.5em"
+                    >
+                      <option value="">Select</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </Select>
+                  ) : (
+                    <Input
+                      id={question}
+                      value={formData[question]}
+                      onChange={(e) => handleChange(e, question)}
+                      bg="rgb(95, 94, 94)"
+                      border="1px solid #fff"
+                      borderRadius="0.25em"
+                      p="0.5em"
+                    />
+                  )}
+                  {question === "Phone Number" && phoneNumberError && (
+                    <Text color="red.500">
+                      Phone number must be exactly 10 digits.
+                    </Text>
+                  )}
+                </FormControl>
+              ))}
               <Button
                 type="submit"
                 bg="#663399"

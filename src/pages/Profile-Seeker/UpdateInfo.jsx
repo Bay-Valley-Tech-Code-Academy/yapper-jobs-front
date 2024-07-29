@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import DeleteAccount from "../../components/DeleteAccount";
 import {
   Button,
   Modal,
@@ -53,7 +54,7 @@ function UpdateInfo() {
                     <Box height={650} overflowY="auto">
                         <form onSubmit={handleSubmit}>
                             <FormControl>
-                              <Text fontSize={20} textAlign="center">Intro</Text>
+                              <Text fontSize={20} mt={4} textAlign="center">Intro</Text>
                                 <FormLabel>First Name</FormLabel>
                                 <Input type="text" name="firstname" placeholder="Your first name.." />
                             </FormControl>
@@ -73,14 +74,14 @@ function UpdateInfo() {
                                 </Select>
                             </FormControl>
                             <FormControl>
-                            <Text fontSize={20} textAlign="center">Experience</Text>
+                            <Text fontSize={20} mt={4} textAlign="center">Experience</Text>
                                 <FormLabel>Job Title</FormLabel>
                                 <Input type="text" name="jobtitle" placeholder="Job Title" />
                                 <FormLabel>Company</FormLabel>
                                 <Input type="text" name="companyname" placeholder="Company Name" />
                             </FormControl>
                             <FormControl>
-                            <Text fontSize={20} textAlign="center">Contact Info</Text>
+                            <Text fontSize={20} mt={4} textAlign="center">Contact Info</Text>
                                 <FormLabel>Email</FormLabel>
                                 <Input type="text" name="email" placeholder="Email" />
                                 <FormLabel>Phone Number</FormLabel>
@@ -100,6 +101,7 @@ function UpdateInfo() {
                                     <option value="other">Other</option>
                                 </Select>
                             </FormControl>
+                            <DeleteAccount />
                         </form>
                         </Box>
                     </ModalBody>

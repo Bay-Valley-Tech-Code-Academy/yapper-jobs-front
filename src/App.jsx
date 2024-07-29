@@ -16,12 +16,13 @@ import Applications from "./pages/Applications";
 import ResetPassword from "./pages/ResetPassword";
 import ForgetPassword from "./pages/ForgetPassword";
 import PostJob from "./pages/PostJob";
+import DeleteConfirmation from "./pages/DeleteConfirmation";
 import useUserStore from "./store/user-store";
 
 function App() {
   const { fetchSeeker, fetchEmployer } = useUserStore(); // Destructure the fetchSeeker function from the user store
 
-  useEffect(() => {
+ /*  useEffect(() => {
     const jwt = localStorage.getItem('jwt');
 
     // Fetch user data when the component mounts (application initializes)
@@ -35,7 +36,7 @@ function App() {
     };
 
     fetchUserData();
-  }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once
+  }, [fetchSeeker, fetchEmployer]); // Ensure useEffect runs only once */
 
   return (
     <ChakraProvider>
@@ -58,6 +59,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/confirm-delete" element={<DeleteConfirmation />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
