@@ -15,9 +15,11 @@ import {
   Text,
   Box
 } from "@chakra-ui/react";
+import customColorMode from "../../../util/toggleColorMode";
 
 function UpdateInfo() {
     const [modal, setModal] = useState(false);
+    const { colorMode, toggleColorMode, colors } = customColorMode();
     
     const toggleModal = () => {
         setModal(!modal);
@@ -40,7 +42,7 @@ function UpdateInfo() {
     return (
         <>
             <div className="modal-btn-outside">
-                <Button colorScheme="purple" onClick={toggleModal}>Edit Profile</Button>
+                <Button color={colors.buttonColor} bgColor={colors.buttonBgColor} onClick={toggleModal}>Edit Profile</Button>
             </div>
             <Modal isOpen={modal} onClose={toggleModal}>
                 <ModalOverlay />

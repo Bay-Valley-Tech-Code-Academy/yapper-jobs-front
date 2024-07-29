@@ -1,12 +1,13 @@
 {/*Imports for React and Chakra*/}
-import React from 'react'
-import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image } from '@chakra-ui/react';
+import React from 'react';
+import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, useBreakpointValue, Divider } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import customColorMode from "../../../util/toggleColorMode";
 
 {/*Imports for Other Page References*/}
 import UpdateEmployerInfo from './UpdateEmployerInfo';
 import ProfileSeekerImg from '../Profile-Seeker/ProfileSeekerImg';
-import TestPic from "/yapper-jobs-defualt-seeker-img.jpg"
+import TestPic from "/yapper-jobs-defualt-seeker-img.jpg";
 import useUserStore from '../../store/user-store';
 
 {/*Imports for Icons on Profile Summary*/}
@@ -17,315 +18,164 @@ import { FaLinkedin } from "react-icons/fa";
 import { CgWebsite } from 'react-icons/cg';
 
 function ProfileEmployer() {
-  const {user} = useUserStore();
-  console.log(user)
+  const { user } = useUserStore();
+  console.log(user);
   const navigate = useNavigate();
+  const { colorMode, toggleColorMode, colors } = customColorMode();
 
   const gotoJobPost = () => {
     navigate("/post-job");
-  }
+  };
   const gotoApplications = () => {
-    navigate("/applications")
-  }
-  return (
-    <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
-    <Flex direction="column" p={5} bg="white">
-      {/* Profile Picture and Contact Information Side by Side */}
-      <HStack align="start" spacing={10} mb={4}>
-        <Box>
-            {/* Profile Picture*/}
-            <ProfileSeekerImg />
-            {/* Edit Profile Button */}
-              <Box ml={5} mt={5}>
-                <UpdateEmployerInfo/>
-              </Box>
-        </Box>
-          {/* Employers Information */}
-        <VStack align="start">
-          <Heading as="h1" size="lg">Yapper Software</Heading>
-          <Flex align="center" mt={1}>
-            <Text ml={1} spacing = {15}>Software Development</Text>
-          </Flex>
-          <Flex align="center" mt={1}>
-            <Text ml={1} spacing = {15}>Less than 12 employees</Text>
-          </Flex>
-          <Flex align="center" mt={1}>
-            <IconButton
-              aria-label="Location"
-              icon={<FaLocationPin />}
-              colorScheme="purple"
-              variant="ghost"
-              size="sm"
-            />
-            <Text ml={1}>California, US</Text>
-          </Flex>
-          <Flex align="center" mt={1}>
-            <IconButton
-              aria-label="Email"
-              icon={<MdEmail />}
-              colorScheme="purple"
-              variant="ghost"
-              size="sm"
-            />
-            <Text ml={2}>yappercontact@gmail.com</Text>
-          </Flex>
-          <Flex align="center" mt={1}>
-            <IconButton
-              aria-label="PhoneNumber"
-              icon={<FaPhoneAlt/>}
-              colorScheme="purple"
-              variant="ghost"
-              size="sm"
-            />
-            <Text ml={2}>123-456-7890</Text>
-          </Flex>
-          <Flex align="center" mt={1}>
-            <IconButton
-              aria-label="LinkedInURL"
-              icon={<FaLinkedin/>}
-              colorScheme="purple"
-              variant="ghost"
-              size="sm"
-            />
-            <Text ml={2}>LinkedIn Profile URL</Text>
-          </Flex>
-          <Flex align="center" mt={1}>
-            <IconButton
-              aria-label="WebsiteURL"
-              icon={<CgWebsite/>}
-              colorScheme="purple"
-              variant="ghost"
-              size="sm"
-            />
-            <Text ml={2}>Website URL</Text>
-          </Flex>
-        </VStack>
-      </HStack>
+    navigate("/applications");
+  };
 
-      {/* Jobs Postings */}
-      <Box mb={10} mt={10}>
-        <Flex ml={5} >
-        <Heading as="h2" size="md">Job Postings</Heading>
-        <Flex ml={5}>
-        <Button colorScheme="purple" variant={'link'} onClick={gotoJobPost}>View All</Button>
+  const isDesktop = useBreakpointValue({ base: false, md: true });
+
+  return (
+    <Flex direction="column" p={5}>
+      <Flex direction={isDesktop ? "row" : "column"} w="full" mb={5}>
+        {/* Employers Information */}
+        <Flex direction="column" bg={colors.dividerColor} p={5} borderRadius="md" mb={isDesktop ? 0 : 5} w={isDesktop ? "70%" : "full"}>
+          {/* Profile Picture and Contact Information Side by Side */}
+          <HStack align="start" spacing={5}>
+            <VStack align="center" spacing={3}>
+              <Box>
+                <ProfileSeekerImg />
+              </Box>
+              {/* Edit Profile Button */}
+              <Box mt={3}>
+                <UpdateEmployerInfo />
+              </Box>
+            </VStack>
+            <VStack align="start" spacing={3}>
+              <Heading as="h1" size="lg">Bay Valley Tech Software</Heading>
+              <Text>Software Development</Text>
+              <Text>11 - 50 Employees (Small Business)</Text>
+              <Flex align="center">
+                <IconButton aria-label="Location" icon={<FaLocationPin />} colorScheme="purple" variant="ghost" size="sm" />
+                <Text ml={1}>Modesto, CA</Text>
+              </Flex>
+              <Flex align="center">
+                <IconButton aria-label="Email" icon={<MdEmail />} colorScheme="purple" variant="ghost" size="sm" />
+                <Text ml={2}>yappercontact@gmail.com</Text>
+              </Flex>
+              <Flex align="center">
+                <IconButton aria-label="PhoneNumber" icon={<FaPhoneAlt />} colorScheme="purple" variant="ghost" size="sm" />
+                <Text ml={2}>209-456-7810</Text>
+              </Flex>
+              <Flex align="center">
+                <IconButton aria-label="LinkedInURL" icon={<FaLinkedin />} colorScheme="purple" variant="ghost" size="sm" />
+                <Text ml={2} color="blue.500" textDecoration="underline">LinkedIn Profile URL</Text>
+              </Flex>
+              <Flex align="center">
+                <IconButton aria-label="WebsiteURL" icon={<CgWebsite />} colorScheme="purple" variant="ghost" size="sm" />
+                <Text ml={2} color="teal.500" textDecoration="underline">Website URL</Text>
+              </Flex>
+            </VStack>
+          </HStack>
         </Flex>
+
+        {/* Job Postings */}
+        <Flex direction="column" bg={colors.dividerColor} p={5} borderRadius="md" w={isDesktop ? "30%" : "full"} ml={isDesktop ? 5 : 0}>
+          <Flex justify="space-between" align="center" mb={3}>
+            <Heading as="h2" size="md">Job Postings</Heading>
+            <Button variant="link" onClick={gotoJobPost} colorScheme="purple">View All</Button>
+          </Flex>
+
+          <Divider color={colors.textColor} />
+
+          <Box mt={3}>
+            <VStack align="start" spacing={3}>
+              <Box>
+                <Text fontWeight="bold" fontSize="lg">Backend Developer</Text>
+                <Text>Posted: 2 days ago</Text>
+                <Text>Location: Remote</Text>
+                <Text color="gray.600">Looking for a skilled Backend Developer with experience in Node.js and Express.</Text>
+              </Box>
+              <Divider width="50%"/>
+              <Box>
+                <Text fontWeight="bold" fontSize="lg">Project Manager</Text>
+                <Text>Posted: 1 week ago</Text>
+                <Text>Location: New York, NY</Text>
+                <Text color="gray.600">Seeking an experienced Project Manager to lead cross-functional teams and deliver complex projects.</Text>
+              </Box>
+            </VStack>
+          </Box>
         </Flex>
-      </Box>
-      <Box bg="gray.100" width={800} height={400} borderRadius="md" overflowY="auto" mt={-7}>        
-        <Box bg="gray.300" height={200}>
-          <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={'black'} overflowY="auto">Front-End Developer</Button>
-          <Text fontWeight={'bold'} fontSize={15} ml={5} mb={3}>Posted 14 days ago</Text>
-          <Text ml={5} fontSize={15}>Looking for a front end developer with a minimum of 2 years work experience with knowledge of JavaScript, HTML, CSS, Chakra UI, and basic knowledge of Git  </Text>
-        </Box>
-        <Box bg="gray.300" height={200}>
-          <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={'black'}>Backend Developer</Button>
-          <Text fontWeight={'bold'} fontSize={15} ml={5} mb={3}>Posted 1 day ago</Text>
-          <Text ml={5} fontSize={15}>Urgently hiring a backend developer. Looking for minimum 4 years experience with proficient with MySQL, Firebase, Insomnia, and Netlify. Extensive knowledge of APIS is a requirement</Text>
-        </Box><Box bg="gray.300" height={200}>
-          <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={'black'}>Janitor / Groundskeeper</Button>
-          <Text ml={5} fontSize={15}>Looking for janitor to clean toilets, thats it. We pay</Text>
-        </Box>
-      </Box>
       </Flex>
-        
-        {/* Applications */}
-        <VStack align="start">
-        <Flex>
-        <Text fontSize={40}>Applications</Text>
-        <Button variant="link" colorScheme='purple' ml={500} mt={10} onClick={gotoApplications}>View All </Button>
+
+      {/* Applications */}
+      <Flex direction={isDesktop ? "row" : "column"} w="full">
+        {/* Outgoing Applications */}
+        <Flex direction="column" bg={colors.dividerColor} p={5} borderRadius="md" mb={isDesktop ? 0 : 5} w={isDesktop ? "50%" : "full"} mr={isDesktop ? 5 : 0}>
+          <Text fontSize="lg" fontWeight="bold" mb={3}>Outgoing Applications</Text>
+          <Divider color="red.500" />
+          <Box mt={3}>
+            <VStack align="start" spacing={3}>
+              <HStack spacing={3}>
+                <Image src={TestPic} alt="Johnathon Smith" borderRadius="full" boxSize="75px" border="5px solid purple" objectFit="cover" />
+                <VStack align="start">
+                  <Text fontWeight="bold">Johnathon Smith</Text>
+                  <Text>Position: Front-End Developer</Text>
+                  <Text>Applied: 14 hrs ago</Text>
+                </VStack>
+              </HStack>
+              <HStack spacing={3}>
+                <Image src={TestPic} alt="Mary Jane" borderRadius="full" boxSize="75px" border="5px solid purple" objectFit="cover" />
+                <VStack align="start">
+                  <Text fontWeight="bold">Mary Jane</Text>
+                  <Text>Position: Backend Developer</Text>
+                  <Text>Applied: 2 days ago</Text>
+                </VStack>
+              </HStack>
+              <HStack spacing={3}>
+                <Image src={TestPic} alt="Michael Kirby" borderRadius="full" boxSize="75px" border="5px solid purple" objectFit="cover" />
+                <VStack align="start">
+                  <Text fontWeight="bold">Michael Kirby</Text>
+                  <Text>Position: UX/UI Designer</Text>
+                  <Text>Applied: 1 week ago</Text>
+                </VStack>
+              </HStack>
+            </VStack>
+          </Box>
         </Flex>
-        <Box bg="gray.100" width={800} height={400} borderRadius="md" overflowY="auto">
-        <Text fontSize={'large'} ml={4} fontWeight={'bold'}>Incoming </Text>
-          {/*Basic Box For Incoming Applicants*/}
-          <Box mt={5}>
-          <HStack>
-            <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-              <VStack align={'start'}>
-                <Text fontWeight={'bold'}>Joe Mama</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text>Applied : 14 hrs ago</Text>
-                </VStack>
-            </HStack>
-        </Box>
-        <Box mt={5}>
-        <HStack>
-        <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>Eren Yeager</Text>
-                <Text>Position : Janitor</Text>
-                <Text>Applied : 14 hrs ago</Text>
+        {/* Application Responses */}
+        <Flex direction="column" bg={colors.dividerColor} p={5} borderRadius="md" w={isDesktop ? "50%" : "full"}>
+          <Text fontSize="lg" fontWeight="bold" mb={3}>Responses</Text>
+          <Divider />
+          <Box mt={3}>
+            <VStack align="start" spacing={3}>
+              <HStack spacing={3}>
+                <Image src={TestPic} alt="George Washington" borderRadius="full" boxSize="75px" border="5px solid purple" objectFit="cover" />
+                <VStack align="start">
+                  <Text fontWeight="bold">George Washington</Text>
+                  <Text>Position: Front-End Developer</Text>
+                  <Text color="red">Status: Denied</Text>
                 </VStack>
               </HStack>
-        </Box>
-        <Box mt={5}>
-        <HStack>
-        <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>Tanjiro Kamado</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text>Applied : 15 hrs ago</Text>
+              <HStack spacing={3}>
+                <Image src={TestPic} alt="Alexander Hamilton" borderRadius="full" boxSize="75px" border="5px solid purple" objectFit="cover" />
+                <VStack align="start">
+                  <Text fontWeight="bold">Alexander Hamilton</Text>
+                  <Text>Position: Backend Developer</Text>
+                  <Text color="green">Status: Approved</Text>
                 </VStack>
               </HStack>
-        </Box>
-        <Box mt={5}>
-        <HStack>
-        <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>Goku</Text>
-                <Text>Position : Backend Developer</Text>
-                <Text>Applied : 19 hrs ago</Text>
+              <HStack spacing={3}>
+                <Image src={TestPic} alt="Abraham Lincoln" borderRadius="full" boxSize="75px" border="5px solid purple" objectFit="cover" />
+                <VStack align="start">
+                  <Text fontWeight="bold">Abraham Lincoln</Text>
+                  <Text>Position: Project Manager</Text>
+                  <Text color="blue">Status: Under Review</Text>
                 </VStack>
               </HStack>
-        </Box>
-      </Box>
-          {/*Replied Box*/}
-      <Box bg="gray.100" width={800} height={350} borderRadius="md" overflowY="auto">
-        <Text fontSize={'large'} ml={5} fontWeight={'bold'}>Replied</Text>
-          {/*Basic Box For Replied Applicants*/}
-        <Box mt={5}>
-          <HStack>
-          <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>George Washington</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text color={'red'}>Status : Denied</Text>
-                </VStack>
-              </HStack>
-        </Box>
-        <Box mt={5}>
-          <HStack>
-          <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>John F. Kennedy</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text color={'red'}>Status : Denied</Text>
-                </VStack>
-              </HStack>
-        </Box>
-        <Box mt={5}>
-          <HStack>
-          <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>Abraham Lincoln</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text color={'#D69E2E'}>Status : Interview Pending</Text>
-                </VStack>
-              </HStack>
-        </Box>
-        <Box mt={5}>
-          <HStack>
-          <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>John Adams</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text color={'green'}>Status : Hired </Text>
-                </VStack>
-              </HStack>
-        </Box>
-        <Box mt={5}>
-          <HStack>
-          <Image
-                    className="seeker-img"
-                    src={TestPic}
-                    alt="Default Profile Pic"
-                    borderRadius="full"
-                    boxSize="75px"
-                    border="5px solid purple"
-                    objectFit="cover"
-                    ml={4}
-                    mt={2}
-                />
-                <VStack align={'start'}>
-                <Text fontWeight={'bold'}>Benjamin Franklin</Text>
-                <Text>Position : Front-End Developer</Text>
-                <Text color={'green'}>Status : Hired</Text>
-                </VStack>
-              </HStack>
-        </Box>
-      </Box>
-      </VStack>
+            </VStack>
+          </Box>
+        </Flex>
+      </Flex>
     </Flex>
-  )
+  );
 }
 
 export default ProfileEmployer;
