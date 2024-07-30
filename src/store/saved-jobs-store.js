@@ -6,6 +6,7 @@ const useSavedJobsStore = create((set) => ({
   savedJobs: [],
   applications: [],
   interviews: [],
+  jobPostings: [],
 
   fetchSavedJobsId: async () => {
     try {
@@ -98,10 +99,10 @@ const useSavedJobsStore = create((set) => ({
       console.error("Failed to remove job", error);
     }
   },
-  fetchApplications: async () => {
+  fetchApplications: async (startIndex, perPage) => {
     try {
       const jwt = localStorage.getItem("jwt");
-      const response = await fetch(`${BASE_URL}/applications`, {
+      const response = await fetch(`${BASE_URL}/job/applications?startIndex=${startIndex}&perPage=${perPage}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -112,9 +113,59 @@ const useSavedJobsStore = create((set) => ({
       if (!response.ok) throw new Error("Failed to fetch applications");
 
       const data = await response.json();
+      data.apps.forEach((app) => {
+        const dateStr = new Date(app.date_applied);
+        const months = (dateStr.getMonth() < 10) ? '0' + dateStr.getMonth() : dateStr.getMonth();
+        const days = (dateStr.getDate() < 10) ? '0' + dateStr.getDate() : dateStr.getDate();
+        app.date_applied = dateStr.getFullYear() + '-' + months + '-' + days;
+      });
       set({ applications: data });
     } catch (error) {
       console.error("Failed to fetch applications", error);
+    }
+  },
+
+  fetchJobPostings: async (search) => {
+    try {
+      const {keywords, location, remote, industry, experience_level, employment_type, company, company_size, salary_range, benefits, certifications, startIndex, perPage} = search;
+      // ?key=${keywords}&loc=${location}&rem={remote}&ind=${industry}&exp=${experience_level}&emp=${employment_type}&size=${company_size}&sal=${salary_range}&ben=${benefits}&cert=${certifications}
+      if(!startIndex || !perPage) throw new Error("Failed to fetch job postings here");
+      let url = `${BASE_URL}/job/search/get?`;
+      const arr = [];
+      if(keywords) arr.push(`key=${keywords}`);
+      if(location) arr.push(`loc=${location}`);
+      if(remote) arr.push(`rem=${remote}`);
+      if(industry) arr.push(`ind=${industry}`);
+      if(experience_level) arr.push(`exp=${experience_level}`);
+      if(employment_type) arr.push(`emp=${employment_type}`);
+      if(company) arr.push(`comp=${company}`);
+      if(company_size) arr.push(`size=${company_size}`);
+      if(salary_range) arr.push(`sal=${salary_range}`);
+      if(benefits) arr.push(`ben=${benefits}`);
+      if(certifications) arr.push(`cert=${certifications}`);
+      arr.push(`startIndex=${startIndex}&perPage=${perPage}`);
+
+      const str = arr.join('&');
+      url += str;
+      // const jwt = localStorage.getItem("jwt");
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch job postings");
+      const data = await response.json();
+      data.jobs.forEach((job) => {
+        const dateStr = new Date(job.date_created);
+        const months = (dateStr.getMonth() < 10) ? '0' + dateStr.getMonth() : dateStr.getMonth();
+        const days = (dateStr.getDate() < 10) ? '0' + dateStr.getDate() : dateStr.getDate();
+        job.date_created = dateStr.getFullYear() + '-' + months + '-' + days;
+      });
+      set({ jobPostings: data });
+    } catch (error) {
+      console.error("Failed to fetch job postings", error);
     }
   },
   

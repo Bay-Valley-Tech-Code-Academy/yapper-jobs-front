@@ -35,7 +35,7 @@ function EmployerMain() {
     if (user) {
       //fetchSavedJobsId();
       fetchApplications();
-      fetchInterviews();
+      //fetchInterviews();
     }
   }, [user, fetchJobs, fetchSavedJobsId, fetchApplications, fetchInterviews]);
 

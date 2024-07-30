@@ -38,7 +38,7 @@ function ProfileSeeker() {
 
   useEffect(async () => {
     try {
-      const response = await fetch('/profile', {
+      const response = await fetch('http://localhost:3000/profile', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwt')}`,

@@ -7,6 +7,7 @@ import UpdateEmployerInfo from './UpdateEmployerInfo';
 import ProfileSeekerImg from '../Profile-Seeker/ProfileSeekerImg';
 import TestPic from "/yapper-jobs-defualt-seeker-img.jpg"
 import useUserStore from '../../store/user-store';
+import useSavedJobsStore from '../../store/saved-jobs-store';
 
 {/*Imports for Icons on Profile Summary*/}
 import { FaLocationPin } from 'react-icons/fa6';
@@ -18,6 +19,7 @@ import { CgWebsite } from 'react-icons/cg';
 import CustomColorMode from '/util/toggleColorMode';
 
 function ProfileEmployer() {
+  const { jobPostings, fetchJobPostings, applications, fetchApplications } = useSavedJobsStore();
   const { user } = useUserStore();
   const { colors } = CustomColorMode();
   // console.log(user)
@@ -30,39 +32,38 @@ function ProfileEmployer() {
   });
 
   useEffect(() => {
-    async function getProf() {
-      try {
-        const response = await fetch('http://localhost:3000/profile', {
-          method: 'GET',
-          headers: {
-              'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-              'Content-Type': 'application/json'
+    if(user) {
+      async function getProf() {
+        try {
+          await fetchJobPostings({company: user.company, startIndex: 1, perPage: 10});
+          await fetchApplications(1, 5);
+          const response = await fetch('http://localhost:3000/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+                'Content-Type': 'application/json'
+            }
+          });
+          const result = await response.json();
+          if (response.ok) {
+              setProfile({
+                industry: result.industry,
+                website: result.website,
+                mobile: result.mobile,
+              });
+              setLoading(false);
+          } else {
+              alert(`Error: ${result.error}`);
           }
-        });
-        const result = await response.json();
-        console.log(result)
-        if (response.ok) {
-            setProfile({
-              industry: result.industry,
-              website: result.website,
-              mobile: result.mobile,
-            });
-            setLoading(false);
-        } else {
-            alert(`Error: ${result.error}`);
+        } catch (error) {
+          alert(`Error: ${error}`);
+          console.error(error);
         }
-      } catch (error) {
-        alert(`Error: ${error}`);
-        console.error(error);
       }
+
+      getProf();
     }
-
-    getProf();
-  }, []);
-
-  useEffect(() => {
   }, [user]);
-
   const gotoJobPost = () => {
     navigate("/post-job");
   }
@@ -171,27 +172,22 @@ function ProfileEmployer() {
       {/* Jobs Postings */}
       <Box mb={10} mt={10}>
         <Flex ml={5} >
-        <Heading as="h2" size="md">Job Postings</Heading>
-        <Flex ml={5}>
-        <Button colorScheme="purple" variant={'link'} onClick={gotoJobPost}>View All</Button>
-        </Flex>
+          <Heading as="h2" size="md">Job Postings</Heading>
+          <Flex ml={5}>
+            <Button colorScheme="purple" variant={'link'} onClick={gotoJobPost}>View All</Button>
+          </Flex>
         </Flex>
       </Box>
       <Box bg={colors.pfSections} width={800} height={400} borderRadius="md" overflowY="auto" mt={-7}>        
-        <Box bg={colors.pfSections} height={200}>
-          <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor} overflowY="auto">Front-End Developer</Button>
-          <Text fontWeight={'bold'} fontSize={15} ml={5} mb={3}>Posted 14 days ago</Text>
-          <Text ml={5} fontSize={15}>Looking for a front end developer with a minimum of 2 years work experience with knowledge of JavaScript, HTML, CSS, Chakra UI, and basic knowledge of Git  </Text>
-        </Box>
-        <Box bg={colors.pfSections} height={200}>
-          <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor}>Backend Developer</Button>
-          <Text fontWeight={'bold'} fontSize={15} ml={5} mb={3}>Posted 1 day ago</Text>
-          <Text ml={5} fontSize={15}>Urgently hiring a backend developer. Looking for minimum 4 years experience with proficient with MySQL, Firebase, Insomnia, and Netlify. Extensive knowledge of APIS is a requirement</Text>
-        </Box>
-        <Box bg={colors.pfSections} height={200}>
-          <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor}>Janitor / Groundskeeper</Button>
-          <Text ml={5} fontSize={15}>Looking for janitor to clean toilets, thats it. We pay</Text>
-        </Box>
+        {jobPostings.jobs.map((job) => {
+          return (
+            <Box key={job.job_id} bg={colors.pfSections} height={200}>
+              <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor} overflowY="auto">Front-End Developer</Button>
+              <Text fontWeight={'bold'} fontSize={15} ml={5} mb={3}>Posted {job.date_created}</Text>
+              <Text ml={5} fontSize={15}>{job.description}</Text>
+            </Box>
+          )
+        })}
       </Box>
       </Flex>
         
@@ -203,10 +199,11 @@ function ProfileEmployer() {
         </Flex>
         <Box bg={colors.pfJobSection} width={800} height={400} borderRadius="md" overflowY="auto">
         <Text fontSize={'large'} ml={4} fontWeight={'bold'}>Incoming </Text>
-          {/*Basic Box For Incoming Applicants*/}
-          <Box mt={5}>
-          <HStack>
-            <Image
+          {applications.apps.map((app) => {
+            return (
+              <Box key={app.app_index} mt={5}>
+                <HStack>
+                  <Image
                     className="seeker-img"
                     src={TestPic}
                     alt="Default Profile Pic"
@@ -216,14 +213,37 @@ function ProfileEmployer() {
                     objectFit="cover"
                     ml={4}
                     mt={2}
-                />
+                  />
+                  <VStack align={'start'}>
+                    <Text fontWeight={'bold'}>{app.first_name} {app.last_name}</Text>
+                    <Text>Position : {app.title}</Text>
+                    <Text>Applied : {app.dare_applied}</Text>
+                  </VStack>
+                </HStack>
+              </Box>
+            )
+          })}
+          {/*Basic Box For Incoming Applicants*/}
+          <Box mt={5}>
+            <HStack>
+              <Image
+                className="seeker-img"
+                src={TestPic}
+                alt="Default Profile Pic"
+                borderRadius="full"
+                boxSize="75px"
+                border="5px solid purple"
+                objectFit="cover"
+                ml={4}
+                mt={2}
+              />
               <VStack align={'start'}>
                 <Text fontWeight={'bold'}>Joe Mama</Text>
                 <Text>Position : Front-End Developer</Text>
                 <Text>Applied : 14 hrs ago</Text>
-                </VStack>
+              </VStack>
             </HStack>
-        </Box>
+          </Box>
         <Box mt={5}>
         <HStack>
           <Image

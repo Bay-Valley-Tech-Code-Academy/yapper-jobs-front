@@ -149,7 +149,7 @@ function Applications() {
   // Function to fetch application data from the backend
   const fetchApplications = async () => {
     try {
-      const response = await fetch('/job/applications', {
+      const response = await fetch('http://localhost:3000/job/applications', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

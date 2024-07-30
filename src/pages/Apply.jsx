@@ -75,7 +75,7 @@ function Apply() {
     try {
       const jwt = localStorage.getItem("jwt");
       console.log(formattedData);
-      const response = await fetch(`/job/apply/${jobId}/submit`, {
+      const response = await fetch(`http://localhost:3000/job/apply/${jobId}/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

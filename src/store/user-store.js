@@ -114,7 +114,6 @@ const useUserStore = create((set, get) => ({
       }
 
       const userData = await response.json();
-      console.log(userData)
       set({ user: {
         first_name: userData.first_name,
         last_name: userData.last_name,

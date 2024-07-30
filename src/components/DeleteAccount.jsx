@@ -34,7 +34,7 @@ const DeleteAccount = () => {
         console.log("Deleting Account");
 
         try {
-            const response = await fetch('/delete-user', {
+            const response = await fetch('http://localhost:3000/delete-user', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
