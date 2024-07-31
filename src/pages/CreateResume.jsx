@@ -1,380 +1,340 @@
-import { Box, Text, Heading, Flex, VStack, HStack, Switch, FormControl,FormLabel,List, ListItem, Highlight, Center, ChakraProvider, Checkbox, Button,  Editable, EditableInput, EditableTextarea, EditablePreview, Input,} from "@chakra-ui/react";
-import React, {useState} from "react";
+import { useState } from "react";
 import { Reorder } from "framer-motion";
-import { FocusLock } from "@chakra-ui/react";
 import jsPDF from "jspdf";
-
-
-import ResumeSection from "./ResumeSection";
+import CustomColorMode from "../../util/toggleColorMode";
+import { 
+  Box, 
+  Text, 
+  Flex, 
+  VStack, 
+  HStack, 
+  Input, 
+  Button, 
+  IconButton,
+} from "@chakra-ui/react";
+import { DeleteIcon } from '@chakra-ui/icons';
 
 function CreateResume() {
-    const [section,setSection] = useState([
-        "Work Experience",
-        "Education",
-        "Skills",
-        "Certifications / Licenses",
-        "Links",
-        "Languages",
-    ]);
-    const variants = {
-        notDragging: {
-          zIndex: 0,
-          boxShadow: "none",
-          background: "var(--chakra-colors-gray-100)",
+  const [section, setSection] = useState([
+    "Work Experience",
+    "Education",
+    "Skills",
+    "Certifications / Licenses",
+    "Links",
+    "Languages",
+  ]);
+
+  const [applicantName, setApplicantName] = useState("");
+  const [applicantLocation, setApplicantLocation] = useState("");
+  const [applicantEmail, setApplicantEmail] = useState("");
+  const [applicantPhone, setApplicantPhone] = useState(""); 
+  const [applicantExperience, setApplicantExperience] = useState([{jobTitle: "", company: "", location: "", startDate: "", endDate: "", description: ""}]);
+  const [applicantEducation, setApplicantEducation] = useState([{degree: "", school: "", startDate: "", endDate: ""}]);
+  const [applicantCertifications, setApplicantCertifications] = useState([{certification: "", organization: ""}]);
+  const [applicantSkills, setApplicantSkills] = useState([{skill: "", years: ""}]);
+  const [applicantLanguages, setApplicantLanguages] = useState([{language: "", proficiency: ""}]);
+  const { colors } = CustomColorMode();
+
+  const handleInputChange = (setFunction, index, event) => {
+    const { name, value } = event.target;
+    setFunction(prevState => {
+      const newState = [...prevState];
+      newState[index] = { ...newState[index], [name]: value };
+      return newState;
+    });
+  };
+
+  const handleExperienceChange = (index, event) => handleInputChange(setApplicantExperience, index, event);
+  const handleEducationChange = (index, event) => handleInputChange(setApplicantEducation, index, event);
+  const handleCertificationChange = (index, event) => handleInputChange(setApplicantCertifications, index, event);
+  const handleSkillChange = (index, event) => handleInputChange(setApplicantSkills, index, event);
+  const handleLanguageChange = (index, event) => handleInputChange(setApplicantLanguages, index, event);
+
+  const addItem = (setFunction, newItem) => {
+    setFunction(prevState => [...prevState, newItem]);
+  };
+
+  const addJobExperience = () => addItem(setApplicantExperience, { jobTitle: "", company: "", location: "", startDate: "", endDate: "", description: "" });
+  const addEducation = () => addItem(setApplicantEducation, { degree: "", school: "", startDate: "", endDate: "" });
+  const addCertification = () => addItem(setApplicantCertifications, { certification: "", organization: "" });
+  const addSkill = () => addItem(setApplicantSkills, { skill: "", years: "" });
+  const addLanguage = () => addItem(setApplicantLanguages, { language: "", proficiency: "" });
+
+  const removeItem = (setFunction, index) => {
+    setFunction(prevState => prevState.filter((_, i) => i !== index));
+  };
+
+  const DownloadResume = () => {
+    let doc = new jsPDF("p", "pt");
+    doc.setFontSize(20);
+    doc.text(applicantName, 50, 50);
+    doc.setFontSize(12);
+    doc.text(applicantLocation, 50, 70);
+    doc.text(applicantEmail, 50, 90);
+    doc.text(applicantPhone, 50, 110);
+    doc.setFontSize(20);
+    doc.text("Work Experience", 50, 130);
+    doc.line(40, 135, 550, 135);
+
+    applicantExperience.forEach((experience, index) => {
+      const yOffset = 150 + index * 80;
+      doc.text(experience.jobTitle, 50, yOffset);
+      doc.text(experience.company, 50, yOffset + 20);
+      doc.text(experience.location, 50, yOffset + 40);
+      doc.text(experience.startDate + " - " + experience.endDate, 50, yOffset + 60);
+      doc.text(experience.description, 50, yOffset + 80);
+    });
+
+    doc.save(`${applicantName}'s Yapper-Jobs-Resume.pdf`);
+  };
+
+  const handleSave = async () => {
+    const resumeData = {
+      summary: applicantName,
+      education: applicantEducation,
+      experience: applicantExperience,
+      skill: applicantSkills,
+      link: [], 
+      publication: [], 
+    };
+  
+    try {
+      const response = await fetch('/resume/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        dragging: {
-          zIndex: 1,
-          boxShadow: "var(--chakra-shadows-lg)",
-          background: "var(--chakra-colors-purple-400)",
-        },
-      };
+        body: JSON.stringify(resumeData),
+      });
+  
+      const textResponse = await response.text();
+      let jsonResponse;
+      try {
+        jsonResponse = JSON.parse(textResponse);
+      } catch (jsonError) {
+        console.error('Failed to parse JSON:', jsonError);
+        jsonResponse = {};
+      }
+  
+      if (response.ok) {
+        console.log('Resume saved successfully:', jsonResponse);
+      } else {
+        console.error('Failed to save resume:', jsonResponse);
+      }
+    } catch (error) {
+      console.error('Error saving resume:', error);
+    }
+  };
 
-      // State variables for the applicant's information
-      const [applicantName, setApplicantName] = useState("");
-      const [applicantLocation, setApplicantLocation] = useState("");
-      const [applicantEmail, setApplicantEmail] = useState("");
-      const [applicantPhone, setApplicantPhone] = useState(""); 
-      const [applicantExperience, setApplicantExperience] = useState([{jobTitle: "", company: "", location: "", startDate: "", endDate: "", description: ""}]);
-      const [applicantEducation, setApplicantEducation] = useState([{degree: "", school: "", startDate: "", endDate: ""}]);
-      const [applicantCertifications, setApplicantCertifications] = useState([{certification: "", organization: "",}]);
-      const [ApplicantSkills, setApplicantSkills] = useState([{skill: "", years: ""}]);
-      const [applicantLanguages, setApplicantLanguages] = useState([{language: "", proficiency: ""}]);
-
-      // Function to handle changes to the applicant's information
-      const handleExperienceChange = (index, event) => {
-        const {name, value} = event.target;
-        let newExperience = [...applicantExperience];
-        newExperience[index] = {...newExperience[index], [name]: value};
-        setApplicantExperience(newExperience);
-      };
-
-      //Add a new job experience
-      const addJobExperience = () => {
-        setApplicantExperience([...applicantExperience, {jobTitle: "", company: "", location: "", startDate: "", endDate: "", description: ""}]);
-      };
-      //Add a new education
-      const addEducation = () => {
-        setApplicantEducation([...applicantEducation, {degree: "", school: "", startDate: "", endDate: ""}]);
-      };
-      //Add a new certification
-      const addCertification = () => {
-        setApplicantCertifications([...applicantCertifications, {certification: "", organization: ""}]);
-      };
-      //Add a new skill
-      const addSkill = () => {
-        setApplicantSkills([...ApplicantSkills, {skill: "", years: ""}]);
-      };
-
-      const addLanguage = () => {
-        setApplicantLanguages([...applicantLanguages, {language: "", proficiency: ""}]);
-      };
-
-      //Generate resume
-      const DownloadResume = () => {
-        // Create a new jsPDF instance
-        let doc = new jsPDF("p", "pt");
-
-        //Creates the header of the resume
-        doc.setFontSize(20);
-        doc.text(applicantName, 50, 50);
-        
-        doc.setFontSize(12);
-        doc.text(applicantLocation, 50, 70);
-        doc.text(applicantEmail, 50, 90);
-        doc.text(applicantPhone, 50, 110);
-        
-        //Creates the sections of the resume
-
-        //Work Experience section
-        doc.setFontSize(20);
-        doc.text("Work Experience", 50, 130);
-        doc.line(40, 135, 550, 135);
-
-        applicantExperience.forEach((experience) => {
-        doc.text(experience.jobTitle, 50, 150);
-        doc.text(experience.company, 50, 170);
-        doc.text(experience.location, 50, 190);
-        doc.text(experience.startDate + " - " + experience.endDate, 50, 210);
-        doc.text(experience.description, 50, 230);
-        });    
-
-        doc.setFontSize(20);
-        doc.text("Education", 50, 150);
-
-        doc.setFontSize(20);
-        doc.text("Certifications / Licenses", 50, 170);
-        
-        doc.setFontSize(20);
-        doc.text("Skills", 50, 190);
-        
-        doc.setFontSize(20);
-        doc.text("Languages", 50, 210);
-        
-        doc.save(`${applicantName}'s Yapper-Jobs-Resume.pdf`);
-      };
-      return (
-        <Flex>
-          <VStack>
-            <Box width={450} height={75}>
-              <Text>Re-order the sections of your resume or toggle their visibility</Text>
-            </Box>
-            <List
-              as={Reorder.Group}
-              spacing={1}
-              ml={5}
-              axis="y"
-              values={section}
-              onReorder={setSection}
-            >
-              <Box width={450} height={75}>
-                {section.map((item) => (
-                  <ListItem
-                    key={item}
-                    as={Reorder.Item}
-                    value={item}
-                    p={2}
-                    bg="gray.100"
-                    rounded="xl"
-                    dragTransition={{
-                      bounceStiffness: 600,
-                    }}
-                    variants={variants}
-                    initial="notDragging"
-                    whileDrag="dragging"
-                    position="relative"
-                    cursor="move"
-                  >
-                    <ResumeSection section={item} />
-                    <HStack>
-                      <Switch></Switch>
-                    </HStack>
-                  </ListItem>
-                ))}
-              </Box>
-            </List>
-          </VStack>
-          <HStack>
-            <Box height={800} width={600} bg={'#EDF2F7'} mt={50} ml={250} overflow={'scroll'}>
-              <Box>
+  return (
+    <Flex justify="center" align="center" minHeight="100vh">
+      <Box width={800} bg={colors.pfSections} p={10} borderRadius="lg" boxShadow="md">
+        <VStack spacing={5} align="stretch">
+          <Text as={'header'} fontSize={45}>Build Resume</Text>
+          <HStack spacing={4}>
+            <Button colorScheme="purple" onClick={DownloadResume}>Download Resume</Button>
+            <Button colorScheme="green" onClick={handleSave}>Save Resume</Button>
+          </HStack>
+          <Text as={'header'} fontSize={25}>Name</Text>
+          <Input
+            placeholder="Name"  
+            width="full"
+            value={applicantName}
+            onChange={(e) => setApplicantName(e.target.value)}
+          />
+          <Input
+            placeholder="Location"
+            width="full"
+            value={applicantLocation}
+            onChange={(e) => setApplicantLocation(e.target.value)}
+          />
+          <Input
+            placeholder="Phone Number"
+            width="full"
+            value={applicantPhone}
+            onChange={(e) => setApplicantPhone(e.target.value)}
+          />
+          <Input
+            placeholder="Email Address"
+            width="full"
+            value={applicantEmail}
+            onChange={(e) => setApplicantEmail(e.target.value)}
+          />
+          <Text as={'header'} fontSize={25}>Work Experience</Text>
+          {applicantExperience.map((experience, index) => (
+            <Box key={index} p={2} borderRadius="md">
+              <Input
+                placeholder="Job Title"
+                name="jobTitle"
+                width="full"
+                value={experience.jobTitle}
+                onChange={(event) => handleExperienceChange(index, event)}
+              />
+              <Input
+                placeholder="Company"
+                name="company"
+                width="full"
+                mt={3}
+                value={experience.company}
+                onChange={(event) => handleExperienceChange(index, event)} 
+              />
+              <Input
+                placeholder="Location"
+                name="location"
+                width="full"
+                mt={3}
+                value={experience.location}
+                onChange={(event) => handleExperienceChange(index, event)}
+              />
+              <HStack>
                 <Input
-                  placeholder="Name"
-                  mt={5}
-                  ml={5}
-                  fontSize={25}
-                  value={applicantName}
-                  onChange={(e) => setApplicantName(e.target.value)}
-                />
-                <Input
-                  placeholder="Location"
-                  mt={1}
-                  mb={0}
-                  ml={5}
-                  fontSize={15}
-                  value={applicantLocation}
-                  onChange={(e) => setApplicantLocation(e.target.value)}
-                />
-                <Input
-                  placeholder="Phone Number"
-                  mt={1}
-                  mb={0}
-                  ml={5}
-                  fontSize={15}
-                  value={applicantPhone}
-                  onChange={(e) => setApplicantPhone(e.target.value)}
-                />
-                <Input
-                  placeholder="Email Address"
-                  mt={1}
-                  mb={0}
-                  ml={5}
-                  fontSize={15}
-                  value={applicantEmail}
-                  onChange={(e) => setApplicantEmail(e.target.value)}
-                />
-              </Box>
-              <Text as={'header'} ml={5} mt={5} fontSize={25}>Work Experience</Text>
-              <Box>
-                {applicantExperience.map((experience, index) => (
-                  <Box key={index}>
-                    <Input
-                      placeholder="Job Title"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={experience.jobTitle}
-                      onChange={(event) => handleExperienceChange(index, event)}
-                    />
-                    <Input
-                      placeholder="Company"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={experience.company}
-                      onChange={(event) => handleExperienceChange(index, event)} 
-                      />
-                    <Input
-                      placeholder="Location"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={experience.location}
-                      onChange={(event) => handleExperienceChange(index, event)}
-                    />
-                    <HStack>
-                      <Input
-                        placeholder="Start Date (MM/YYYY)"
-                        mt={1}
-                        ml={5}
-                        fontSize={15}
-                        value={experience.startDate}
-                        onChange={(event) => handleExperienceChange(index, event)}
-                      />
-                      <Text fontSize={15}> - </Text>
-                      <Input
-                        placeholder="End Date (MM/YYYY)"
-                        mt={1}
-                        ml={5}
-                        fontSize={15}
-                        value={experience.endDate}
-                        onChange={(event) => handleExperienceChange(index, event)}
-                      />
-                    </HStack>
-                    <Input
-                      placeholder="Description"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={experience.description}
-                      onChange={(e) => handleExperienceChange(index, e)} 
-                    />
-                  </Box>
-                ))}
-              </Box>
-              <Button ml={7} onClick={addJobExperience}>+ Add Work Experience</Button>
-              <Text as={'header'} ml={5} mt={5} fontSize={25}>Education</Text>
-              <Box>
-                {applicantEducation.map((education, index) => (
-                  <Box key={index}>
-                    <Input
-                      placeholder="Degree"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={education.degree}
-                      onChange={(event) => handleExperienceChange(index, event)}
-                    />
-                    <Input
-                      placeholder="School"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={education.school}
-                      onChange={(event) => handleExperienceChange(index, event)}
-                    />
-                    <HStack>
-                      <Input
-                        placeholder="Start Date (MM/YYYY)"
-                        mt={1}
-                        ml={5}
-                        fontSize={15}
-                        value={education.startDate}
-                        onChange={(event) => handleExperienceChange(index, event)}
-                      />
-                      <Text fontSize={15}> - </Text>
-                      <Input
-                        placeholder="End Date (MM/YYYY)"
-                        mt={1}
-                        ml={5}
-                        fontSize={15}
-                        value={education.endDate}
-                        onChange={(event) => handleExperienceChange(index, event)}
-                      />
-                    </HStack>
-                  </Box>
-                ))}
-              </Box>
-              <Button ml={7} onClick={addEducation}>+ Add Education</Button>
-              <Text as={'header'} ml={5} mt={5} fontSize={25}>Certifications / Licenses</Text>
-              <Box>
-                {applicantCertifications.map((certification, index) => (
-                  <Box key={index}>
-                    <Input
-                      placeholder="Certification"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={certification.certification}
-                      onChange={(event) => handleExperienceChange(index, event)}
-                    />
-                    <Input
-                      placeholder="Organization"
-                      mt={1}
-                      ml={5}
-                      fontSize={15}
-                      value={certification.organization}
-                      onChange={(event) => handleExperienceChange(index, event)}
-                    />
-                  </Box>
-                ))}
-              </Box>
-              <Button ml={7} onClick={addCertification}>+ Add Certifications / Licenses</Button>
-              <Text as={'header'} ml={5} mt={5} fontSize={25}>Skills</Text>
-              <Box>
-                {ApplicantSkills.map((ApplicantSkills, index) => (
-                  <Box key={index}>
-                    <HStack>
-                <Input
-                  placeholder="Skill"
-                  mt={1}
-                  ml={5}
-                  fontSize={15}
-                  value={ApplicantSkills.skill}
+                  type="date"
+                  name="startDate"
+                  width="full"
+                  mt={3}
+                  value={experience.startDate}
                   onChange={(event) => handleExperienceChange(index, event)}
                 />
+                <Text>to</Text>
                 <Input
-                  placeholder="Years"
-                  mt={1}
-                  ml={5}
-                  fontSize={15}
-                  value={ApplicantSkills.years}
+                  type="date"
+                  name="endDate"
+                  width="full"
+                  mt={3}
+                  value={experience.endDate}
                   onChange={(event) => handleExperienceChange(index, event)}
                 />
               </HStack>
-                    </Box>
-                ))}
-              </Box>
-              <Button ml={7} onClick={addSkill}>+ Add Skill</Button>
-              <Text as={'header'} ml={5} mt={5} fontSize={25}>Languages</Text>
-              <Box>
-                {applicantLanguages.map((language, index) => (
-                  <Box key={index}>
-                    <HStack>
-                      <Input
-                        placeholder="Language"
-                        mt={1}
-                        ml={5}
-                        fontSize={15}
-                        value={language.language}
-                        onChange={(event) => handleExperienceChange(index, event)}
-                      />
-                      <Input
-                        placeholder="Proficiency"
-                        mt={1}
-                        ml={5}
-                        fontSize={15}
-                        value={language.proficiency}
-                        onChange={(event) => handleExperienceChange(index, event)}
-                      />
-                    </HStack>
-                  </Box>
-                ))}
-              </Box>
-              <Button ml={7} onClick={addLanguage}>+ Add Language</Button>
+              <Input
+                placeholder="Description"
+                name="description"
+                width="full"
+                mt={3}
+                value={experience.description}
+                onChange={(event) => handleExperienceChange(index, event)} 
+              />
+              <IconButton
+                aria-label="Delete experience"
+                icon={<DeleteIcon />}
+                mt={3}
+                onClick={() => removeItem(setApplicantExperience, index)}
+              />
             </Box>
-            <Button ml={400} mb={750} colorScheme="purple" onClick={DownloadResume}>Download Resume</Button>
-          </HStack>
-        </Flex>
-      );
-}      
+          ))}
+          <Button colorScheme='purple' onClick={addJobExperience}>+ Add Work Experience</Button>
+          <Text as={'header'} fontSize={25}>Education</Text>
+          {applicantEducation.map((education, index) => (
+            <Box key={index} p={2} borderRadius="md">
+              <Input
+                placeholder="Degree"
+                name="degree"
+                width="full"
+                value={education.degree}
+                onChange={(event) => handleEducationChange(index, event)}
+              />
+              <Input
+                placeholder="School"
+                name="school"
+                width="full"
+                mt={3}
+                value={education.school}
+                onChange={(event) => handleEducationChange(index, event)} 
+              />
+              <HStack mt={3}>
+                <Input
+                  type="date"
+                  name="startDate"
+                  width="full"
+                  value={education.startDate}
+                  onChange={(event) => handleEducationChange(index, event)}
+                />
+                <Text>to</Text>
+                <Input
+                  type="date"
+                  name="endDate"
+                  width="full"
+                  value={education.endDate}
+                  onChange={(event) => handleEducationChange(index, event)}
+                />
+              </HStack>
+              <IconButton
+                aria-label="Delete education"
+                icon={<DeleteIcon />}
+                mt={3}
+                onClick={() => removeItem(setApplicantEducation, index)}
+              />
+            </Box>
+          ))}
+          <Button colorScheme='purple' onClick={addEducation}>+ Add Education</Button>
+          <Text as={'header'} fontSize={25}>Certifications / Licenses</Text>
+          {applicantCertifications.map((certification, index) => (
+            <Box key={index} p={2} borderRadius="md">
+              <Input
+                placeholder="Certification"
+                name="certification"
+                width="full"
+                value={certification.certification}
+                onChange={(event) => handleCertificationChange(index, event)}
+              />
+              <Input
+                placeholder="Organization"
+                name="organization"
+                width="full"
+                mt={3}
+                value={certification.organization}
+                onChange={(event) => handleCertificationChange(index, event)} 
+              />
+              <IconButton
+                aria-label="Delete certification"
+                icon={<DeleteIcon />}
+                mt={3}
+                onClick={() => removeItem(setApplicantCertifications, index)}
+              />
+            </Box>
+          ))}
+          <Button colorScheme='purple' onClick={addCertification}>+ Add Certification</Button>
+          <Text as={'header'} fontSize={25}>Skills</Text>
+          {applicantSkills.map((skill, index) => (
+            <Box key={index} p={2} borderRadius="md">
+              <Input
+                placeholder="Skill"
+                name="skill"
+                width="full"
+                value={skill.skill}
+                onChange={(event) => handleSkillChange(index, event)}
+              />
+              <IconButton
+                aria-label="Delete skill"
+                icon={<DeleteIcon />}
+                mt={3}
+                onClick={() => removeItem(setApplicantSkills, index)}
+              />
+            </Box>
+          ))}
+          <Button colorScheme='purple' onClick={addSkill}>+ Add Skill</Button>
+          <Text as={'header'} fontSize={25}>Languages</Text>
+          {applicantLanguages.map((language, index) => (
+            <Box key={index} p={2} borderRadius="md">
+              <Input
+                placeholder="Language"
+                name="language"
+                width="full"
+                value={language.language}
+                onChange={(event) => handleLanguageChange(index, event)}
+              />
+              <IconButton
+                aria-label="Delete language"
+                icon={<DeleteIcon />}
+                mt={3}
+                onClick={() => removeItem(setApplicantLanguages, index)}
+              />
+            </Box>
+          ))}
+          <Button colorScheme='purple' onClick={addLanguage}>+ Add Language</Button>
+        </VStack>
+      </Box>
+    </Flex>
+  );
+}
 
-export default CreateResume
+export default CreateResume;

@@ -14,7 +14,6 @@ import {
   Image,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import customColorMode from "../../../util/toggleColorMode";
 
 import UpdateInfo from "./UpdateInfo";
 import ProfileSeekerImg from "./ProfileSeekerImg";

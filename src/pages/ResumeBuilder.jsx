@@ -1,7 +1,6 @@
-import React, { useState, useRef } from "react";
-import { Flex, Heading, Box, Text, Button, IconButton, HStack, VStack, Image, Center, Input} from '@chakra-ui/react';
+import { useState, useRef } from "react";
+import { Flex, Heading, Text, Button, HStack, VStack, Center, Input} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import CreateResume from "./CreateResume";
 
 function ResumeBuilder() {
   const inputRef = useRef(null);
