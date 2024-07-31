@@ -163,6 +163,7 @@ const useSavedJobsStore = create((set) => ({
         const days = (dateStr.getDate() < 10) ? '0' + dateStr.getDate() : dateStr.getDate();
         job.date_created = dateStr.getFullYear() + '-' + months + '-' + days;
       });
+      console.log(data)
       set({ jobPostings: data });
     } catch (error) {
       console.error("Failed to fetch job postings", error);

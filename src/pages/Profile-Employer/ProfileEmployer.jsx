@@ -182,9 +182,9 @@ function ProfileEmployer() {
         {jobPostings.jobs.map((job) => {
           return (
             <Box key={job.job_id} bg={colors.pfSections} height={200}>
-              <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor} overflowY="auto">Front-End Developer</Button>
+              <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor} overflowY="auto">{job.title}</Button>
               <Text fontWeight={'bold'} fontSize={15} ml={5} mb={3}>Posted {job.date_created}</Text>
-              <Text ml={5} fontSize={15}>{job.description}</Text>
+              <Text ml={5} fontSize={15}>{job.job_description}</Text>
             </Box>
           )
         })}
