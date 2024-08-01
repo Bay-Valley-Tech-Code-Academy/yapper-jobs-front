@@ -93,29 +93,6 @@ const JobPosting = () => {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
 
-    // // Capitalize the first letter of the company name
-    // if (id === "company") {
-    //   const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    //   setFormData({
-    //     ...formData,
-    //     [id]: capitalizedValue,
-    //   });
-
-    //   return;
-    // }
-
-    // Validation for zipcode
-    // if (id === "zipcode") {
-    //   if (!/^\d*$/.test(value)) {
-    //     setFormError("Zipcode cannot contain letters");
-    //     return;
-    //   }
-    //   if (value.length > 5) {
-    //     setFormError("Zipcode cannot be longer than 5 digits");
-    //     return;
-    //   }
-    // }
-
     // Handle the isRemote property
     if (id === "work-location") {
       setFormData({
@@ -432,16 +409,6 @@ const JobPosting = () => {
                   />
                 </FormControl>
               </HStack>
-              {/* <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Zipcode:</FormLabel>
-                <Input
-                  id="zipcode"
-                  placeholder="Enter zipcode"
-                  height="50px"
-                  value={formData.zipcode}
-                  onChange={handleInputChange}
-                />
-              </FormControl> */}
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Experience Level:</FormLabel>
                 <Select
@@ -498,9 +465,9 @@ const JobPosting = () => {
                   value={formData["companySize"]}
                   onChange={handleInputChange}
                 >
-                  <option value="1-10 employees">1-10 employees</option>
-                  <option value="11-50 employees">11-50 employees</option>
-                  <option value="51-200 employees">51-200 employees</option>
+                  <option value="1-10 employees">1-10 employees (Startup)</option>
+                  <option value="11-50 employees">11-50 employees (Small Business)</option>
+                  <option value="51-200 employees">51-200 employees (Large Corporation)</option>
                 </Select>
               </FormControl>
               <FormControl isRequired pb={4}>
@@ -522,15 +489,6 @@ const JobPosting = () => {
                   />
                 </HStack>
               </FormControl>
-              {/* <FormControl isRequired pb={4}>
-                <FormLabel fontWeight="bold">Skills:</FormLabel>
-                <Textarea
-                  id="skills"
-                  placeholder="List required skills"
-                  value={formData.skills}
-                  onChange={handleInputChange}
-                />
-              </FormControl> */}
               {/* New benefits to turn into an array */}
               <FormControl isRequired pb={4}>
                 <FormLabel fontWeight="bold">Benefits:</FormLabel>
@@ -567,17 +525,6 @@ const JobPosting = () => {
                   onChange={handleInputChange}
                 />
               </FormControl>
-              {/* <FormControl pb={4}>
-                <FormLabel fontWeight="bold">
-                  Responsibilities (Optional):
-                </FormLabel>
-                <Textarea
-                  id="responsibilities"
-                  placeholder="List responsibilities"
-                  value={formData.responsibilities}
-                  onChange={handleInputChange}
-                />
-              </FormControl> */}
             </Box>
           )}
 

@@ -226,7 +226,8 @@ function Apply() {
                 py="0.25em"
                 borderRadius="1em"
                 cursor="pointer"
-                mt="1em"
+                mt="0.5em"
+                mb="3em"
                 _hover={{ bg: "teal" }}
                 maxW="10em"
               >
