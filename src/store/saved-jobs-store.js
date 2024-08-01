@@ -7,6 +7,8 @@ const useSavedJobsStore = create((set) => ({
   applications: [],
   interviews: [],
   jobPostings: [],
+  count: 0,
+  searchCount: 0,
 
   fetchSavedJobsId: async () => {
     try {
@@ -129,7 +131,7 @@ const useSavedJobsStore = create((set) => ({
     try {
       const {keywords, location, remote, industry, experience_level, employment_type, company, company_size, salary_range, benefits, certifications, startIndex, perPage} = search;
       // ?key=${keywords}&loc=${location}&rem={remote}&ind=${industry}&exp=${experience_level}&emp=${employment_type}&size=${company_size}&sal=${salary_range}&ben=${benefits}&cert=${certifications}
-      if(!startIndex || !perPage) throw new Error("Failed to fetch job postings here");
+      if(typeof(startIndex) != 'number' || !perPage) throw new Error("Failed to fetch job postings here");
       let url = `${BASE_URL}/job/search/get?`;
       const arr = [];
       if(keywords) arr.push(`key=${keywords}`);
@@ -163,8 +165,7 @@ const useSavedJobsStore = create((set) => ({
         const days = (dateStr.getDate() < 10) ? '0' + dateStr.getDate() : dateStr.getDate();
         job.date_created = dateStr.getFullYear() + '-' + months + '-' + days;
       });
-      console.log(data)
-      set({ jobPostings: data });
+      set({ jobPostings: data.jobs, searchCount: data.count });
     } catch (error) {
       console.error("Failed to fetch job postings", error);
     }
@@ -207,6 +208,23 @@ const useSavedJobsStore = create((set) => ({
       set({ analytics: data });
     } catch (error) {
       console.error("Failed to fetch analytics", error);
+    }
+  },
+  fetchCount: async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/jobs/count`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch count");
+
+      const data = await response.json();
+      set({ count: data });
+    } catch (error) {
+      console.error("Failed to fetch job count", error);
     }
   },
 }));

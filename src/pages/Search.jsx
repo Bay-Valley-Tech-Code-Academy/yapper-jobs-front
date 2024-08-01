@@ -11,17 +11,52 @@ import useUserStore from "../store/user-store";
 function Search() {
   const [selectedJob, setSelectedJob] = useState(1);
   const [maxJobCards, setMaxJobCards] = useState(10);
-  const { jobs, fetchJobs } = useApiStore();
-  const { fetchSavedJobsId, savedJobs, saveJob, removeJob } = useSavedJobsStore();
+  const [startIndex, setStartIndex] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  // const { jobs, fetchJobs } = useApiStore();
+  const { fetchSavedJobsId, savedJobs, saveJob, removeJob, jobPostings, fetchJobPostings, searchCount } = useSavedJobsStore();
   const { colors } = customColorMode();
   const { user } = useUserStore();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchJobs();
-    if (user) {
-      fetchSavedJobsId();
+    const fetchers = async () => {
+      try {
+        await fetchJobPostings({startIndex: startIndex, perPage: perPage});
+        if (user) {
+          await fetchSavedJobsId();
+        }
+      } catch (error) {
+        alert(`Error: ${error}`);
+        console.error(error);
+      }
     }
-  }, [user, fetchJobs, fetchSavedJobsId]);
+
+    fetchers();
+  }, []);
+
+  useEffect(() => {
+    
+    const fetchers = async () => {
+      try {
+        await fetchJobPostings({startIndex: startIndex, perPage: perPage});
+        if (user) {
+          await fetchSavedJobsId();
+        }
+      } catch (error) {
+        alert(`Error: ${error}`);
+        console.error(error);
+      }
+    }
+
+    fetchers();
+  }, [startIndex]);
+
+  useEffect(() => {
+    if(searchCount > 0) {
+      setLoading(false);
+    }
+  }, [searchCount]);
 
   const handleSaveJob = async (job_id) => {
     try {
@@ -36,9 +71,9 @@ function Search() {
   };
 
   const renderJobCards = () => {
-    return jobCards.map((job, index) => (
+    return jobPostings.map((job) => (
       <JobCard
-        key={index}
+        key={job.job_id}
         {...job}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
@@ -49,23 +84,31 @@ function Search() {
   };
 
   const renderShowMoreButton = () => {
-    if (jobs.length > maxJobCards) {
+    if (searchCount > perPage && perPage >= jobPostings.length) {
+      console.log(1)
       return (
-        <Button onClick={handleShowMore} mt="4">
-          Show More
-        </Button>
+        <Flex  alignItems={'center'}>
+          <Button alignItems={'center'} onClick={handleShowMore} mt="4">
+            Next Page
+          </Button>
+        </Flex>
       );
     }
     return null;
   };
 
   const handleShowMore = () => {
-    setMaxJobCards((prevMax) => prevMax + 5);
+    setStartIndex(jobPostings[perPage - 1].job_id);
+    setLoading(true);
   };
 
-  const jobCards = jobs.slice(0, maxJobCards);
+  // const jobCards = jobs.slice(0, maxJobCards);
 
   // console.log(user ? user : "No")
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <Box
@@ -87,13 +130,13 @@ function Search() {
         px="4"
         mb="4"
       >
-        <Searchbar jobs={jobs} />
+        <Searchbar jobs={jobPostings} />
       </Flex>
       <Flex width="80%" maxH="100vh" mx="auto" px="4">
-        <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto">
+        <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto" flex={true} justifyContent={'center'}>
           <Box ml="10" p="3">
             <Heading>Search Results</Heading>
-            <Text>{jobs.length} jobs</Text>
+            <Text>{searchCount} jobs</Text>
           </Box>
           {renderJobCards()}
           {renderShowMoreButton()}

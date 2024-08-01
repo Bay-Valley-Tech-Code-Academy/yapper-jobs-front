@@ -14,8 +14,11 @@ import {
 import { FaMapMarkerAlt } from "react-icons/fa";
 import useApiStore from "../store/api-store";
 
+import useSavedJobsStore from '../store/saved-jobs-store';
+
 function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
   const navigate = useNavigate();
+  const { jobPostings } = useSavedJobsStore();
   const jobs = useApiStore((state) => state.jobs);
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
 
@@ -24,7 +27,7 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
   }
 
   //get job details matching the id of selected job to the jobs JSON
-  const job = jobs.find((job) => job.job_id === selectedJob);
+  const job = jobPostings.find((job) => job.job_id === selectedJob);
 
   if (!job) {
     return (
@@ -35,7 +38,7 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
   }
 
   //format timestamp column to date only
-  function formatDate(timestamp) {
+  /* function formatDate(timestamp) {
     const date = new Date(timestamp); // Create a Date object from the timestamp
 
     // Extract the date components
@@ -45,7 +48,7 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
 
     // Format the date as MM/DD/YYYY
     return `${month}/${day}/${year}`;
-  }
+  } */
 
   return (
     <Box height="100%" ml="3%" overflowY="auto" paddingRight="2">
@@ -68,7 +71,7 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
           </Text>
         )}
         <Stack direction="row" justify="space-between" align="center" mb="1">
-          <Text fontSize="sm">Posted {formatDate(job.created)}</Text>
+          <Text fontSize="sm">Posted {job.date_created}</Text>
         </Stack>
       </Stack>
       <Stack direction="row" spacing="4" align="center" mb="1">

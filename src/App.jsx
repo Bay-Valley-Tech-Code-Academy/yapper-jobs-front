@@ -59,7 +59,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/delete-confirmation" element={<DeleteConfirmation />} />
+          <Route path="/confirm-delete" element={<DeleteConfirmation />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

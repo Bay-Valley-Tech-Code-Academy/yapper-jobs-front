@@ -179,7 +179,7 @@ function ProfileEmployer() {
         </Flex>
       </Box>
       <Box bg={colors.pfSections} width={800} height={400} borderRadius="md" overflowY="auto" mt={-7}>        
-        {jobPostings.jobs.map((job) => {
+        {jobPostings.map((job) => {
           return (
             <Box key={job.job_id} bg={colors.pfSections} height={200}>
               <Button ml={3} fontWeight={'bold'} fontSize={20} variant={'link'} color={colors.textColor} overflowY="auto">{job.title}</Button>
