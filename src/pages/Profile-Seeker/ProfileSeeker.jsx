@@ -27,7 +27,6 @@ import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
-// import { CgWebsite } from "react-icons/cg";
 import useUserStore from "../../store/user-store";
 import useSavedJobsStore from "../../store/saved-jobs-store";
 
@@ -73,7 +72,7 @@ function ProfileSeeker() {
   const handleRemoveJob = async (id) => {
     try {
       await removeJob(id);
-      await fetchSavedJobs(); // Fetch the updated list of saved jobs after removing a job
+      await fetchSavedJobs();
     } catch (error) {
       console.error(error);
     }
@@ -89,6 +88,7 @@ function ProfileSeeker() {
       justifyContent="space-between"
     >
       <Flex direction={isDesktop ? "row" : "column"} w="full" mb={5}>
+
         {/* Seeker's Information */}
         <Flex
           direction="column"
@@ -104,6 +104,7 @@ function ProfileSeeker() {
               <Box>
                 <ProfileSeekerImg />
               </Box>
+              
               {/* Edit Profile Button */}
               <Box mt={3}>
                 <UpdateInfo />
@@ -184,7 +185,7 @@ function ProfileSeeker() {
           <Heading color={colors.textColor} as="h3" size="md" ml={5}>
             Summary
           </Heading>
-          <Box maxWidth="100%" maxHeight={450} border={"2px solid purple"} mt={5} ml={5} p={4}>
+          <Box maxWidth="100%" borderRadius="md" maxHeight={450} border={"3px solid purple"} mt={2} ml={2} p={4}>
             <Textarea
               value={summary}
               onChange={handleSummaryChange}
@@ -227,7 +228,7 @@ function ProfileSeeker() {
           <Divider color="gray.200" />
 
           <Box mt={3}>
-            <Text color={colors.textColor} fontSize="lg" fontWeight="bold" mb={3}>Saved Jobs: (0 Saved)</Text>
+            <Text color={colors.textColor} fontSize="lg" fontWeight="bold" mb={3}>Saved Jobs:</Text>
             <VStack align="start" spacing={3}>
               {savedJobs && savedJobs.map((job, index) => (
                 <SavedJobCard
