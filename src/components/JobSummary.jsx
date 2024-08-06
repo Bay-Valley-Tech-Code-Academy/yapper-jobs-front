@@ -71,7 +71,7 @@ function JobSummary({ selectedJob, handleSaveJob, isSaved }) {
           </Text>
         )}
         <Stack direction="row" justify="space-between" align="center" mb="1">
-          <Text fontSize="sm">Posted {job.date_created}</Text>
+          <Text fontSize="sm">Posted {job.ago}</Text>
         </Stack>
       </Stack>
       <Stack direction="row" spacing="4" align="center" mb="1">

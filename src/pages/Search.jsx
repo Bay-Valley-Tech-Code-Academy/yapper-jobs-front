@@ -85,7 +85,6 @@ function Search() {
 
   const renderShowMoreButton = () => {
     if (searchCount > perPage && perPage >= jobPostings.length) {
-      console.log(1)
       return (
         <Flex  alignItems={'center'}>
           <Button alignItems={'center'} onClick={handleShowMore} mt="4">

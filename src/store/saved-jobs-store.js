@@ -159,11 +159,35 @@ const useSavedJobsStore = create((set) => ({
 
       if (!response.ok) throw new Error("Failed to fetch job postings");
       const data = await response.json();
+      const yearMil = 1000 * 60 * 60 * 24 * 365.2425; // year length from NASA
+      const monthMil = yearMil / 12;
+      const weekMil = 1000 * 60 * 60 * 24 * 7;
+      const dayMil = 1000 * 60 * 60 * 24;
+      const hourMil = 1000 * 60 * 60;
+      const minMil = 1000 * 60;
+
       data.jobs.forEach((job) => {
         const dateStr = new Date(job.date_created);
-        const months = (dateStr.getMonth() < 10) ? '0' + dateStr.getMonth() : dateStr.getMonth();
-        const days = (dateStr.getDate() < 10) ? '0' + dateStr.getDate() : dateStr.getDate();
-        job.date_created = dateStr.getFullYear() + '-' + months + '-' + days;
+        const now = new Date(Date.now());
+        const diff =  now.getTime() - dateStr.getTime();
+        if(diff >= yearMil) {
+          const years = Math.floor(diff / yearMil);
+          job.ago = years + (years > 1 ? ' years' : ' year') + ' ago';
+        } else if(diff >= monthMil) {
+          const months = Math.floor(diff / monthMil);
+          job.ago = months + (months > 1 ? ' months' : ' month') + ' ago';
+        } else if(diff >= dayMil) {
+          const days = Math.floor(diff / dayMil);
+          job.ago = days + (days > 1 ? ' days' : ' day') + ' ago';
+        } else if(diff >= hourMil) {
+          const hours = Math.floor(diff / hourMil);
+          job.ago = hours + (hours > 1 ? ' hours' : ' hour') + ' ago';
+        } else if(diff >= minMil) {
+          const minutes = Math.floor(diff / minMil);
+          job.ago = minutes + (minutes > 1 ? ' minutes' : ' minute') + ' ago';
+        } else {
+          job.ago = 'seconds ago';
+        }
       });
       set({ jobPostings: data.jobs, searchCount: data.count });
     } catch (error) {

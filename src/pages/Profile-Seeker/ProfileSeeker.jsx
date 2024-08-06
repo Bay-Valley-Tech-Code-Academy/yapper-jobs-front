@@ -1,14 +1,18 @@
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
   Heading,
   Box,
   Text,
+  Textarea,
   Button,
   IconButton,
   HStack,
   VStack,
+  Divider,
+  Image,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 
 import UpdateInfo from "./UpdateInfo";
@@ -23,44 +27,28 @@ import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
-// import { CgWebsite } from "react-icons/cg";
 import useUserStore from "../../store/user-store";
 import useSavedJobsStore from "../../store/saved-jobs-store";
+
+const MAX_CHAR_LIMIT = 500;
 
 function ProfileSeeker() {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  const { colors } = CustomColorMode();
   const { fetchSavedJobs, savedJobs, removeJob } = useSavedJobsStore();
-  const [profile, setProfile] = useState({
-    summary: "",
-  });
+  const [summary, setSummary] = useState("");
+  const [charCount, setCharCount] = useState(0);
+  const { colorMode, toggleColorMode, colors } = CustomColorMode();
 
-  useEffect(async () => {
-    try {
-      const response = await fetch('http://localhost:3000/profile', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-            'Content-Type': 'application/json'
-        }
-      });
-      const result = await response.json();
-      if (response.ok) {
-          setProfile({
-            summary: result.user.summary,
-          });
-          setLoading(false);
-      } else {
-          alert(`Error: ${result.error}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  // Handle changes to the summary text area
+  const handleSummaryChange = (event) => {
+    const newSummary = event.target.value;
+    setSummary(newSummary);
+    setCharCount(newSummary.length);
+  };
 
-  useEffect(()=> {
-    // Fetch saved jobs when the component mounts using try catch block
+  useEffect(() => {
+    // Fetch saved jobs when the component mounts
     const fetchJobs = async () => {
       try {
         if (user) {
@@ -71,88 +59,83 @@ function ProfileSeeker() {
       }
     };
     fetchJobs();
-  }, [user, fetchSavedJobs])
-
-  useEffect(()=> {
-    // Fetch saved jobs when the component mounts using try catch block
-    const fetchJobs = async () => {
-      try {
-        if (user) {
-          await fetchSavedJobs();
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchJobs();
-  }, [user, fetchSavedJobs])
+  }, [user, fetchSavedJobs]);
 
   const goToResumeBuilder = () => {
     navigate("/resume-builder");
   };
+
   const goToYourJobs = () => {
     navigate("/saved-jobs");
   };
 
-  // Function to handle removing a saved job
   const handleRemoveJob = async (id) => {
     try {
       await removeJob(id);
-      await fetchSavedJobs(); // Fetch the updated list of saved jobs after removing a job
+      await fetchSavedJobs();
     } catch (error) {
       console.error(error);
     }
   };
 
+  const isDesktop = useBreakpointValue({ base: false, md: true });
+
   return (
-    <Flex direction="row" p={5} mx="auto" justifyContent="space-between">
-      <Flex 
-        direction="column" 
-        p={5}
-        bg={colors.pfSections}
-        borderRadius="md"
-      >
-        {/* Profile Picture and Contact Information Side by Side */}
-        <HStack align="start" spacing={10} mb={4}>
-          <Box>
-            {/* Profile Picture*/}
-            <ProfileSeekerImg />
-            {/* Edit Profile Button */}
-            <Box ml={5} mt={5}>
-              <UpdateInfo />
-            </Box>
-          </Box>
-          {/* Job Seeker's Information */}
-          <VStack align="start">
-            <Heading as="h1" size="lg">
-              {user ? `${user.first_name} ${user.last_name}` : "Guest"}
-            </Heading>
-            <Flex align="center" mt={1}>
-              <Text ml={1} spacing={15}>
-                Teacher @ Tokyo Jujutsu High
-              </Text>
-            </Flex>
-            <Flex align="center" mt={1}>
-              <IconButton
-                aria-label="Location"
-                icon={<FaLocationPin />}
-                colorScheme="purple"
-                variant="ghost"
-                size="sm"
-              />
-              <Text ml={1}>Shibuya, JP</Text>
-            </Flex>
-            <Flex align="center" mt={1}>
-              <IconButton
-                aria-label="Email"
-                icon={<MdEmail />}
-                colorScheme="purple"
-                variant="ghost"
-                size="sm"
-              />
-              <Text ml={2}>{user.email}</Text>
-            </Flex>
-            <Flex align="center" mt={1}>
+    <Flex
+      direction={isDesktop ? "row" : "column"}
+      p={5}
+      mx="auto"
+      justifyContent="space-between"
+    >
+      <Flex direction={isDesktop ? "row" : "column"} w="full" mb={5}>
+
+        {/* Seeker's Information */}
+        <Flex
+          direction="column"
+          bg={colors.dividerColor}
+          p={5}
+          borderRadius="md"
+          mb={isDesktop ? 0 : 5}
+          w={isDesktop ? "65%" : "full"}
+        >
+          {/* Profile Picture and Contact Information Side by Side */}
+          <HStack align="start" spacing={5}>
+            <VStack align="center" spacing={3}>
+              <Box>
+                <ProfileSeekerImg />
+              </Box>
+              
+              {/* Edit Profile Button */}
+              <Box mt={3}>
+                <UpdateInfo />
+              </Box>
+            </VStack>
+            <VStack align="start" spacing={3}>
+              <Heading as="h1" size="lg">
+                {user ? `${user.first_name} ${user.last_name}` : "Hayden Janes"}
+              </Heading>
+              <Text color={colors.textColor}>Front End Software Developer</Text>
+              <Flex align="center">
+                <IconButton
+                  aria-label="Location"
+                  icon={<FaLocationPin />}
+                  colorScheme="purple"
+                  variant="ghost"
+                  size="sm"
+                />
+                <Text color={colors.textColor} ml={1}>Modesto, CA</Text>
+              </Flex>
+              <Flex align="center">
+                <IconButton
+                  aria-label="Email"
+                  icon={<MdEmail />}
+                  colorScheme="purple"
+                  variant="ghost"
+                  size="sm"
+                />
+                <Text color={colors.textColor} ml={2}>hayden.janes.cohort233@gmail.com</Text>
+              </Flex>
+              <Flex align="center" mt={1}>
               <IconButton
                 aria-label="PhoneNumber"
                 icon={<FaPhoneAlt />}
@@ -160,7 +143,7 @@ function ProfileSeeker() {
                 variant="ghost"
                 size="sm"
               />
-              <Text ml={2}>123-456-7890</Text>
+              <Text color={colors.textColor} ml={2}>209-456-7810</Text>
             </Flex>
             <Flex align="center" mt={1}>
               <IconButton
@@ -170,7 +153,7 @@ function ProfileSeeker() {
                 variant="ghost"
                 size="sm"
               />
-              <Text ml={2}>LinkedIn Profile URL</Text>
+              <Text color={colors.hyperlinkColor} ml={2}>https://www.linkedin.com/in/haydenjanes/</Text>
             </Flex>
             <Flex align="center" mt={1}>
               <IconButton
@@ -180,94 +163,84 @@ function ProfileSeeker() {
                 variant="ghost"
                 size="sm"
               />
-              <Text ml={2}>GitHub Profile URL</Text>
+              <Text color={colors.hyperlinkColor} ml={2}>https://github.com/haydencohort233</Text>
             </Flex>
-          </VStack>
-        </HStack>
+            </VStack>
+          </HStack>
 
-        {/* Resume Information */}
-        <Box mb={10} mt={10}>
-          <Flex ml={5}>
-            <Heading as="h2" size="md">
+          {/* Resume Information */}
+          <Box mt={-20}>
+            <Heading color={colors.textColor} as="h2" size="md" mb={3}>
               Your Resume
             </Heading>
-            <Flex ml={5}>
-              <Button colorScheme="purple" onClick={goToResumeBuilder}>
-                Edit Resume
-              </Button>
-            </Flex>
-          </Flex>
-        </Box>
+            <Button bgColor={colors.buttonBgColor} color={colors.buttonColor} onClick={goToResumeBuilder} ml={2.5} mb={3}>
+              Edit Resume
+            </Button>
+          </Box>
 
-        {/* Summary */}
-        <Box>
-          <Heading as="h3" size="md" ml={5}>
+          <Divider color="gray.200" />
+
+          {/* Summary */}
+          <Box>
+          <Heading color={colors.textColor} as="h3" size="md" ml={5}>
             Summary
           </Heading>
-          <Box
-            width={800}
-            maxHeight={450}
-            border={"2px solid purple"}
-            borderRadius="md"
-            mt={5}
-            ml={5}
-          >
-            <Text mt={1} p={3}>
-              {profile.summary}
+          <Box maxWidth="100%" borderRadius="md" maxHeight={450} border={"3px solid purple"} mt={2} ml={2} p={4}>
+            <Textarea
+              value={summary}
+              onChange={handleSummaryChange}
+              placeholder="Enter your summary..."
+              size="sm"
+              resize="none"
+            />
+            <Text mt={2} color={charCount > MAX_CHAR_LIMIT ? "red.500" : "gray.500"}>
+              {charCount}/{MAX_CHAR_LIMIT}
             </Text>
           </Box>
         </Box>
       </Flex>
 
-      {/* Your Jobs Box */}
-      <VStack align="start">
-        <Flex>
-          <Text fontSize={40}>Your Jobs</Text>
-          <Button
-            variant="link"
-            colorScheme="purple"
-            ml={550}
-            mt={10}
-            onClick={goToYourJobs}
-          >
-            View All{" "}
-          </Button>
-        </Flex>
-        <Box
-          bg={colors.pfJobSection}
-          width={800}
-          height={400}
+        {/* Your Jobs Box */}
+        <Flex
+          direction="column"
+          bg={colors.dividerColor}
+          p={5}
           borderRadius="md"
-          overflowY="auto"
+          w={isDesktop ? "30%" : "full"}
+          ml={isDesktop ? 5 : 0}
         >
-          <Text fontSize={"large"} ml={4} fontWeight={"bold"}>
-            Application Status
-          </Text>
-          <Box>
-            {jobs.map((job) => (
-              <AppliedJobCard key={job.id} {...job} />
-            ))}
+          <Flex justify="space-between" align="center" mb={3}>
+            <Heading color={colors.textColor} as="h2" size="md">Your Jobs</Heading>
+            <Button variant="link" onClick={goToYourJobs} color={colors.hyperlinkColor}>View All</Button>
+          </Flex>
+
+          <Divider color="gray.200" />
+
+          <Box mt={3} mb={5} maxHeight="400px" overflowX="hidden" overflowY="auto">
+            <Text color={colors.textColor} fontSize="lg" fontWeight="bold" mb={0}>Application Status:</Text>
+            <VStack align="start" spacing={0}>
+              {jobs.map((job) => (
+                <AppliedJobCard key={job.id} {...job} />
+              ))}
+            </VStack>
           </Box>
-        </Box>
-        <Box
-          bg={colors.pfJobSection}
-          width={800}
-          height={350}
-          borderRadius="md"
-          overflowY="auto"
-        >
-          <Text fontSize={"large"} ml={4} fontWeight={"bold"}>
-            Saved Jobs
-          </Text>
-          {savedJobs && savedJobs.map((job, index) => (
-            <SavedJobCard
-              key={index}
-              {...job}
-              handleRemoveJob={handleRemoveJob}
-            />
-          ))}
-        </Box>
-      </VStack>
+          
+          <Divider color="gray.200" />
+
+          <Box mt={3}>
+            <Text color={colors.textColor} fontSize="lg" fontWeight="bold" mb={3}>Saved Jobs:</Text>
+            <VStack align="start" spacing={3}>
+              {savedJobs && savedJobs.map((job, index) => (
+                <SavedJobCard
+                  key={index}
+                  {...job}
+                  handleRemoveJob={handleRemoveJob}
+                />
+              ))}
+            </VStack>
+          </Box>
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

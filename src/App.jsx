@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Layout from "./Layout/Layout";
 import SavedJobs from "./pages/SavedJobs";
 import ResumeBuilder from "./pages/ResumeBuilder";
+import CreateResume from "./pages/CreateResume";
 import Applications from "./pages/Applications";
 import ResetPassword from "./pages/ResetPassword";
 import ForgetPassword from "./pages/ForgetPassword";
@@ -45,12 +46,13 @@ function App() {
           {/* Routes with Navbar */}
           <Route element={<Layout />}>
             <Route path="/search" element={<Search />} />
-            <Route path="apply/:jobId" element={<Apply />} />
-            <Route path="employer-main" element={<EmployerMain />} />
-            <Route path="profile-employer" element={<ProfileEmployer />} />
-            <Route path="profile-seeker" element={<ProfileSeeker />} />
-            <Route path="saved-jobs" element={<SavedJobs />} />
-            <Route path="resume-builder" element={<ResumeBuilder />} />
+            <Route path="/apply/:jobId" element={<Apply />} />
+            <Route path="/employer-main" element={<EmployerMain />} />
+            <Route path="/profile-employer" element={<ProfileEmployer />} />
+            <Route path="/profile-seeker" element={<ProfileSeeker />} />
+            <Route path="/saved-jobs" element={<SavedJobs />} />
+            <Route path="/resume-builder" element={<ResumeBuilder />} />
+            <Route path="/create-resume" element={<CreateResume />} />
             <Route path="/applications" element={<Applications />} />
             <Route path="/post-job" element={<PostJob />} />
           </Route>
