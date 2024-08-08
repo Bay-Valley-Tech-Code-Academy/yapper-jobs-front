@@ -43,6 +43,7 @@ function Search() {
         if (user) {
           await fetchSavedJobsId();
         }
+        setLoading(false);
       } catch (error) {
         alert(`Error: ${error}`);
         console.error(error);

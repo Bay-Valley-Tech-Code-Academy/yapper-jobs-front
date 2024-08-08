@@ -14,31 +14,60 @@ import {
 import useApiStore from "../store/api-store";
 import { useParams } from "react-router-dom";
 import useUserStore from "../store/user-store";
+import useSavedJobsStore from "../store/saved-jobs-store";
 
 function Apply() {
   const { jobId } = useParams();
   const { jobs, fetchJobs } = useApiStore();
   const { user } = useUserStore();
-
+  const { jobPostings, jobDetails, fetchJobDetails } = useSavedJobsStore();
   const [formData, setFormData] = useState({});
   const [phoneNumberError, setPhoneNumberError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchJobs();
-  }, []);
-
-  const job = jobs.find((job) => job.job_id === parseInt(jobId));
 
   // Initialize formData based on job's questions
-  useEffect(() => {
-    if (job && job.questions) {
+/*   useEffect(() => {
+    if (job && job.questions !== null) {
       const initialFormData = job.questions.reduce((acc, question) => {
         acc[question] = "";
         return acc;
       }, {});
       setFormData(initialFormData);
     }
-  }, [job]);
+  }, [job]); */
+  
+  useEffect(() => {
+    const fetchers = async () => {
+      try {
+        await fetchJobDetails(jobId);
+        setLoading(false);
+      } catch (error) {
+        alert(`Error: ${error}`);
+        console.error(error);
+      }
+    }
+
+    fetchers();
+  }, []);
+  
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  const job = jobPostings.find((job) => job.job_id === parseInt(jobId));
+
+  // Initialize formData based on job's questions
+/*   useEffect(() => {
+    if (job && job.questions !== null) {
+      const initialFormData = job.questions.reduce((acc, question) => {
+        acc[question] = "";
+        return acc;
+      }, {});
+      setFormData(initialFormData);
+    }
+  }, [job]); */
 
   const handleChange = (e, question) => {
     const value = e.target.value;
@@ -64,11 +93,11 @@ function Apply() {
       jobId: jobId,
       answers: {
         ...formData,
-        commute: formData["Will you be able to make the commute?"] === "Yes",
+        /* commute: formData["Will you be able to make the commute?"] === "Yes",
         authorizedToWork:
           formData["Are you authorized to work in the United States?"] ===
           "Yes",
-        isVeteran: formData["Are you a veteran?"] === "Yes",
+        isVeteran: formData["Are you a veteran?"] === "Yes", */
       },
     };
 
@@ -113,7 +142,7 @@ function Apply() {
       >
         Apply To Job
       </Heading>
-      {!job ? (
+      {!jobDetails ? (
         <Text fontSize="24px" color="red.500">
           Job does not exist. Please check the job listing and try again.
         </Text>
@@ -146,20 +175,20 @@ function Apply() {
               mb="1em"
               maxW="40em"
             >
-              <Text>{job.job_description}</Text>
+              <Text>{jobDetails.job_description}</Text>
             </Box>
             <VStack align="start" ml="10em" spacing="0.5em">
               <Text className="job-info-item" fontSize="22px">
-                <strong>{job.title}</strong>
+                <strong>{jobDetails.title}</strong>
               </Text>
               <Text className="job-info-item" fontSize="22px">
-                <strong>Company:</strong> {job.company}
+                <strong>Company:</strong> {jobDetails.company}
               </Text>
               <Text className="job-info-item" fontSize="22px">
-                <strong>Location:</strong> {job.city}, {job.state}
+                <strong>Location:</strong> {jobDetails.city}, {jobDetails.state}
               </Text>
               <Text className="job-info-item" fontSize="22px">
-                <strong>Status:</strong> {job.employment_type}
+                <strong>Status:</strong> {jobDetails.employment_type}
               </Text>
             </VStack>
           </Flex>
@@ -175,7 +204,7 @@ function Apply() {
           </Heading>
           <form onSubmit={handleSubmit}>
             <VStack spacing="0.75em" align="stretch">
-              {job.questions && job.questions.map((question) => (
+              {jobDetails.questions && jobDetails.questions.map((question) => (
                 <FormControl
                   key={question}
                   isRequired

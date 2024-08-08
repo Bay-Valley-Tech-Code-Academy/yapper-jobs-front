@@ -9,6 +9,8 @@ const useSavedJobsStore = create((set) => ({
   jobPostings: [],
   count: 0,
   searchCount: 0,
+  jobDetails: {},
+  detailCount: 0,
 
   fetchSavedJobsId: async () => {
     try {
@@ -188,11 +190,26 @@ const useSavedJobsStore = create((set) => ({
         } else {
           job.ago = 'seconds ago';
         }
+        console.log(job)
       });
       set({ jobPostings: data.jobs, searchCount: data.count });
     } catch (error) {
       console.error("Failed to fetch job postings", error);
     }
+  },
+
+  fetchJobDetails: async (job_id) => {
+    const response = await fetch(`${BASE_URL}/job/${job_id}/get`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch job details");
+    const data = await response.json();
+    
+    set({ jobDetails: data.job });
   },
   
   fetchInterviews: async () => {
