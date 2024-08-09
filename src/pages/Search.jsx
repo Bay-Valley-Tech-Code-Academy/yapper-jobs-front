@@ -136,7 +136,7 @@ function Search() {
         <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto" flex={true} justifyContent={'center'}>
           <Box ml="10" p="3">
             <Heading>Search Results</Heading>
-            <Text>{searchCount} jobs</Text>
+            <Text>{searchCount < 1000 ? searchCount : '999+'} jobs</Text>
           </Box>
           {renderJobCards()}
           {renderShowMoreButton()}

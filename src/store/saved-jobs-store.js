@@ -190,7 +190,6 @@ const useSavedJobsStore = create((set) => ({
         } else {
           job.ago = 'seconds ago';
         }
-        console.log(job)
       });
       set({ jobPostings: data.jobs, searchCount: data.count });
     } catch (error) {

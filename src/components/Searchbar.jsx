@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   InputGroup,
   InputLeftElement,
@@ -21,6 +21,9 @@ function Searchbar({jobs}) {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
+  useEffect(() => {
+    console.log(selectedFilters);
+  }, [selectedFilters])
 
   const handleSearch = () => {
     filterJobs(searchRef.current.value);
