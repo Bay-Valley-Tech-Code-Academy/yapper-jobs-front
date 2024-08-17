@@ -7,7 +7,7 @@ import {
   } from '@chakra-ui/react';
   import { SearchIcon } from '@chakra-ui/icons';
 
-function SearchInput({isLargerThanSmall, searchRef}) {
+function SearchInput({isLargerThanSmall, searchRef, searchQuery}) {
   return (
     <InputGroup flex="1">
     {isLargerThanSmall ? (

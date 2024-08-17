@@ -18,6 +18,7 @@ function Search() {
   const { colors } = customColorMode();
   const { user } = useUserStore();
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState({});
 
   useEffect(() => {
     const fetchers = async () => {
@@ -39,10 +40,7 @@ function Search() {
     
     const fetchers = async () => {
       try {
-        await fetchJobPostings({startIndex: startIndex, perPage: perPage});
-        if (user) {
-          await fetchSavedJobsId();
-        }
+        await fetchJobPostings({...searchQuery, startIndex: startIndex, perPage: perPage});
         setLoading(false);
       } catch (error) {
         alert(`Error: ${error}`);
@@ -130,7 +128,7 @@ function Search() {
         px="4"
         mb="4"
       >
-        <Searchbar jobs={jobPostings} />
+        <Searchbar jobs={jobPostings} setSearchQuery={setSearchQuery} searchQuery={searchQuery} startIndex={startIndex} perPage={perPage} />
       </Flex>
       <Flex width="80%" maxH="100vh" mx="auto" px="4">
         <Box width={{ base: "100%", sm: "40%" }} mr="4" overflow="auto" flex={true} justifyContent={'center'}>

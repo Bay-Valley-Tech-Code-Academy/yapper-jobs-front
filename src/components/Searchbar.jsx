@@ -12,10 +12,13 @@ import { SearchIcon } from "@chakra-ui/icons";
 import FilterMenu from "./FilterMenu";
 import SearchInput from "./SearchInput";
 import useApiStore from "../store/api-store";
+import useSavedJobsStore from '../store/saved-jobs-store';
 
-function Searchbar({jobs}) {
+function Searchbar(params) {
   const filterJobs = useApiStore(state => state.filterJobs);
+  const {fetchJobPostings} = useSavedJobsStore();
   const searchRef = useRef();
+  const setSearchQuery = params.setSearchQuery;
 
   const [isLargerThanSmall] = useMediaQuery("(min-width: 30em)");
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -25,8 +28,16 @@ function Searchbar({jobs}) {
     console.log(selectedFilters);
   }, [selectedFilters])
 
+  useEffect(() => {
+    if(!(!params.searchQuery.keywords)) {
+      searchRef.current.value = params.searchQuery.keywords;
+    }
+  }, [])
+
   const handleSearch = () => {
-    filterJobs(searchRef.current.value);
+    fetchJobPostings({keywords: searchRef.current.value, startIndex: params.startIndex, perPage: params.perPage});
+    setSearchQuery({...params.searchQuery, keywords: searchRef.current.value});
+    //filterJobs(searchRef.current.value);
   };
 
   const handleFilterClick = (filters) => {
@@ -45,6 +56,7 @@ function Searchbar({jobs}) {
       <SearchInput
         isLargerThanSmall={isLargerThanSmall}
         searchRef={searchRef}
+        searchQuery={params.searchQuery}
       />
       {/* Filter Options */}
       <FilterMenu
